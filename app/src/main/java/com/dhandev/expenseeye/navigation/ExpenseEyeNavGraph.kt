@@ -1,5 +1,6 @@
 package com.dhandev.expenseeye.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,9 +30,19 @@ fun ExpenseEyeNavGraph(
         }
         composable(route = ReportDestination.route) {
             ReportScreen()
+            BackHandler {
+                navController.navigate(HomeDestination.route) {
+                    popUpTo(HomeDestination.route) { inclusive = true }
+                }
+            }
         }
         composable(route = SettingsDestination.route) {
             SettingsScreen()
+            BackHandler {
+                navController.navigate(HomeDestination.route) {
+                    popUpTo(HomeDestination.route) { inclusive = true }
+                }
+            }
         }
     }
 }
