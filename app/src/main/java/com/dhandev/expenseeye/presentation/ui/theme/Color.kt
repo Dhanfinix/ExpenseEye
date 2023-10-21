@@ -1,4 +1,4 @@
-package com.dhandev.expenseeye.ui.theme
+package com.dhandev.expenseeye.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -9,3 +9,7 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+val BlueMain = Color(0xFF00B2FF)
+val BlueSecondary = Color(0xFFBEEBFF)
+val Gray = Color(0xFFE7E7E7)
