@@ -84,4 +84,7 @@ dependencies {
 
     //datastore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:2.7.4")
 }

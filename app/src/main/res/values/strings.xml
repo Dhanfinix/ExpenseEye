@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">ExpenseEye</string>
+    <string name="app_name">Expense Eye</string>
+    <string name="back_button">Back Button</string>
 </resources>
