@@ -2,4 +2,7 @@
 <resources>
 
     <style name="Theme.ExpenseEye" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="TextRalewayRegular">
+
+    </style>
 </resources>
