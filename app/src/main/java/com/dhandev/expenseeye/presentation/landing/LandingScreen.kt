@@ -14,12 +14,17 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -33,6 +38,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.navigation.NavigationDestination
+import com.dhandev.expenseeye.presentation.ui.component.LandingBottomSheet
 import com.dhandev.expenseeye.presentation.ui.component.StepProgressIndicator
 import com.dhandev.expenseeye.presentation.ui.component.TitleSubtitle
 import com.dhandev.expenseeye.ui.theme.BlueSecondary
@@ -45,11 +51,12 @@ object LandingDestination : NavigationDestination {
     override val titleRes: Int = R.string.landing
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun LandingScreen(
     modifier: Modifier = Modifier,
     autoSlideDuration: Long,
+    navigateToHome: ()-> Unit
 ) {
     val contentData = Constants.LandingPageItems
     val itemsCount = contentData.size
@@ -68,6 +75,10 @@ fun LandingScreen(
     }
     val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
     val currentPage = pagerState.currentPage
+
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -137,7 +148,7 @@ fun LandingScreen(
                 subtitle = stringResource(id = contentData[currentPage].subtitle))
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { showBottomSheet = true },
                 modifier = Modifier
                     .padding(12.dp)
                     .fillMaxWidth()
@@ -145,7 +156,13 @@ fun LandingScreen(
                 Text(text = stringResource(id = R.string.landing_start_btn))
             }
         }
-
+        if (showBottomSheet){
+            LandingBottomSheet(
+                sheetState = sheetState,
+                scope = scope,
+                onProceed = { navigateToHome.invoke() },
+                isShown = { showBottomSheet = it })
+        }
     }
 
 

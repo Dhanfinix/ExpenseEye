@@ -29,7 +29,12 @@ fun ExpenseEyeNavGraph(
         modifier = modifier
     ) {
         composable(route = LandingDestination.route){
-            LandingScreen(autoSlideDuration = 5000)
+            LandingScreen(
+                autoSlideDuration = 5000,
+                navigateToHome = {navController.navigate(HomeDestination.route){
+                    popUpTo(LandingDestination.route) { inclusive = true }
+                } }
+            )
         }
         composable(route = HomeDestination.route) {
             HomeScreen()
