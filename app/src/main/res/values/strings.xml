@@ -19,6 +19,9 @@
 
     <string name="landing_start_btn">Start</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="landing_skip">Skip</string>
+    <string name="landing_back">Back</string>
+    <string name="landing_next">Next</string>
 
     <string name="landing_start_title">Before start, please fill this form</string>
     <string name="landing_start_name">Your name</string>

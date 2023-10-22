@@ -2,11 +2,13 @@ package com.dhandev.expenseeye.presentation.landing
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -41,7 +44,9 @@ import com.dhandev.expenseeye.navigation.NavigationDestination
 import com.dhandev.expenseeye.presentation.ui.component.LandingBottomSheet
 import com.dhandev.expenseeye.presentation.ui.component.StepProgressIndicator
 import com.dhandev.expenseeye.presentation.ui.component.TitleSubtitle
+import com.dhandev.expenseeye.ui.theme.BlueMain
 import com.dhandev.expenseeye.ui.theme.BlueSecondary
+import com.dhandev.expenseeye.ui.theme.raleway
 import com.dhandev.expenseeye.utils.Constants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -56,7 +61,7 @@ object LandingDestination : NavigationDestination {
 fun LandingScreen(
     modifier: Modifier = Modifier,
     autoSlideDuration: Long,
-    navigateToHome: ()-> Unit
+    navigateToHome: () -> Unit
 ) {
     val contentData = Constants.LandingPageItems
     val itemsCount = contentData.size
@@ -97,7 +102,7 @@ fun LandingScreen(
 
         Box(
             modifier = modifier.fillMaxSize(),
-            ) {
+        ) {
             HorizontalPager(
                 state = pagerState,
                 pageSpacing = 0.dp,
@@ -128,7 +133,7 @@ fun LandingScreen(
                 }
             )
         }
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.BottomCenter)
@@ -145,18 +150,42 @@ fun LandingScreen(
             TitleSubtitle(
                 modifier = Modifier.padding(bottom = 28.dp),
                 title = stringResource(id = contentData[currentPage].title),
-                subtitle = stringResource(id = contentData[currentPage].subtitle))
-
-            Button(
-                onClick = { showBottomSheet = true },
-                modifier = Modifier
-                    .padding(12.dp)
-                    .fillMaxWidth()
+                subtitle = stringResource(id = contentData[currentPage].subtitle)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = stringResource(id = R.string.landing_start_btn))
+                Text(
+                    text = stringResource(id = if (currentPage == 0)  R.string.landing_skip else R.string.landing_back),
+                    style = raleway(16, FontWeight.Bold),
+                    color = BlueMain,
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .clickable {
+                            scope.launch {
+                                pagerState.animateScrollToPage(if (currentPage == 0) itemsCount - 1 else currentPage - 1)
+                            }
+                        }
+                )
+
+                Button(
+                    onClick = {
+                        if (currentPage == itemsCount - 1) showBottomSheet = true else
+                            scope.launch {
+                                pagerState.animateScrollToPage(currentPage + 1)
+                            }
+                    },
+                    modifier = Modifier
+                        .padding(12.dp)
+                ) {
+                    Text(text = stringResource(id = if (currentPage == itemsCount - 1) R.string.landing_start_btn else R.string.landing_next))
+                }
             }
+
         }
-        if (showBottomSheet){
+        if (showBottomSheet) {
             LandingBottomSheet(
                 sheetState = sheetState,
                 scope = scope,
