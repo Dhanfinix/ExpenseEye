@@ -20,14 +20,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import com.dhandev.expenseeye.presentation.ui.theme.BlueMain
+import com.dhandev.expenseeye.presentation.ui.theme.BlueSecondary
 
 @Composable
 fun StepProgressIndicator(
     modifier: Modifier = Modifier,
     totalDots: Int,
     selectedIndex: Int,
-    selectedColor: Color = MaterialTheme.colorScheme.primary,
-    unselectedColor: Color = MaterialTheme.colorScheme.primary,
+    selectedColor: Color = BlueMain,
+    unselectedColor: Color = BlueSecondary,
     dotSize: Dp
 ){
     LazyRow(

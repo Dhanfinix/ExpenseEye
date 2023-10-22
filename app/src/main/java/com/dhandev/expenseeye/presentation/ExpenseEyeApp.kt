@@ -26,20 +26,29 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.navigation.ExpenseEyeNavGraph
+import com.dhandev.expenseeye.presentation.landing.LandingDestination
 import com.dhandev.expenseeye.presentation.ui.component.BottomNavigationView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseEyeApp(navController: NavHostController = rememberNavController()) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
-        bottomBar = { BottomNavigationView(navController = navController, Modifier)},
-        content = {paddingValues ->
+        bottomBar = {
+            if (currentRoute != LandingDestination.route) {
+                BottomNavigationView(navController = navController, Modifier)
+            }
+        },
+        content = { paddingValues ->
             ExpenseEyeNavGraph(navController = navController, Modifier, paddingValues)
         }
     )
