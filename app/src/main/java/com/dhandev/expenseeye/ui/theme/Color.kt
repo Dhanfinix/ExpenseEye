@@ -1,4 +1,4 @@
-package com.dhandev.expenseeye.presentation.ui.theme
+package com.dhandev.expenseeye.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

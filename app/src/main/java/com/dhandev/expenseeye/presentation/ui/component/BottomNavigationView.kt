@@ -15,9 +15,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.dhandev.expenseeye.presentation.home.HomeDestination
-import com.dhandev.expenseeye.presentation.ui.theme.BlueMain
-import com.dhandev.expenseeye.presentation.ui.theme.BlueSecondary
-import com.dhandev.expenseeye.presentation.ui.theme.DarkGray
+import com.dhandev.expenseeye.ui.theme.BlueMain
+import com.dhandev.expenseeye.ui.theme.BlueSecondary
+import com.dhandev.expenseeye.ui.theme.DarkGray
 import com.dhandev.expenseeye.utils.Constants
 
 @Composable

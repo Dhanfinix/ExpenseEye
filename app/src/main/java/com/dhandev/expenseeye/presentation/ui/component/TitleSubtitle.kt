@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dhandev.expenseeye.presentation.ui.theme.ExpenseEyeTheme
-import com.dhandev.expenseeye.presentation.ui.theme.raleway
+import com.dhandev.expenseeye.ui.theme.ExpenseEyeTheme
+import com.dhandev.expenseeye.ui.theme.raleway
 
 @Composable
 fun TitleSubtitle(

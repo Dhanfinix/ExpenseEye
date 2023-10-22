@@ -2,25 +2,19 @@ package com.dhandev.expenseeye.presentation.landing
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,9 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
@@ -44,7 +35,7 @@ import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.navigation.NavigationDestination
 import com.dhandev.expenseeye.presentation.ui.component.StepProgressIndicator
 import com.dhandev.expenseeye.presentation.ui.component.TitleSubtitle
-import com.dhandev.expenseeye.presentation.ui.theme.BlueSecondary
+import com.dhandev.expenseeye.ui.theme.BlueSecondary
 import com.dhandev.expenseeye.utils.Constants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -92,11 +83,10 @@ fun LandingScreen(
                 )
             }
         }
+
         Box(
             modifier = modifier.fillMaxSize(),
-
-//            contentAlignment = Alignment.Center
-        ) {
+            ) {
             HorizontalPager(
                 state = pagerState,
                 pageSpacing = 0.dp,
@@ -148,7 +138,9 @@ fun LandingScreen(
 
             Button(
                 onClick = { /*TODO*/ },
-                modifier = Modifier.padding(12.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(12.dp)
+                    .fillMaxWidth()
             ) {
                 Text(text = stringResource(id = R.string.landing_start_btn))
             }

@@ -1,4 +1,4 @@
-package com.dhandev.expenseeye.presentation.ui.theme
+package com.dhandev.expenseeye.ui.theme
 
 import android.app.Activity
 import android.os.Build
