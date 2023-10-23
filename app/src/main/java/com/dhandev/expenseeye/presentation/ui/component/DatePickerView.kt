@@ -33,12 +33,12 @@ import com.dhandev.expenseeye.utils.DateUtil
 @Composable
 fun DatePickerView(
     modifier: Modifier = Modifier,
-    title: String
+    title: String,
+    value: (String) -> Unit
 ) {
-    val context = LocalContext.current
     val date = remember { mutableStateOf(DateUtil.millisToOnlyDate(System.currentTimeMillis())) }
     val showDialog = remember { mutableStateOf(false) }
-
+    value.invoke(date.value)
     if (showDialog.value) {
         val datePickerState = rememberDatePickerState()
         val confirmEnabled = remember {

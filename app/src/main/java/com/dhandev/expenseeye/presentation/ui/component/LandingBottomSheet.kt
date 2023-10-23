@@ -10,6 +10,10 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.dhandev.expenseeye.R
+import com.dhandev.expenseeye.data.model.ProfileModel
 import com.dhandev.expenseeye.ui.theme.raleway
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -27,9 +32,13 @@ fun LandingBottomSheet(
     modifier: Modifier = Modifier,
     sheetState: SheetState,
     scope: CoroutineScope,
-    onProceed: () -> Unit,
+    onProceed: (ProfileModel) -> Unit,
     isShown: (Boolean) -> Unit
 ) {
+    var username by remember { mutableStateOf("") }
+    var balance by remember { mutableStateOf("0") }
+    var reportPeriod by remember { mutableStateOf("") }
+
     ModalBottomSheet(
         modifier = modifier.fillMaxSize(),
         onDismissRequest = { isShown(false) },
@@ -50,20 +59,23 @@ fun LandingBottomSheet(
             TextFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_name),
-                keyboardType = KeyboardType.Text
+                keyboardType = KeyboardType.Text,
+                value = {username = it}
             )
             TextFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_current_balance),
-                keyboardType = KeyboardType.Number
+                keyboardType = KeyboardType.Number,
+                value = {balance = it}
             )
             DatePickerView(
                 modifier = modifier.padding(bottom = 12.dp),
-                title = stringResource(id = R.string.landing_start_period_date)
+                title = stringResource(id = R.string.landing_start_period_date),
+                value = {reportPeriod = it}
             )
             Button(
                 onClick = { scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    onProceed.invoke()
+                    onProceed.invoke(ProfileModel(username, balance.toLong(), reportPeriod))
                 } },
                 modifier = Modifier
                     .padding(vertical = 22.dp)

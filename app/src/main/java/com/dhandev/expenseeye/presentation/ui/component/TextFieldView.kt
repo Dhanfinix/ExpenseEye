@@ -29,10 +29,11 @@ import com.dhandev.expenseeye.ui.theme.raleway
 fun TextFieldView(
     modifier : Modifier = Modifier,
     title: String,
-    keyboardType: KeyboardType
+    keyboardType: KeyboardType,
+    value: (String) -> Unit
 ) {
     var data by remember { mutableStateOf("") }
-
+    value.invoke(data)
     Column(modifier) {
         Text(
             modifier = Modifier.padding(bottom = 6.dp),
@@ -60,18 +61,22 @@ fun TextFieldView(
 @Preview
 @Composable
 fun PreviewTextField(){
+    var typed by remember { mutableStateOf("") }
+
     ExpenseEyeTheme {
         Surface {
             Column {
                 TextFieldView(
                     title = "Nama kamu",
                     modifier = Modifier.padding(16.dp),
-                    keyboardType = KeyboardType.Text
+                    keyboardType = KeyboardType.Text,
+                    value = {typed = it}
                 )
                 TextFieldView(
                     title = "Nama kamu",
                     modifier = Modifier.padding(16.dp),
-                    keyboardType = KeyboardType.Text
+                    keyboardType = KeyboardType.Text,
+                    value = {typed = it}
                 )
             }
         }

@@ -31,17 +31,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.navigation.ExpenseEyeNavGraph
 import com.dhandev.expenseeye.presentation.landing.LandingDestination
+import com.dhandev.expenseeye.presentation.landing.MainViewModel
 import com.dhandev.expenseeye.presentation.ui.component.BottomNavigationView
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseEyeApp(navController: NavHostController = rememberNavController()) {
+fun ExpenseEyeApp(
+    navController: NavHostController,
+    viewModel: MainViewModel
+) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
         bottomBar = {
             if (currentRoute != LandingDestination.route) {
@@ -49,7 +52,7 @@ fun ExpenseEyeApp(navController: NavHostController = rememberNavController()) {
             }
         },
         content = { paddingValues ->
-            ExpenseEyeNavGraph(navController = navController, Modifier, paddingValues)
+            ExpenseEyeNavGraph(navController = navController, Modifier, paddingValues, viewModel)
         }
     )
 }

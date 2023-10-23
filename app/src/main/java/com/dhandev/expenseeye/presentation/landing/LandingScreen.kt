@@ -50,6 +50,7 @@ import com.dhandev.expenseeye.ui.theme.raleway
 import com.dhandev.expenseeye.utils.Constants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 object LandingDestination : NavigationDestination {
     override val route: String = "landing"
@@ -61,6 +62,7 @@ object LandingDestination : NavigationDestination {
 fun LandingScreen(
     modifier: Modifier = Modifier,
     autoSlideDuration: Long,
+    viewModel: MainViewModel = koinViewModel(),
     navigateToHome: () -> Unit
 ) {
     val contentData = Constants.LandingPageItems
@@ -158,7 +160,7 @@ fun LandingScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = stringResource(id = if (currentPage == 0)  R.string.landing_skip else R.string.landing_back),
+                    text = stringResource(id = if (currentPage == 0) R.string.landing_skip else R.string.landing_back),
                     style = raleway(16, FontWeight.Bold),
                     color = BlueMain,
                     modifier = Modifier
@@ -189,7 +191,10 @@ fun LandingScreen(
             LandingBottomSheet(
                 sheetState = sheetState,
                 scope = scope,
-                onProceed = { navigateToHome.invoke() },
+                onProceed = {
+                    viewModel.saveProfileData(it)
+                    navigateToHome.invoke()
+                },
                 isShown = { showBottomSheet = it })
         }
     }

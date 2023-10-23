@@ -77,6 +77,7 @@ dependencies {
     //koin
     val koinAndroidVersion = "3.5.0"
     implementation("io.insert-koin:koin-android:$koinAndroidVersion")
+    implementation("io.insert-koin:koin-androidx-compose:$koinAndroidVersion")
 
     //room
     val roomVersion = "2.5.2"
