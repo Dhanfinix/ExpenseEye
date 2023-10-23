@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,14 +33,14 @@ fun ExpenseEyeNavGraph(
     val logged by viewModel.logged
     val loading by viewModel.loading
     if (loading){
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
         NavHost(
             navController = navController,
             startDestination =  if (logged) HomeDestination.route else LandingDestination.route,
-            modifier = modifier
+            modifier = modifier.padding(paddingValues)
         ) {
             composable(route = LandingDestination.route){
                 LandingScreen(

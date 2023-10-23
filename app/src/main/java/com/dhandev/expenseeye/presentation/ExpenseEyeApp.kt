@@ -24,19 +24,26 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.navigation.ExpenseEyeNavGraph
+import com.dhandev.expenseeye.presentation.home.HomeDestination
 import com.dhandev.expenseeye.presentation.landing.LandingDestination
 import com.dhandev.expenseeye.presentation.landing.MainViewModel
+import com.dhandev.expenseeye.presentation.report.ReportDestination
+import com.dhandev.expenseeye.presentation.settings.SettingsDestination
 import com.dhandev.expenseeye.presentation.ui.component.BottomNavigationView
+import com.dhandev.expenseeye.presentation.ui.component.TitleSubtitle
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseEyeApp(
     navController: NavHostController,
@@ -44,8 +51,23 @@ fun ExpenseEyeApp(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val currentRouteName = navBackStackEntry?.destination?.displayName
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            when (currentRoute) {
+                HomeDestination.route -> TitleSubtitle(title = "Good Morning,", subtitle = viewModel.username.value)
+                ReportDestination.route -> TitleSubtitle(title = "Here is your money report,", subtitle = "in good visual")
+                SettingsDestination.route -> TitleSubtitle(title = "Settings", subtitle = stringResource(
+                    id = R.string.app_name
+                ))
+
+                else -> {}
+                //            else -> ExpenseEyeTopAppBar(title = currentRouteName, canNavigateBack = true)
+            }
+        },
         bottomBar = {
             if (currentRoute != LandingDestination.route) {
                 BottomNavigationView(navController = navController, Modifier)
