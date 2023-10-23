@@ -95,4 +95,16 @@ dependencies {
 
     //splash screen
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    //data store
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //GSON
+    implementation("com.google.code.gson:gson:2.9.1")
+
+    // Coroutine lifecycle scopes
+    val lifeCycleScopeVersion = "2.6.2"
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleScopeVersion")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycleScopeVersion")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleScopeVersion")
 }
