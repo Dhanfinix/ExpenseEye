@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.navigation.NavigationDestination
 import com.dhandev.expenseeye.presentation.landing.MainViewModel
+import com.dhandev.expenseeye.presentation.ui.component.BalanceCardView
 import com.dhandev.expenseeye.presentation.ui.component.TitleSubtitle
 import org.koin.androidx.compose.koinViewModel
 
@@ -30,6 +31,6 @@ fun HomeScreen(
             .fillMaxSize()
             .padding()
     ) {
-        TitleSubtitle(title = "Halo", subtitle = "Loha")
+        BalanceCardView(modifier = Modifier.padding(16.dp))
     }
 }
