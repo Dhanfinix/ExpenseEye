@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -36,15 +39,13 @@ import com.dhandev.expenseeye.ui.theme.raleway
 fun BalanceCardView(
     modifier: Modifier = Modifier,
 ){
-    val gradient = Brush.linearGradient(
-        colors = listOf(BlueSecondary, MaterialTheme.colorScheme.background),
-        start = Offset(500f, 0f),
-        end = Offset(0f, 200f)
-    )
-    Box(modifier = modifier
-        .fillMaxWidth()
-        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-        .background(brush = gradient)
+    Card(modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        )
     ){
         Column(
             modifier = Modifier.padding(16.dp)

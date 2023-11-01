@@ -28,4 +28,6 @@
     <string name="landing_start_current_balance">Current balance</string>
     <string name="landing_start_period_date">Report period</string>
     <string name="landing_start_period_date_content">Day - %s every month</string>
+
+    <string name="expense_list">Expense List</string>
 </resources>
