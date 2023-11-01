@@ -52,17 +52,17 @@ fun ExpenseEyeApp(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val currentRouteName = navBackStackEntry?.destination?.displayName
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             when (currentRoute) {
-                HomeDestination.route -> TitleSubtitle(title = "Good Morning,", subtitle = viewModel.username.value)
-                ReportDestination.route -> TitleSubtitle(title = "Here is your money report,", subtitle = "in good visual")
+                HomeDestination.route -> TitleSubtitle(title = "Good Morning,", subtitle = viewModel.username.value, scrollBehavior = scrollBehavior)
+                ReportDestination.route -> TitleSubtitle(title = "Here is your money report,", subtitle = "in good visual", scrollBehavior = scrollBehavior)
                 SettingsDestination.route -> TitleSubtitle(title = "Settings", subtitle = stringResource(
                     id = R.string.app_name
-                ))
+                ), scrollBehavior = scrollBehavior)
 
                 else -> {}
                 //            else -> ExpenseEyeTopAppBar(title = currentRouteName, canNavigateBack = true)

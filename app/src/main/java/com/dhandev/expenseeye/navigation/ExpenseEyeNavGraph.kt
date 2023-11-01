@@ -40,7 +40,7 @@ fun ExpenseEyeNavGraph(
         NavHost(
             navController = navController,
             startDestination =  if (logged) HomeDestination.route else LandingDestination.route,
-            modifier = modifier.padding(paddingValues)
+            modifier = modifier.fillMaxSize().padding(paddingValues)
         ) {
             composable(route = LandingDestination.route){
                 LandingScreen(

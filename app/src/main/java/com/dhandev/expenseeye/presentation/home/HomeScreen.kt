@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,8 @@ import com.dhandev.expenseeye.presentation.landing.MainViewModel
 import com.dhandev.expenseeye.presentation.ui.component.BalanceCardView
 import com.dhandev.expenseeye.presentation.ui.component.ChipGroup
 import com.dhandev.expenseeye.presentation.ui.component.TitleSubtitle
+import com.dhandev.expenseeye.presentation.ui.component.TransactionGroup
+import com.dhandev.expenseeye.presentation.ui.component.listDummyDataTransaction
 import com.dhandev.expenseeye.ui.theme.BlueSecondary
 import com.dhandev.expenseeye.ui.theme.RalewayFamily
 import com.dhandev.expenseeye.ui.theme.raleway
@@ -42,24 +45,34 @@ fun HomeScreen(
         start = Offset(800f, 0f),
         end = Offset(0f, 400f)
     )
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal =  16.dp),
+        userScrollEnabled = true
     ) {
-        BalanceCardView()
-        Text(
-            modifier = Modifier.padding(top = 24.dp),
-            text = stringResource(id = R.string.expense_list),
-            style = raleway(
-                fontSize = 16,
-                weight = FontWeight.Bold
+        item {
+            BalanceCardView(modifier.padding(top = 8.dp))
+        }
+        item {
+            Text(
+                modifier = Modifier.padding(top = 24.dp),
+                text = stringResource(id = R.string.expense_list),
+                style = raleway(
+                    fontSize = 16,
+                    weight = FontWeight.Bold
+                )
             )
-        )
-        ChipGroup(
-            modifier = Modifier.padding(vertical = 8.dp),
-            items = listOf("7 hari", "2 minggu", "1 bulan", "Periode pencatatan")){
-
+        }
+        item {
+            ChipGroup(
+                modifier = Modifier.padding(vertical = 8.dp),
+                items = listOf("7 hari", "2 minggu", "1 bulan", "Periode pencatatan")){
+                //TODO: Filter recent transaction
+            }
+        }
+        items(listDummyDataTransaction.count()){
+            TransactionGroup(data = listDummyDataTransaction[it])
         }
     }
 }

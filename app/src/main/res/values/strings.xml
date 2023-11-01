@@ -30,4 +30,15 @@
     <string name="landing_start_period_date_content">Day - %s every month</string>
 
     <string name="expense_list">Expense List</string>
+    <string name="category_image_desc">Category Image</string>
+
+    <string name="category_food">Food and Drink</string>
+    <string name="category_transportation">Transportation</string>
+    <string name="category_donation">Donation</string>
+    <string name="category_bill">Bills</string>
+    <string name="category_health">Health</string>
+    <string name="category_exercise">Exercise</string>
+    <string name="category_education">Education</string>
+    <string name="category_payment">Payment</string>
+    <string name="category_gift">Gift</string>
 </resources>
