@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.dhandev.expenseeye.presentation.create.CreateDestination
+import com.dhandev.expenseeye.presentation.create.CreateScreen
 import com.dhandev.expenseeye.presentation.home.HomeDestination
 import com.dhandev.expenseeye.presentation.home.HomeScreen
 import com.dhandev.expenseeye.presentation.landing.LandingDestination
@@ -40,7 +42,9 @@ fun ExpenseEyeNavGraph(
         NavHost(
             navController = navController,
             startDestination =  if (logged) HomeDestination.route else LandingDestination.route,
-            modifier = modifier.fillMaxSize().padding(paddingValues)
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
             composable(route = LandingDestination.route){
                 LandingScreen(
@@ -51,7 +55,7 @@ fun ExpenseEyeNavGraph(
                 )
             }
             composable(route = HomeDestination.route) {
-                HomeScreen()
+                HomeScreen(navigateToCreate = {navController.navigate(CreateDestination.route)})
             }
             composable(route = ReportDestination.route) {
                 ReportScreen()
@@ -63,6 +67,14 @@ fun ExpenseEyeNavGraph(
             }
             composable(route = SettingsDestination.route) {
                 SettingsScreen()
+                BackHandler {
+                    navController.navigate(HomeDestination.route) {
+                        popUpTo(HomeDestination.route) { inclusive = true }
+                    }
+                }
+            }
+            composable(route = CreateDestination.route){
+                CreateScreen()
                 BackHandler {
                     navController.navigate(HomeDestination.route) {
                         popUpTo(HomeDestination.route) { inclusive = true }

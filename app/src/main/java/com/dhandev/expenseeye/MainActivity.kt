@@ -21,14 +21,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
         setContent {
             ExpenseEyeTheme(dynamicColor = false) {
                 val viewModel : MainViewModel = koinViewModel()
                 val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize().padding(top = 30.dp),
+                    modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ExpenseEyeApp(navController, viewModel)

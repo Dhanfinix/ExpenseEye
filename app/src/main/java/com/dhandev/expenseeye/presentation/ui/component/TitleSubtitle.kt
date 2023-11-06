@@ -32,7 +32,6 @@ fun TitleSubtitle(
             Column(
                 modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
             ) {
                 Text(text = title, style = raleway(20, FontWeight.Bold))
                 Text(text = subtitle, style = raleway(16, FontWeight.Normal))

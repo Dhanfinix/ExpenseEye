@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -39,6 +40,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.navigation.ExpenseEyeNavGraph
+import com.dhandev.expenseeye.presentation.create.CreateDestination
 import com.dhandev.expenseeye.presentation.home.HomeDestination
 import com.dhandev.expenseeye.presentation.landing.LandingDestination
 import com.dhandev.expenseeye.presentation.landing.MainViewModel
@@ -68,21 +70,17 @@ fun ExpenseEyeApp(
                 SettingsDestination.route -> TitleSubtitle(title = "Settings", subtitle = stringResource(
                     id = R.string.app_name
                 ), scrollBehavior = scrollBehavior)
-
+                CreateDestination.route -> ExpenseEyeTopAppBar(
+                    title = "Tambah Transaksi",
+                    canNavigateBack = true,
+                    navigateUp = { navController.navigateUp() }
+                )
                 else -> {}
                 //            else -> ExpenseEyeTopAppBar(title = currentRouteName, canNavigateBack = true)
             }
         },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text(text = "Transaksi") },
-                onClick = {},
-                icon = { Icon(Filled.Add, "") },
-                containerColor = BlueSecondary
-            )
-        },
         bottomBar = {
-            if (currentRoute != LandingDestination.route) {
+            if (currentRoute == HomeDestination.route || currentRoute == ReportDestination.route || currentRoute == SettingsDestination.route) {
                 BottomNavigationView(navController = navController, Modifier)
             }
         },
@@ -104,7 +102,7 @@ fun ExpenseEyeTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigateUp: () -> Unit = {}
 ) {
-    CenterAlignedTopAppBar(
+    TopAppBar(
         title = { Text(title) },
         modifier = modifier,
         scrollBehavior = scrollBehavior,

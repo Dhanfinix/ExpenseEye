@@ -1,7 +1,9 @@
 package com.dhandev.expenseeye.presentation.ui.component
 
+import HiddenBalanceView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +43,7 @@ import com.dhandev.expenseeye.ui.theme.raleway
 fun BalanceCardView(
     modifier: Modifier = Modifier,
 ){
+    val showBalance = remember { mutableStateOf(true) }
     Card(modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -57,15 +62,22 @@ fun BalanceCardView(
                     style = raleway(fontSize = 14, weight = FontWeight.Normal)
                 )
                 Image(
-                    modifier = Modifier.padding(start = 8.dp),
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .clickable { showBalance.value = !showBalance.value },
                     painter = painterResource(id = R.drawable.ic_eye_shown),
                     contentDescription = "Hide balance"
                 )
             }
-            Text(
-                text = "Rp5.000.000",
-                style = raleway(fontSize = 32, weight = FontWeight.Bold)
-            )
+            if (showBalance.value){
+                Text(
+                    text = "Rp5.000.000",
+                    style = raleway(fontSize = 32, weight = FontWeight.Bold)
+                )
+            } else {
+                HiddenBalanceView()
+            }
+
             Text(
                 modifier = Modifier.padding(top = 16.dp),
                 text = "75% left since first month day",

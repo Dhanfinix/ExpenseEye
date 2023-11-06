@@ -31,6 +31,7 @@ fun ChipGroup(
     ) {
         itemsIndexed(items) { index, item ->
             ChipButton(
+                modifier = Modifier.padding(start = if (index == 0)  16.dp else 0.dp),
                 text = item,
                 onClick = {
                     selectedItem.intValue = index
@@ -45,6 +46,7 @@ fun ChipGroup(
 
 @Composable
 private fun ChipButton(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
     backgroundColor: Color = Color.White,
@@ -54,7 +56,7 @@ private fun ChipButton(
         shape = RoundedCornerShape(16.dp),
         color = backgroundColor,
         border = BorderStroke(1.dp, BlueSecondary),
-        modifier = Modifier.clickable(onClick = onClick).padding(end = 8.dp)
+        modifier = modifier.clickable(onClick = onClick).padding(end = 8.dp)
     ) {
         Text(
             text = text,

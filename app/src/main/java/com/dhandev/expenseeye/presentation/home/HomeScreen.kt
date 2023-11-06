@@ -1,8 +1,13 @@
 package com.dhandev.expenseeye.presentation.home
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +15,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -39,6 +45,7 @@ object HomeDestination : NavigationDestination {
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel(),
+    navigateToCreate: () -> Unit
 ) {
     val gradient = Brush.linearGradient(
         colors = listOf(BlueSecondary, MaterialTheme.colorScheme.background),
@@ -46,53 +53,65 @@ fun HomeScreen(
         end = Offset(0f, 400f)
     )
     val filter = remember { mutableIntStateOf(0) }       //today
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        userScrollEnabled = true
-    ) {
-        item {
-            BalanceCardView(modifier.padding(top = 8.dp))
-        }
-        item {
-            Text(
-                modifier = Modifier.padding(top = 24.dp),
-                text = stringResource(id = R.string.expense_list),
-                style = raleway(
-                    fontSize = 16,
-                    weight = FontWeight.Bold
-                )
-            )
-        }
-        item {
-            ChipGroup(
-                modifier = Modifier.padding(vertical = 8.dp),
-                items = listOf("Hari ini", "7 hari", "2 minggu", "1 bulan", "Periode pencatatan")
-            ) {
-                //TODO: Filter recent transaction
-                filter.intValue = it
+    Box(modifier = Modifier.fillMaxSize()){
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            userScrollEnabled = true
+        ) {
+            item {
+                BalanceCardView(modifier.padding(vertical = 8.dp, horizontal = 16.dp))
             }
-        }
-        val groupedData = listDummyItemData
-            .filter {
-                when (filter.intValue) {
-                    0 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1) //today
-                    1 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7) //7 days
-                    2 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(14) //2 weeks
-                    3 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(30) //1 month
-                    else -> false
+            item {
+                Text(
+                    modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+                    text = stringResource(id = R.string.expense_list),
+                    style = raleway(
+                        fontSize = 16,
+                        weight = FontWeight.Bold
+                    )
+                )
+            }
+            item {
+                ChipGroup(
+                    modifier = Modifier.padding(),
+                    items = listOf("Hari ini", "7 hari", "2 minggu", "1 bulan", "Periode pencatatan")
+                ) {
+                    //TODO: Filter recent transaction
+                    filter.intValue = it
                 }
             }
-            .groupBy {
-                DateUtil.millisToDateForGroup(it.dateInMillis)
-            }.map {
-                TransactionGroupModel(it.key, it.value)
-            }.sortedBy {
-                it.date
+            val groupedData = listDummyItemData
+                .filter {
+                    when (filter.intValue) {
+                        0 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1) //today
+                        1 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7) //7 days
+                        2 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(14) //2 weeks
+                        3 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(30) //1 month
+                        else -> false
+                    }
+                }
+                .groupBy {
+                    DateUtil.millisToDateForGroup(it.dateInMillis)
+                }.map {
+                    TransactionGroupModel(it.key, it.value)
+                }.sortedBy {
+                    it.date
+                }
+            items(groupedData.count()) {
+                TransactionGroup(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    data = groupedData[it]
+                )
             }
-        items(groupedData.count()) {
-            TransactionGroup(data = groupedData[it])
         }
+
+        ExtendedFloatingActionButton(
+            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+            text = { Text(text = "Transaksi") },
+            onClick = {navigateToCreate.invoke()},
+            icon = { Icon(Icons.Filled.Add, "") },
+            containerColor = BlueSecondary
+        )
     }
 }
