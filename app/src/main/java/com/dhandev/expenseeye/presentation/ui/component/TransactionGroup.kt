@@ -53,7 +53,7 @@ fun TransactionGroup(
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = DateUtil.millisToDateForGroup(data.dateInMillis),
+                    text = data.date,
                     style = raleway(fontSize = 14, weight = FontWeight.Normal)
                 )
                 Text(
@@ -83,105 +83,131 @@ fun TransactionGroup(
 @Preview
 @Composable
 fun PreviewTrxGroup() {
+    val groupedData = listDummyItemData.groupBy {
+        DateUtil.millisToDateForGroup(it.dateInMillis)
+    }.map {
+        TransactionGroupModel(it.key, it.value)
+    }
     ExpenseEyeTheme {
         Surface {
-            TransactionGroup(modifier = Modifier.padding(8.dp), dummyData)
+            TransactionGroup(modifier = Modifier.padding(8.dp), groupedData[0])
         }
     }
 }
 
-
-val dummyData = TransactionGroupModel(
+val dummyItemData = TransactionItemModel(
     id = 1,
-    dateInMillis = System.currentTimeMillis(),
-    transactionItem = listOf(
-        TransactionItemModel(
-            id = 1,
-            title = "Groceries",
-            dateInMillis = System.currentTimeMillis(),
-            total = 10000.0,
-            category = "Food",
-            isExpense = false
-        ),
-        TransactionItemModel(
-            id = 2,
-            title = "Salary",
-            dateInMillis = System.currentTimeMillis(),
-            total = 1000.0,
-            category = "Income",
-            isExpense = false
-        )
-    )
+    title = "Groceries",
+    dateInMillis = 1698685200000,
+    total = 10000.0,
+    category = "Food",
+    isExpense = false
 )
 
-val dummyData1 = TransactionGroupModel(
+val dummyItemData2 = TransactionItemModel(
     id = 2,
-    dateInMillis = System.currentTimeMillis(),
-    transactionItem = listOf(
-        TransactionItemModel(
-            id = 3,
-            title = "Rent",
-            dateInMillis = System.currentTimeMillis(),
-            total = 5000.0,
-            category = "Income",
-            isExpense = true
-        ),
-        TransactionItemModel(
-            id = 4,
-            title = "Freelance",
-            dateInMillis = System.currentTimeMillis(),
-            total = 2000.0,
-            category = "Income",
-            isExpense = false
-        )
-    )
+    title = "Salary",
+    dateInMillis = 1698685200000,
+    total = 1000.0,
+    category = "Income",
+    isExpense = false
 )
+//val dummyData = TransactionGroupModel(
+//    id = 1,
+//    dateInMillis = System.currentTimeMillis(),
+//    transactionItem = listOf(
+//        dummyItemData,
+//        dummyItemData2
+//    )
+//)
 
-val dummyData2 = TransactionGroupModel(
+val dummyItemData3 = TransactionItemModel(
     id = 3,
-    dateInMillis = System.currentTimeMillis(),
-    transactionItem = listOf(
-        TransactionItemModel(
-            id = 5,
-            title = "Utilities",
-            dateInMillis = System.currentTimeMillis(),
-            total = 1500.0,
-            category = "Bills",
-            isExpense = true
-        ),
-        TransactionItemModel(
-            id = 6,
-            title = "Dividends",
-            dateInMillis = System.currentTimeMillis(),
-            total = 500.0,
-            category = "Income",
-            isExpense = false
-        )
-    )
+    title = "Rent",
+    dateInMillis = 1698685200000,
+    total = 5000.0,
+    category = "Income",
+    isExpense = true
 )
-
-val dummyData3 = TransactionGroupModel(
+val dummyItemData4 = TransactionItemModel(
     id = 4,
-    dateInMillis = System.currentTimeMillis(),
-    transactionItem = listOf(
-        TransactionItemModel(
-            id = 7,
-            title = "Utilities",
-            dateInMillis = System.currentTimeMillis(),
-            total = 1500.0,
-            category = "Bills",
-            isExpense = true
-        ),
-        TransactionItemModel(
-            id = 8,
-            title = "Dividends",
-            dateInMillis = System.currentTimeMillis(),
-            total = 500.0,
-            category = "Income",
-            isExpense = false
-        )
-    )
+    title = "Freelance",
+    dateInMillis = 1698685200000,
+    total = 2000.0,
+    category = "Income",
+    isExpense = false
 )
 
-val listDummyDataTransaction = listOf(dummyData, dummyData1, dummyData2, dummyData3, dummyData, dummyData1, dummyData2, dummyData3, dummyData, dummyData1, dummyData2, dummyData3)
+//val dummyData1 = TransactionGroupModel(
+//    id = 2,
+//    dateInMillis = System.currentTimeMillis(),
+//    transactionItem = listOf(
+//        dummyItemData3,
+//        dummyItemData4
+//    )
+//)
 
+val dummyItemData5 = TransactionItemModel(
+    id = 5,
+    title = "Utilities",
+    dateInMillis = System.currentTimeMillis(),
+    total = 1500.0,
+    category = "Bills",
+    isExpense = true
+)
+
+val dummyItemData6 =TransactionItemModel(
+    id = 6,
+    title = "Dividends",
+    dateInMillis = System.currentTimeMillis(),
+    total = 500.0,
+    category = "Income",
+    isExpense = false
+)
+
+//val dummyData2 = TransactionGroupModel(
+//    id = 3,
+//    dateInMillis = System.currentTimeMillis(),
+//    transactionItem = listOf(
+//        dummyItemData5,
+//        dummyItemData6
+//    )
+//)
+
+val dummyItemData7 = TransactionItemModel(
+    id = 7,
+    title = "Utilities",
+    dateInMillis = System.currentTimeMillis(),
+    total = 1500.0,
+    category = "Bills",
+    isExpense = true
+)
+val dummyItemData8 = TransactionItemModel(
+    id = 8,
+    title = "Dividends",
+    dateInMillis = System.currentTimeMillis(),
+    total = 500.0,
+    category = "Income",
+    isExpense = false
+)
+
+//val dummyData3 = TransactionGroupModel(
+//    id = 4,
+//    dateInMillis = System.currentTimeMillis(),
+//    transactionItem = listOf(
+//        dummyItemData7,
+//        dummyItemData8
+//    )
+//)
+
+//val listDummyDataTransaction = listOf(dummyData, dummyData1, dummyData2, dummyData3, dummyData, dummyData1, dummyData2, dummyData3, dummyData, dummyData1, dummyData2, dummyData3)
+val listDummyItemData = listOf(
+    dummyItemData,
+    dummyItemData2,
+    dummyItemData3,
+    dummyItemData4,
+    dummyItemData5,
+    dummyItemData6,
+    dummyItemData7,
+    dummyItemData8,
+)
