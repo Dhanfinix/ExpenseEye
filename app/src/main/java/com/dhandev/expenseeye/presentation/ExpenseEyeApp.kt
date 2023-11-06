@@ -16,10 +16,14 @@
 
 package com.dhandev.expenseeye.presentation
 
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -42,6 +46,7 @@ import com.dhandev.expenseeye.presentation.report.ReportDestination
 import com.dhandev.expenseeye.presentation.settings.SettingsDestination
 import com.dhandev.expenseeye.presentation.ui.component.BottomNavigationView
 import com.dhandev.expenseeye.presentation.ui.component.TitleSubtitle
+import com.dhandev.expenseeye.ui.theme.BlueSecondary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,6 +72,14 @@ fun ExpenseEyeApp(
                 else -> {}
                 //            else -> ExpenseEyeTopAppBar(title = currentRouteName, canNavigateBack = true)
             }
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                text = { Text(text = "Transaksi") },
+                onClick = {},
+                icon = { Icon(Filled.Add, "") },
+                containerColor = BlueSecondary
+            )
         },
         bottomBar = {
             if (currentRoute != LandingDestination.route) {
