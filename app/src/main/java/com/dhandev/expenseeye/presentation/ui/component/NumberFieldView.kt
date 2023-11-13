@@ -1,17 +1,14 @@
 package com.dhandev.expenseeye.presentation.ui.component
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dhandev.expenseeye.ui.theme.BlueMain
@@ -33,28 +31,41 @@ import com.dhandev.expenseeye.utils.NumUtil.clearThousandFormat
 import com.dhandev.expenseeye.utils.NumUtil.formatThousand
 
 @Composable
-fun TextFieldView(
-    modifier : Modifier = Modifier,
+fun NumberFieldView(
+    modifier: Modifier = Modifier,
     title: String,
     value: (String) -> Unit
-) {
-    var data by remember { mutableStateOf("") }
-    value.invoke(data)
-    Column(
-        modifier = modifier.fillMaxWidth()
-    ) {
+){
+    var text by remember {
+        mutableStateOf(TextFieldValue(""))
+    }
+    value.invoke(text.text)
+    Column(modifier = modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(bottom = 6.dp),
             text = title,
-            style = raleway(fontSize = 14, weight = FontWeight.Normal))
+            style = raleway(fontSize = 14, weight = FontWeight.Normal)
+        )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = data,
-            onValueChange = { newInput -> data = newInput},
-            placeholder = {
-                Text(text = "Type here...", color = Color.LightGray)
+            value = text,
+            onValueChange = { newInput ->
+                val clearText = newInput.text.clearThousandFormat()
+                if (clearText.length <= 18 && clearText.matches(Regex("[0-9]*"))) {
+                    val newValue = if (clearText.isNotBlank()) {
+                        clearText.toLong().formatThousand()
+                    } else clearText
+
+                    text = newInput.copy(
+                        text = newValue,
+                        selection = TextRange(newValue.length)
+                    )
+                }
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            placeholder = {
+                Text(text = "100.000", color = Color.LightGray)
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = BlueSecondary,
                 cursorColor = BlueMain
@@ -63,25 +74,12 @@ fun TextFieldView(
     }
 }
 
-@Preview
 @Composable
-fun PreviewTextField(){
-    var typed by remember { mutableStateOf("") }
-
+@Preview
+fun PreviewNumberField(){
     ExpenseEyeTheme {
         Surface {
-            Column {
-                TextFieldView(
-                    title = "Nama kamu",
-                    modifier = Modifier.padding(16.dp),
-                    value = {typed = it}
-                )
-                TextFieldView(
-                    title = "Nama kamu",
-                    modifier = Modifier.padding(16.dp),
-                    value = {typed = it}
-                )
-            }
+            NumberFieldView(title = "Nominal", value = { "100000" })
         }
     }
 }

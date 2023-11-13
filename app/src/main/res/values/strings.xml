@@ -42,4 +42,9 @@
     <string name="category_education">Education</string>
     <string name="category_payment">Payment</string>
     <string name="category_gift">Gift</string>
+
+    //Create page
+    <string name="save">Save</string>
+    <string name="amount">Amount (Rp)</string>
+    <string name="trx_name">Transaction Name</string>
 </resources>

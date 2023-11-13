@@ -59,13 +59,11 @@ fun LandingBottomSheet(
             TextFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_name),
-                keyboardType = KeyboardType.Text,
                 value = {username = it}
             )
-            TextFieldView(
+            NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_current_balance),
-                keyboardType = KeyboardType.Number,
                 value = {balance = it}
             )
             DatePickerView(

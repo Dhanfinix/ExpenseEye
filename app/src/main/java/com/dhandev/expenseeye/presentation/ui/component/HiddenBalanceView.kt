@@ -24,14 +24,14 @@ fun HiddenBalanceView(
     modifier: Modifier = Modifier
 ){
     val gradient = Brush.linearGradient(
-        colors = listOf(Color.Black, Color.Gray),
-        start = Offset(100f, 0f),
-        end = Offset(0f, 100f)
+        colors = listOf(Color.Black, Color.White),
+        start = Offset(200f, 0f),
+        end = Offset(0f, 200f)
     )
     val gradient2 = Brush.linearGradient(
-        colors = listOf(Color.Gray, Color.Black),
-        start = Offset(100f, 0f),
-        end = Offset(0f, 100f)
+        colors = listOf(Color.White, Color.Black),
+        start = Offset(200f, 0f),
+        end = Offset(0f, 200f)
     )
     LazyRow(
         modifier = modifier.padding(top = 10.dp, end = 10.dp),
@@ -39,7 +39,7 @@ fun HiddenBalanceView(
     ){
         items(7){
             Surface(
-                modifier = Modifier.size(30.dp).clip(CircleShape).background(brush = if (it % 2 == 0) gradient else gradient2),
+                modifier = Modifier.size(25.dp).clip(CircleShape).background(brush = if (it % 2 == 0) gradient else gradient2),
                 shape = CircleShape,
                 color = Color.Transparent
             ){}
