@@ -44,4 +44,6 @@ object Constants {
             route = "settings"
         ),
     )
+
+    val categoryOutcomeName = listOf("Makan & Minum", "Transportasi", "Donasi", "Hadiah")
 }
