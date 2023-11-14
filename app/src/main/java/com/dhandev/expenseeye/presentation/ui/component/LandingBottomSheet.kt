@@ -66,11 +66,11 @@ fun LandingBottomSheet(
                 title = stringResource(id = R.string.landing_start_current_balance),
                 value = {balance = it}
             )
-            DatePickerView(
-                modifier = modifier.padding(bottom = 12.dp),
-                title = stringResource(id = R.string.landing_start_period_date),
-                value = {reportPeriod = it}
-            )
+//            DatePickerView(
+//                modifier = modifier.padding(bottom = 12.dp),
+//                title = stringResource(id = R.string.landing_start_period_date),
+//                value = {reportPeriod = it}
+//            )
             Button(
                 onClick = { scope.launch { sheetState.hide() }.invokeOnCompletion {
                     onProceed.invoke(ProfileModel(username, balance.toLong(), reportPeriod))

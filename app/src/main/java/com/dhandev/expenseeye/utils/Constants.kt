@@ -1,7 +1,9 @@
 package com.dhandev.expenseeye.utils
 
+import androidx.compose.ui.res.painterResource
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.data.model.BottomNavItem
+import com.dhandev.expenseeye.data.model.CategoryItem
 import com.dhandev.expenseeye.data.model.LandingItem
 
 object Constants {
@@ -45,5 +47,14 @@ object Constants {
         ),
     )
 
-    val categoryOutcomeName = listOf("Makan & Minum", "Transportasi", "Donasi", "Hadiah")
+    val categoryOutcomeName = listOf(
+        CategoryItem("Makan & Minum", R.drawable.ic_food_drinks),
+        CategoryItem("Tagihan", R.drawable.ic_bill),
+        CategoryItem("Donasi", R.drawable.ic_donate),
+        CategoryItem("Edukasi", R.drawable.ic_education),
+        CategoryItem("Olahraga", R.drawable.ic_exercise),
+        CategoryItem("Hadiah", R.drawable.ic_gift),
+        CategoryItem("Kesehatan", R.drawable.ic_health),
+        CategoryItem("Transportasi", R.drawable.ic_transportation),
+    )
 }
