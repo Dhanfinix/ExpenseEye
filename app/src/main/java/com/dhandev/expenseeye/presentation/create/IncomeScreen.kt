@@ -20,44 +20,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.data.model.OutcomeItem
-import com.dhandev.expenseeye.data.model.Transaction
 import com.dhandev.expenseeye.presentation.ui.component.DatePickerView
 import com.dhandev.expenseeye.presentation.ui.component.DropdownView
 import com.dhandev.expenseeye.presentation.ui.component.NumberFieldView
 import com.dhandev.expenseeye.presentation.ui.component.TextFieldView
 import com.dhandev.expenseeye.ui.theme.BlueSecondary
 import com.dhandev.expenseeye.ui.theme.DarkGray
-import com.dhandev.expenseeye.ui.theme.MyRed
+import com.dhandev.expenseeye.ui.theme.MyGreen
 import com.dhandev.expenseeye.ui.theme.raleway
 import com.dhandev.expenseeye.utils.Constants
-import com.dhandev.expenseeye.utils.NumUtil.clearThousandFormat
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun OutcomeScreen(
-    modifier: Modifier = Modifier,
-    viewModel: CreateViewModel = koinViewModel()
+fun IncomeScreen(
+    modifier: Modifier = Modifier
 ) {
-    val lifeCycleOwner : LifecycleOwner = LocalLifecycleOwner.current
-    val mCategory = Constants.categoryOutcomeName
+    val mCategory = Constants.categoryIncomeName
     var nominal by remember { mutableStateOf("") }
     var trxName by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf(mCategory[0]) }
     var trxDate by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
 
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()){
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -73,20 +65,9 @@ fun OutcomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
-            onClick = {
-                viewModel.insert(
-                    Transaction(
-                        trxName = trxName,
-                        amount = nominal.clearThousandFormat().toDouble(),
-                        category = selectedCategory.name,
-                        dateInMillis = trxDate,
-                        isOutcome = true
-                    )
-                )
-//                println("My Selected value ${OutcomeItem(trxName, nominal, selectedCategory.name, trxDate)}")
-            },
+            onClick = { println("My Selected value ${OutcomeItem(trxName, nominal, selectedCategory.name, trxDate)}") },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MyRed,
+                containerColor = MyGreen,
                 contentColor = Color.White
             )
         ) {
@@ -104,14 +85,6 @@ fun OutcomeScreen(
                 color = Color.White
             )
         }
-
-//        Button(onClick = {
-//            viewModel.getAll().observe(lifeCycleOwner){
-//                println("Saved data $it")
-//            }
-//        }) {
-//            Text(text = "Cek Saved")
-//        }
     }
 
 }
