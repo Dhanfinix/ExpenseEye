@@ -6,11 +6,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -104,22 +106,27 @@ fun DropdownView(
             modifier = Modifier
                 .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
                 .fillMaxWidth()
+                .background(Color.White)
         ) {
             category.forEachIndexed { index, categoryItem ->
-                DropdownMenuItem(
-                    modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.onPrimary),
-                    text = { Text(text = categoryItem.name) },
-                    onClick = {
-                        mSelectedIndex = index
-                        mExpanded = false
-                    },
-                    leadingIcon = {
-                        Image(
-                            painter = painterResource(id = categoryItem.icon),
-                            contentDescription = null
-                        )
+                Column {
+                    DropdownMenuItem(
+                        text = { Text(text = categoryItem.name) },
+                        onClick = {
+                            mSelectedIndex = index
+                            mExpanded = false
+                        },
+                        leadingIcon = {
+                            Image(
+                                painter = painterResource(id = categoryItem.icon),
+                                contentDescription = null
+                            )
+                        }
+                    )
+                    if (index != category.size-1){
+                        Divider(modifier.fillMaxWidth().height(1.dp).padding(horizontal = 8.dp))
                     }
-                )
+                }
             }
         }
     }

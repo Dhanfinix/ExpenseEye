@@ -38,30 +38,6 @@ fun CreateScreen(
 ) {
     Box(modifier.fillMaxSize()) {
         TabView()
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .align(Alignment.BottomCenter),
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = BlueSecondary,
-                contentColor = DarkGray
-            )
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_save_24),
-                contentDescription = stringResource(id = R.string.save))
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = stringResource(id = R.string.save),
-                style = raleway(
-                    fontSize = 16,
-                    weight = FontWeight.Medium
-                ),
-                color = DarkGray
-            )
-        }
     }
 }
 

@@ -1,22 +1,39 @@
 package com.dhandev.expenseeye.presentation.create
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.dhandev.expenseeye.R
+import com.dhandev.expenseeye.data.model.OutcomeItem
 import com.dhandev.expenseeye.presentation.ui.component.DatePickerView
 import com.dhandev.expenseeye.presentation.ui.component.DropdownView
 import com.dhandev.expenseeye.presentation.ui.component.NumberFieldView
 import com.dhandev.expenseeye.presentation.ui.component.TextFieldView
+import com.dhandev.expenseeye.ui.theme.BlueSecondary
+import com.dhandev.expenseeye.ui.theme.DarkGray
+import com.dhandev.expenseeye.ui.theme.raleway
 import com.dhandev.expenseeye.utils.Constants
 
 @Composable
@@ -29,16 +46,43 @@ fun OutcomeScreen(
     var selectedCategory by remember { mutableStateOf(mCategory[0]) }
     var trxDate by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        NumberFieldView(title = stringResource(id = R.string.amount), value = { nominal = it })
-        TextFieldView(title = stringResource(id = R.string.trx_name), value = { trxName = it })
-        DropdownView(
-            title = stringResource(id = R.string.category),
-            category = mCategory,
-            value = { selectedCategory = it })
-        DatePickerView(title = stringResource(id = R.string.date), value = { trxDate = it })
+
+    Box(modifier = modifier.fillMaxSize()){
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            NumberFieldView(title = stringResource(id = R.string.amount), value = { nominal = it })
+            TextFieldView(title = stringResource(id = R.string.trx_name), value = { trxName = it })
+            DropdownView(
+                title = stringResource(id = R.string.category),
+                category = mCategory,
+                value = { selectedCategory = it })
+            DatePickerView(title = stringResource(id = R.string.date), value = { trxDate = it })
+        }
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
+            onClick = { println("My Selected value ${OutcomeItem(trxName, nominal, selectedCategory.name, trxDate)}") },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = BlueSecondary,
+                contentColor = DarkGray
+            )
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_save_24),
+                contentDescription = stringResource(id = R.string.save)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = stringResource(id = R.string.save),
+                style = raleway(
+                    fontSize = 16,
+                    weight = FontWeight.Medium
+                ),
+                color = DarkGray
+            )
+        }
     }
+
 }
