@@ -34,15 +34,15 @@ import com.dhandev.expenseeye.presentation.ui.component.NumberFieldView
 import com.dhandev.expenseeye.presentation.ui.component.TextFieldView
 import com.dhandev.expenseeye.ui.theme.BlueSecondary
 import com.dhandev.expenseeye.ui.theme.DarkGray
-import com.dhandev.expenseeye.ui.theme.MyRed
+import com.dhandev.expenseeye.ui.theme.MyGreen
 import com.dhandev.expenseeye.ui.theme.raleway
 import com.dhandev.expenseeye.utils.Constants
 
 @Composable
-fun OutcomeScreen(
+fun IncomeScreen(
     modifier: Modifier = Modifier
 ) {
-    val mCategory = Constants.categoryOutcomeName
+    val mCategory = Constants.categoryIncomeName
     var nominal by remember { mutableStateOf("") }
     var trxName by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf(mCategory[0]) }
@@ -67,7 +67,7 @@ fun OutcomeScreen(
                 .align(Alignment.BottomCenter),
             onClick = { println("My Selected value ${OutcomeItem(trxName, nominal, selectedCategory.name, trxDate)}") },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MyRed,
+                containerColor = MyGreen,
                 contentColor = Color.White
             )
         ) {

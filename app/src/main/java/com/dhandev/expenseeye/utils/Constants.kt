@@ -53,8 +53,12 @@ object Constants {
         CategoryItem("Donasi", R.drawable.ic_donate),
         CategoryItem("Edukasi", R.drawable.ic_education),
         CategoryItem("Olahraga", R.drawable.ic_exercise),
-        CategoryItem("Hadiah", R.drawable.ic_gift),
         CategoryItem("Kesehatan", R.drawable.ic_health),
         CategoryItem("Transportasi", R.drawable.ic_transportation),
+    )
+
+    val categoryIncomeName = listOf(
+        CategoryItem("Hadiah", R.drawable.ic_gift),
+        CategoryItem("Gaji", R.drawable.ic_payment),
     )
 }

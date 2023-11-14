@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dhandev.expenseeye.presentation.create.IncomeScreen
 import com.dhandev.expenseeye.presentation.create.OutcomeScreen
 import com.dhandev.expenseeye.ui.theme.BlueMain
 import com.dhandev.expenseeye.ui.theme.ExpenseEyeTheme
@@ -45,7 +46,7 @@ fun TabView() {
         }
         when (selectedTabIndex) {
             0 -> OutcomeScreen(Modifier.padding(16.dp))
-            1 -> Text("Content of Tab 2")
+            1 -> IncomeScreen(Modifier.padding(16.dp))
         }
     }
 }
