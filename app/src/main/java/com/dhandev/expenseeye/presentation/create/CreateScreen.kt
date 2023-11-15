@@ -21,11 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.navigation.NavigationDestination
+import com.dhandev.expenseeye.presentation.landing.MainViewModel
 import com.dhandev.expenseeye.presentation.ui.component.TabView
 import com.dhandev.expenseeye.ui.theme.BlueSecondary
 import com.dhandev.expenseeye.ui.theme.DarkGray
 import com.dhandev.expenseeye.ui.theme.ExpenseEyeTheme
 import com.dhandev.expenseeye.ui.theme.raleway
+import org.koin.androidx.compose.koinViewModel
 
 object CreateDestination : NavigationDestination {
     override val route: String = "createEdit"

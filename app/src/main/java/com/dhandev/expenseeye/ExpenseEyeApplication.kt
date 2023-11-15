@@ -2,6 +2,8 @@ package com.dhandev.expenseeye
 
 import android.app.Application
 import com.dhandev.expenseeye.di.PreferenceModule
+import com.dhandev.expenseeye.di.DatabaseModule
+import com.dhandev.expenseeye.di.RepositoryModule
 import com.dhandev.expenseeye.di.ViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,6 +20,8 @@ class ExpenseEyeApplication : Application() {
             modules(
                 listOf(
                     PreferenceModule,
+                    DatabaseModule,
+                    RepositoryModule,
                     ViewModelModule
                 )
             )

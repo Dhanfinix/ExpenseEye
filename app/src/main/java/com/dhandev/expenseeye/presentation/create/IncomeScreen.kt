@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.data.model.OutcomeItem
+import com.dhandev.expenseeye.data.model.Transaction
 import com.dhandev.expenseeye.presentation.ui.component.DatePickerView
 import com.dhandev.expenseeye.presentation.ui.component.DropdownView
 import com.dhandev.expenseeye.presentation.ui.component.NumberFieldView
@@ -37,10 +38,13 @@ import com.dhandev.expenseeye.ui.theme.DarkGray
 import com.dhandev.expenseeye.ui.theme.MyGreen
 import com.dhandev.expenseeye.ui.theme.raleway
 import com.dhandev.expenseeye.utils.Constants
+import com.dhandev.expenseeye.utils.NumUtil.clearThousandFormat
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun IncomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: CreateViewModel = koinViewModel()
 ) {
     val mCategory = Constants.categoryIncomeName
     var nominal by remember { mutableStateOf("") }
@@ -49,7 +53,7 @@ fun IncomeScreen(
     var trxDate by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
 
-    Box(modifier = modifier.fillMaxSize()){
+    Box(modifier = modifier.fillMaxSize()) {
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -65,7 +69,17 @@ fun IncomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
-            onClick = { println("My Selected value ${OutcomeItem(trxName, nominal, selectedCategory.name, trxDate)}") },
+            onClick = {
+                viewModel.insert(
+                    Transaction(
+                        trxName = trxName,
+                        amount = nominal.clearThousandFormat().toDouble(),
+                        category = selectedCategory.name,
+                        dateInMillis = trxDate,
+                        isOutcome = false
+                    )
+                )
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MyGreen,
                 contentColor = Color.White
@@ -86,5 +100,4 @@ fun IncomeScreen(
             )
         }
     }
-
 }
