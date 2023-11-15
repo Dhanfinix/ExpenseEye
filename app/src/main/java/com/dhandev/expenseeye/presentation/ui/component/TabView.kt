@@ -22,7 +22,9 @@ import com.dhandev.expenseeye.ui.theme.BlueMain
 import com.dhandev.expenseeye.ui.theme.ExpenseEyeTheme
 
 @Composable
-fun TabView() {
+fun TabView(
+    onSuccess: () -> Unit
+) {
     val titles = listOf("Pengeluaran", "Pendapatan")
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
@@ -45,8 +47,8 @@ fun TabView() {
             }
         }
         when (selectedTabIndex) {
-            0 -> OutcomeScreen(Modifier.padding(16.dp))
-            1 -> IncomeScreen(Modifier.padding(16.dp))
+            0 -> OutcomeScreen(Modifier.padding(16.dp), onSuccess = { onSuccess.invoke() })
+            1 -> IncomeScreen(Modifier.padding(16.dp), onSuccess = { onSuccess.invoke() })
         }
     }
 }
@@ -56,7 +58,7 @@ fun TabView() {
 fun PreviewTab(){
     ExpenseEyeTheme {
         Surface {
-            TabView()
+            TabView {}
         }
     }
 }

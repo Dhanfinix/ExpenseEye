@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -17,44 +16,40 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
 import com.dhandev.expenseeye.R
-import com.dhandev.expenseeye.data.model.OutcomeItem
 import com.dhandev.expenseeye.data.model.Transaction
 import com.dhandev.expenseeye.presentation.ui.component.DatePickerView
 import com.dhandev.expenseeye.presentation.ui.component.DropdownView
 import com.dhandev.expenseeye.presentation.ui.component.NumberFieldView
 import com.dhandev.expenseeye.presentation.ui.component.TextFieldView
-import com.dhandev.expenseeye.ui.theme.BlueSecondary
-import com.dhandev.expenseeye.ui.theme.DarkGray
 import com.dhandev.expenseeye.ui.theme.MyRed
 import com.dhandev.expenseeye.ui.theme.raleway
 import com.dhandev.expenseeye.utils.Constants
 import com.dhandev.expenseeye.utils.NumUtil.clearThousandFormat
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OutcomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: CreateViewModel = koinViewModel()
+    viewModel: CreateViewModel = koinViewModel(),
+    onSuccess: () -> Unit
 ) {
-    val lifeCycleOwner : LifecycleOwner = LocalLifecycleOwner.current
     val mCategory = Constants.categoryOutcomeName
     var nominal by remember { mutableStateOf("") }
     var trxName by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf(mCategory[0]) }
     var trxDate by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    val scope = rememberCoroutineScope()
 
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -74,16 +69,19 @@ fun OutcomeScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
             onClick = {
-                viewModel.insert(
-                    Transaction(
-                        trxName = trxName,
-                        amount = nominal.clearThousandFormat().toDouble(),
-                        category = selectedCategory.name,
-                        dateInMillis = trxDate,
-                        isOutcome = true
+                scope.launch {
+                    viewModel.insert(
+                        Transaction(
+                            trxName = trxName,
+                            amount = nominal.clearThousandFormat().toDouble(),
+                            category = selectedCategory.name,
+                            dateInMillis = trxDate,
+                            isOutcome = true
+                        )
                     )
-                )
-//                println("My Selected value ${OutcomeItem(trxName, nominal, selectedCategory.name, trxDate)}")
+                }.invokeOnCompletion {
+                    onSuccess.invoke()
+                }
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MyRed,
@@ -113,5 +111,4 @@ fun OutcomeScreen(
 //            Text(text = "Cek Saved")
 //        }
     }
-
 }

@@ -49,4 +49,5 @@
     <string name="trx_name">Transaction Name</string>
     <string name="category">Category</string>
     <string name="date">Date</string>
+    <string name="transaction_success">Transaksi berhasil tersimpan</string>
 </resources>

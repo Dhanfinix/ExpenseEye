@@ -74,7 +74,9 @@ fun ExpenseEyeNavGraph(
                 }
             }
             composable(route = CreateDestination.route){
-                CreateScreen()
+                CreateScreen(
+                    navigateBack = { navController.popBackStack() },
+                )
                 BackHandler {
                     navController.navigate(HomeDestination.route) {
                         popUpTo(HomeDestination.route) { inclusive = true }
