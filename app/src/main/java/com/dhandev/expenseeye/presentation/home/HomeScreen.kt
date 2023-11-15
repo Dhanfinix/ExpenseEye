@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -51,12 +52,12 @@ fun HomeScreen(
         start = Offset(800f, 0f),
         end = Offset(0f, 400f)
     )
-    val filter = remember { mutableIntStateOf(0) }       //today
-//    val groupedData = remember { mutableStateOf(listOf(TransactionGroupModel("", listDummyItemData))) }
+    val filter = remember { mutableLongStateOf(DateUtil.currentDate) }       //today
     val groupedData = remember { mutableStateOf<List<TransactionGroupModel>?>(null) }
+    val selectedFilter = remember { mutableIntStateOf(0) }
 
     Box(modifier = Modifier.fillMaxSize()){
-        viewModel.getAll().observe(lifecycleOwner){data->
+        viewModel.getAll(filter.longValue).observe(lifecycleOwner){data->
             groupedData.value = data
                 .groupBy {
                     DateUtil.millisToDateForGroup(it.dateInMillis)
@@ -85,10 +86,17 @@ fun HomeScreen(
             item {
                 ChipGroup(
                     modifier = Modifier.padding(),
-                    items = listOf("Hari ini", "7 hari", "2 minggu", "1 bulan", "Periode pencatatan")
+                    items = listOf("Hari ini", "7 hari", "1 bulan", "Periode pencatatan"),
+                    selectedItem = selectedFilter
                 ) {
                     //TODO: Filter recent transaction
-                    filter.intValue = it
+                    selectedFilter.intValue = it
+                    filter.longValue = when(it){
+                        0 -> DateUtil.fromDateInMillisToday
+                        1 -> DateUtil.fromDateInMillis7Days
+                        2 -> DateUtil.fromDateInMillis30Days
+                        else -> DateUtil.fromReportPeriodDate(viewModel.reportPeriod.intValue)
+                    }
                 }
             }
 

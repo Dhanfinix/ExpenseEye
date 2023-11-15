@@ -9,8 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -23,9 +22,9 @@ import com.dhandev.expenseeye.ui.theme.raleway
 fun ChipGroup(
     modifier: Modifier = Modifier,
     items: List<String>,
+    selectedItem: MutableIntState,
     onItemSelected: (Int) -> Unit
 ) {
-    val selectedItem = remember { mutableIntStateOf(0) }
     LazyRow(
         modifier = modifier
     ) {
@@ -34,7 +33,6 @@ fun ChipGroup(
                 modifier = Modifier.padding(start = if (index == 0)  16.dp else 0.dp),
                 text = item,
                 onClick = {
-                    selectedItem.intValue = index
                     onItemSelected(index)
                 },
                 backgroundColor = if (selectedItem.intValue == index) BlueSecondary else Color.White,

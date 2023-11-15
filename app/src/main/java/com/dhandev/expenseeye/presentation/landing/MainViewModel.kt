@@ -25,7 +25,7 @@ class MainViewModel(
             preference.saveProfileData(data)
         }
     }
-    fun getAll() = trxRepository.getAllTransaction().asLiveData()
+    fun getAll(fromDataInMillis: Long) = trxRepository.getAllTransaction(fromDataInMillis).asLiveData()
 
     init {
         viewModelScope.launch {

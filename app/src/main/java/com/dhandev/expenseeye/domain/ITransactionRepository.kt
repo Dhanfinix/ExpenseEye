@@ -20,6 +20,6 @@ import com.dhandev.expenseeye.data.model.TransactionItemModel
 import kotlinx.coroutines.flow.Flow
 
 interface ITransactionRepository {
-    fun getAllTransaction(): Flow<List<TransactionItemModel>>
+    fun getAllTransaction(fromDataInMillis: Long): Flow<List<TransactionItemModel>>
     suspend fun insertItem(item: TransactionItemModel)
 }
