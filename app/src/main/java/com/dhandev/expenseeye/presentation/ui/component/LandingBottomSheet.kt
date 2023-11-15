@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.data.model.ProfileModel
 import com.dhandev.expenseeye.ui.theme.raleway
+import com.dhandev.expenseeye.utils.NumUtil.clearThousandFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -76,9 +77,9 @@ fun LandingBottomSheet(
             )
             Button(
                 onClick = {
-                    if (username.isNotEmpty() || balance.isNotEmpty()){
+                    if (username.isNotEmpty() || balance.clearThousandFormat().isNotEmpty()){
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            onProceed.invoke(ProfileModel(username, balance.toLong(), reportPeriod))
+                            onProceed.invoke(ProfileModel(username, balance.clearThousandFormat().toLong(), reportPeriod))
                         }
                     } else {
                         Toast.makeText(context, "Mohon isi semua kolom", Toast.LENGTH_SHORT).show()

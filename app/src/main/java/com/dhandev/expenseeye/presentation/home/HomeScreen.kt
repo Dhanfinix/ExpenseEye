@@ -11,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,12 +29,10 @@ import com.dhandev.expenseeye.presentation.landing.MainViewModel
 import com.dhandev.expenseeye.presentation.ui.component.BalanceCardView
 import com.dhandev.expenseeye.presentation.ui.component.ChipGroup
 import com.dhandev.expenseeye.presentation.ui.component.TransactionGroup
-import com.dhandev.expenseeye.presentation.ui.component.listDummyItemData
 import com.dhandev.expenseeye.ui.theme.BlueSecondary
 import com.dhandev.expenseeye.ui.theme.raleway
 import com.dhandev.expenseeye.utils.DateUtil
 import org.koin.androidx.compose.koinViewModel
-import java.util.concurrent.TimeUnit
 
 object HomeDestination : NavigationDestination {
     override val route: String = "home"
@@ -47,13 +45,25 @@ fun HomeScreen(
     viewModel: MainViewModel = koinViewModel(),
     navigateToCreate: () -> Unit
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val gradient = Brush.linearGradient(
         colors = listOf(BlueSecondary, MaterialTheme.colorScheme.background),
         start = Offset(800f, 0f),
         end = Offset(0f, 400f)
     )
     val filter = remember { mutableIntStateOf(0) }       //today
+//    val groupedData = remember { mutableStateOf(listOf(TransactionGroupModel("", listDummyItemData))) }
+    val groupedData = remember { mutableStateOf<List<TransactionGroupModel>?>(null) }
+
     Box(modifier = Modifier.fillMaxSize()){
+        viewModel.getAll().observe(lifecycleOwner){data->
+            groupedData.value = data
+                .groupBy {
+                    DateUtil.millisToDateForGroup(it.dateInMillis)
+                }.map {
+                    TransactionGroupModel(it.key, it.value)
+                }
+        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
@@ -81,33 +91,45 @@ fun HomeScreen(
                     filter.intValue = it
                 }
             }
-            val groupedData = listDummyItemData
-                .filter {
-                    when (filter.intValue) {
-                        0 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1) //today
-                        1 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7) //7 days
-                        2 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(14) //2 weeks
-                        3 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(30) //1 month
-                        else -> false
-                    }
+
+            groupedData.value?.let {
+                items(it.size) { index ->
+                    TransactionGroup(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = if (index == it.size-1) 50.dp else 0.dp),
+                        data = it[index]
+                    )
                 }
-                .groupBy {
-                    DateUtil.millisToDateForGroup(it.dateInMillis)
-                }.map {
-                    TransactionGroupModel(it.key, it.value)
-                }.sortedBy {
-                    it.date
-                }
-            items(groupedData.count()) {
-                TransactionGroup(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    data = groupedData[it]
-                )
             }
+//            val groupedData = listDummyItemData
+//                .filter {
+//                    when (filter.intValue) {
+//                        0 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1) //today
+//                        1 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7) //7 days
+//                        2 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(14) //2 weeks
+//                        3 -> it.dateInMillis >= System.currentTimeMillis() - TimeUnit.DAYS.toMillis(30) //1 month
+//                        else -> false
+//                    }
+//                }
+//                .groupBy {
+//                    DateUtil.millisToDateForGroup(it.dateInMillis)
+//                }.map {
+//                    TransactionGroupModel(it.key, it.value)
+//                }.sortedBy {
+//                    it.date
+//                }
+//            items(groupedData.count()) {
+//                TransactionGroup(
+//                    modifier = Modifier.padding(horizontal = 16.dp),
+//                    data = groupedData[it]
+//                )
+//            }
+
         }
 
         ExtendedFloatingActionButton(
-            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp),
             text = { Text(text = "Transaksi") },
             onClick = {navigateToCreate.invoke()},
             icon = { Icon(Icons.Filled.Add, "") },
