@@ -16,10 +16,10 @@
 
 package com.dhandev.expenseeye.domain
 
-import com.dhandev.expenseeye.data.model.Transaction
+import com.dhandev.expenseeye.data.model.TransactionItemModel
 import kotlinx.coroutines.flow.Flow
 
 interface ITransactionRepository {
-    fun getAllTransaction(): Flow<List<Transaction>>
-    suspend fun insertItem(item: Transaction)
+    fun getAllTransaction(): Flow<List<TransactionItemModel>>
+    suspend fun insertItem(item: TransactionItemModel)
 }

@@ -2,8 +2,7 @@ package com.dhandev.expenseeye.presentation.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.dhandev.expenseeye.data.local.room.TransactionDao
-import com.dhandev.expenseeye.data.model.Transaction
+import com.dhandev.expenseeye.data.model.TransactionItemModel
 import com.dhandev.expenseeye.domain.TransactionRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +17,7 @@ class CreateViewModel(private val trxRepository: TransactionRepository): ViewMod
     fun getAll() = trxRepository.getAllTransaction().asLiveData()
 
     // Define an insert method that calls the insert method in the DAO
-    fun insert(item: Transaction) {
+    fun insert(item: TransactionItemModel) {
         viewModelScope.launch {
             trxRepository.insertItem(item)
         }

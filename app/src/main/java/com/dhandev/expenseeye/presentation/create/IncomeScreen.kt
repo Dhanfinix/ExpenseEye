@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dhandev.expenseeye.R
-import com.dhandev.expenseeye.data.model.Transaction
+import com.dhandev.expenseeye.data.model.TransactionItemModel
 import com.dhandev.expenseeye.presentation.ui.component.DatePickerView
 import com.dhandev.expenseeye.presentation.ui.component.DropdownView
 import com.dhandev.expenseeye.presentation.ui.component.NumberFieldView
@@ -70,12 +70,12 @@ fun IncomeScreen(
             onClick = {
                 scope.launch {
                     viewModel.insert(
-                        Transaction(
-                            trxName = trxName,
-                            amount = nominal.clearThousandFormat().toDouble(),
+                        TransactionItemModel(
+                            title = trxName,
+                            total = nominal.clearThousandFormat().toDouble(),
                             category = selectedCategory.name,
                             dateInMillis = trxDate,
-                            isOutcome = false
+                            isExpense = false
                         )
                     )
                 }.invokeOnCompletion {
