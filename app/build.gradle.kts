@@ -108,4 +108,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleScopeVersion")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifeCycleScopeVersion")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleScopeVersion")
+
+    //Number picker
+    implementation ("com.chargemap.compose:numberpicker:1.0.3")
 }

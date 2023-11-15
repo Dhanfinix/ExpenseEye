@@ -1,5 +1,6 @@
 package com.dhandev.expenseeye.presentation.ui.component
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,14 +12,15 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.dhandev.expenseeye.R
 import com.dhandev.expenseeye.data.model.ProfileModel
@@ -37,7 +39,8 @@ fun LandingBottomSheet(
 ) {
     var username by remember { mutableStateOf("") }
     var balance by remember { mutableStateOf("0") }
-    var reportPeriod by remember { mutableStateOf("") }
+    var reportPeriod by remember { mutableIntStateOf(1) }
+    val context = LocalContext.current
 
     ModalBottomSheet(
         modifier = modifier.fillMaxSize(),
@@ -66,17 +69,22 @@ fun LandingBottomSheet(
                 title = stringResource(id = R.string.landing_start_current_balance),
                 value = {balance = it}
             )
-//            DatePickerView(
-//                modifier = modifier.padding(bottom = 12.dp),
-//                title = stringResource(id = R.string.landing_start_period_date),
-//                value = {reportPeriod = it}
-//            )
+            NumberPickerView(
+                modifier = modifier.padding(bottom = 12.dp),
+                title = stringResource(id = R.string.landing_start_period_date),
+                value = {reportPeriod = it}
+            )
             Button(
-                onClick = { scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    onProceed.invoke(ProfileModel(username, balance.toLong(), reportPeriod))
-                } },
+                onClick = {
+                    if (username.isNotEmpty() || balance.isNotEmpty()){
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            onProceed.invoke(ProfileModel(username, balance.toLong(), reportPeriod))
+                        }
+                    } else {
+                        Toast.makeText(context, "Mohon isi semua kolom", Toast.LENGTH_SHORT).show()
+                    }
+                },
                 modifier = Modifier
-                    .padding(vertical = 22.dp)
                     .fillMaxWidth()
             ) {
                 Text(text = stringResource(id = R.string.landing_start_btn))

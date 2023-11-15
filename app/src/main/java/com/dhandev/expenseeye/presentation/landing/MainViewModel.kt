@@ -1,5 +1,6 @@
 package com.dhandev.expenseeye.presentation.landing
 
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +13,7 @@ class MainViewModel(private val preference: DataStorePreference) : ViewModel() {
     val logged = mutableStateOf(false)
     val loading = mutableStateOf(true)
     val username = mutableStateOf("")
-    val reportPeriod = mutableStateOf("")
+    val reportPeriod = mutableIntStateOf(1)
 
     fun saveProfileData(data: ProfileModel) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -26,7 +27,7 @@ class MainViewModel(private val preference: DataStorePreference) : ViewModel() {
                 logged.value = profile != null
                 loading.value = false
                 username.value = profile?.userName ?: ""
-                reportPeriod.value = profile?.reportPeriod ?: ""
+                reportPeriod.intValue = profile?.reportPeriod ?: 1
             }
         }
     }
