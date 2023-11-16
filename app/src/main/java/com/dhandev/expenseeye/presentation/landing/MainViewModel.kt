@@ -3,13 +3,18 @@ package com.dhandev.expenseeye.presentation.landing
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.dhandev.expenseeye.data.local.DataStorePreference
 import com.dhandev.expenseeye.data.model.ProfileModel
+import com.dhandev.expenseeye.domain.TransactionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val preference: DataStorePreference) : ViewModel() {
+class MainViewModel(
+    private val preference: DataStorePreference,
+    private val trxRepository: TransactionRepository
+) : ViewModel() {
     val logged = mutableStateOf(false)
     val loading = mutableStateOf(true)
     val username = mutableStateOf("")
@@ -20,6 +25,7 @@ class MainViewModel(private val preference: DataStorePreference) : ViewModel() {
             preference.saveProfileData(data)
         }
     }
+    fun getAll(fromDataInMillis: Long) = trxRepository.getAllTransaction(fromDataInMillis).asLiveData()
 
     init {
         viewModelScope.launch {
