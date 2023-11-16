@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 object DateUtil {
@@ -24,17 +25,24 @@ object DateUtil {
         return sdf.format(Date(timeInMillis))
     }
 
-    val currentDate = System.currentTimeMillis()
+    val currentDate = {
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta"))
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        calendar.timeInMillis
+    }
     val oneDayInMillis : Long = 24 * 60 * 60 * 1000
 
     // For today's transactions
     val fromDateInMillisToday = currentDate
 
     // For last 7 days' transactions
-    val fromDateInMillis7Days = currentDate - 7 * oneDayInMillis
+    val fromDateInMillis7Days = currentDate() - 7 * oneDayInMillis
 
     // For last 30 days' transactions
-    val fromDateInMillis30Days = currentDate - 30 * oneDayInMillis
+    val fromDateInMillis30Days = currentDate() - 30 * oneDayInMillis
 
     fun fromReportPeriodDate(periodDate: Int): Long{
         val calendar = Calendar.getInstance()
@@ -55,6 +63,6 @@ object DateUtil {
         // Convert the difference from milliseconds to days
         val daysPassed = TimeUnit.DAYS.convert(currentDateInMillis - targetDateInMillis, TimeUnit.MILLISECONDS)
 
-        return currentDate - (daysPassed + 1) * oneDayInMillis
+        return currentDate() - daysPassed * oneDayInMillis
     }
 }

@@ -61,7 +61,7 @@ fun HomeScreen(
         start = Offset(800f, 0f),
         end = Offset(0f, 400f)
     )
-    val filter = remember { mutableLongStateOf(DateUtil.currentDate) }       //today
+    val filter = remember { mutableLongStateOf(DateUtil.currentDate()) }       //today
     val groupedData = remember { mutableStateOf<List<TransactionGroupModel>?>(emptyList()) }
     val selectedFilter = remember { mutableIntStateOf(0) }
     val composition =
@@ -103,12 +103,12 @@ fun HomeScreen(
             item {
                 ChipGroup(
                     modifier = Modifier.padding(),
-                    items = listOf("Hari ini", "7 hari", "1 bulan", "Periode pencatatan"),
+                    items = listOf("Hari ini", "7 hari", "30 hari", "Periode pencatatan"),
                     selectedItem = selectedFilter
                 ) {
                     selectedFilter.intValue = it
                     filter.longValue = when (it) {
-                        0 -> DateUtil.fromDateInMillisToday
+                        0 -> DateUtil.fromDateInMillisToday()
                         1 -> DateUtil.fromDateInMillis7Days
                         2 -> DateUtil.fromDateInMillis30Days
                         else -> DateUtil.fromReportPeriodDate(viewModel.reportPeriod.intValue)
