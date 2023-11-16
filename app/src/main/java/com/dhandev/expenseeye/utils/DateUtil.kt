@@ -55,6 +55,6 @@ object DateUtil {
         // Convert the difference from milliseconds to days
         val daysPassed = TimeUnit.DAYS.convert(currentDateInMillis - targetDateInMillis, TimeUnit.MILLISECONDS)
 
-        return currentDate - daysPassed * oneDayInMillis
+        return currentDate - (daysPassed + 1) * oneDayInMillis
     }
 }
