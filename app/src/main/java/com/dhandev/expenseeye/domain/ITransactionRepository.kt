@@ -22,4 +22,6 @@ import kotlinx.coroutines.flow.Flow
 interface ITransactionRepository {
     fun getAllTransaction(fromDataInMillis: Long): Flow<List<TransactionItemModel>>
     suspend fun insertItem(item: TransactionItemModel)
+    suspend fun getTotalExpense(): Flow<Double>
+    suspend fun getTotalIncome(): Flow<Double>
 }

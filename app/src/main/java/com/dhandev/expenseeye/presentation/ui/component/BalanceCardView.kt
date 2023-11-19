@@ -38,10 +38,13 @@ import com.dhandev.expenseeye.ui.theme.BlueSecondary
 import com.dhandev.expenseeye.ui.theme.ExpenseEyeTheme
 import com.dhandev.expenseeye.ui.theme.Gray
 import com.dhandev.expenseeye.ui.theme.raleway
+import com.dhandev.expenseeye.utils.NumUtil
+import com.dhandev.expenseeye.utils.StringUtil
 
 @Composable
 fun BalanceCardView(
     modifier: Modifier = Modifier,
+    balance: Double
 ){
     val showBalance = remember { mutableStateOf(true) }
     Card(modifier = modifier.fillMaxWidth(),
@@ -71,7 +74,7 @@ fun BalanceCardView(
             }
             if (showBalance.value){
                 Text(
-                    text = "Rp5.000.000",
+                    text = StringUtil.formatRp(balance.toString()),
                     style = raleway(fontSize = 32, weight = FontWeight.Bold)
                 )
             } else {
@@ -103,7 +106,7 @@ fun BalanceCardView(
 fun PreviewBalanceCard(){
     ExpenseEyeTheme {
         Surface {
-            BalanceCardView(modifier = Modifier.padding(16.dp))
+            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0)
         }
     }
 }
