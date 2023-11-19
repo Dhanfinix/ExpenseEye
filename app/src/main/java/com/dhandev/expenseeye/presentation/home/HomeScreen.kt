@@ -88,7 +88,7 @@ fun HomeScreen(
             userScrollEnabled = true
         ) {
             item {
-                BalanceCardView(modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+                BalanceCardView(modifier.padding(vertical = 8.dp, horizontal = 16.dp), viewModel.balance)
             }
             item {
                 Text(
