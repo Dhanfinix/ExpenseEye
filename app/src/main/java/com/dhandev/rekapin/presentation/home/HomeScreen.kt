@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -64,14 +65,16 @@ fun HomeScreen(
     val filter = remember { mutableLongStateOf(DateUtil.currentDate()) }       //today
     val groupedData = remember { mutableStateOf<List<TransactionGroupModel>?>(emptyList()) }
     val selectedFilter = remember { mutableIntStateOf(0) }
-    val composition =
-        rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.anim_empty)
-        )
+    val composition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.anim_empty))
     val progress by animateLottieCompositionAsState(
         composition = composition.value,
         iterations = LottieConstants.IterateForever
     )
+    viewModel.getIncomeExpense()
+    val balance = remember { mutableDoubleStateOf(0.0) }
+    viewModel.balance.observe(lifecycleOwner){
+        balance.doubleValue = it
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         viewModel.getAll(filter.longValue).observe(lifecycleOwner) { data ->
@@ -88,7 +91,7 @@ fun HomeScreen(
             userScrollEnabled = true
         ) {
             item {
-                BalanceCardView(modifier.padding(vertical = 8.dp, horizontal = 16.dp), viewModel.balance)
+                BalanceCardView(modifier.padding(vertical = 8.dp, horizontal = 16.dp), balance.doubleValue)
             }
             item {
                 Text(

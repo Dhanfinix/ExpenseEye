@@ -24,4 +24,5 @@ interface ITransactionRepository {
     suspend fun insertItem(item: TransactionItemModel)
     suspend fun getTotalExpense(): Flow<Double>
     suspend fun getTotalIncome(): Flow<Double>
+    suspend fun getTotalBalance(): Double
 }

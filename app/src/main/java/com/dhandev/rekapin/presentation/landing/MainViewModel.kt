@@ -3,6 +3,8 @@ package com.dhandev.rekapin.presentation.landing
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -12,6 +14,7 @@ import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.domain.TransactionRepository
 import com.dhandev.rekapin.utils.TransactionCategory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -22,10 +25,8 @@ class MainViewModel(
     val loading = mutableStateOf(true)
     val username = mutableStateOf("")
     val reportPeriod = mutableIntStateOf(1)
-    private val incomeBalance = mutableDoubleStateOf(0.0)
-    private val expenseBalance = mutableDoubleStateOf(0.0)
-    val balance = incomeBalance.doubleValue - expenseBalance.doubleValue
-
+    private val _balance = MutableLiveData<Double>()
+    val balance : LiveData<Double> = _balance
     fun saveProfileData(data: ProfileModel) {
         viewModelScope.launch(Dispatchers.IO) {
             preference.saveProfileData(data)
@@ -39,6 +40,9 @@ class MainViewModel(
         }
     }
     fun getAll(fromDataInMillis: Long) = trxRepository.getAllTransaction(fromDataInMillis).asLiveData()
+    fun getIncomeExpense() = viewModelScope.launch {
+        _balance.postValue(trxRepository.getTotalBalance())
+    }
 
     init {
         viewModelScope.launch {
@@ -47,13 +51,6 @@ class MainViewModel(
                 loading.value = false
                 username.value = profile?.userName ?: ""
                 reportPeriod.intValue = profile?.reportPeriod ?: 1
-            }
-
-            trxRepository.getTotalIncome().collect{income ->
-                incomeBalance.doubleValue = income
-            }
-            trxRepository.getTotalExpense().collect{expense ->
-                expenseBalance.doubleValue = expense
             }
         }
     }

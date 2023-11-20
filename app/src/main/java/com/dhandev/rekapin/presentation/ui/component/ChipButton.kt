@@ -2,6 +2,7 @@ package com.dhandev.rekapin.presentation.ui.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -54,7 +55,11 @@ private fun ChipButton(
         shape = RoundedCornerShape(16.dp),
         color = backgroundColor,
         border = BorderStroke(1.dp, BlueSecondary),
-        modifier = modifier.clickable(onClick = onClick).padding(end = 8.dp)
+        modifier = modifier.clickable(
+            interactionSource = MutableInteractionSource(),
+            onClick = onClick,
+            indication = null
+        ).padding(end = 8.dp)
     ) {
         Text(
             text = text,
