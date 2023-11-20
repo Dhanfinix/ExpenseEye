@@ -40,6 +40,7 @@ fun LandingBottomSheet(
 ) {
     var username by remember { mutableStateOf("") }
     var balance by remember { mutableStateOf("0") }
+    var budget by remember { mutableStateOf("0") }
     var reportPeriod by remember { mutableIntStateOf(1) }
     val context = LocalContext.current
 
@@ -70,6 +71,11 @@ fun LandingBottomSheet(
                 title = stringResource(id = R.string.landing_start_current_balance),
                 value = {balance = it}
             )
+            NumberFieldView(
+                modifier = modifier.padding(bottom = 12.dp),
+                title = stringResource(id = R.string.landing_start_monthly_budget),
+                value = {budget = it}
+            )
             NumberPickerView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_period_date),
@@ -79,7 +85,14 @@ fun LandingBottomSheet(
                 onClick = {
                     if (username.isNotEmpty() || balance.clearThousandFormat().isNotEmpty()){
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            onProceed.invoke(ProfileModel(username, balance.clearThousandFormat().toLong(), reportPeriod))
+                            onProceed.invoke(
+                                ProfileModel(
+                                    username,
+                                    balance.clearThousandFormat().toLong(),
+                                    budget.clearThousandFormat().toLong(),
+                                    reportPeriod
+                                )
+                            )
                         }
                     } else {
                         Toast.makeText(context, "Mohon isi semua kolom", Toast.LENGTH_SHORT).show()

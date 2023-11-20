@@ -83,7 +83,7 @@ fun LandingScreen(
     val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
     val currentPage = pagerState.currentPage
 
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 

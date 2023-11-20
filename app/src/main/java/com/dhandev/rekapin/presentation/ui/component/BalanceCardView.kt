@@ -35,7 +35,8 @@ import com.dhandev.rekapin.utils.StringUtil
 @Composable
 fun BalanceCardView(
     modifier: Modifier = Modifier,
-    balance: Double
+    balance: Double,
+    budgetLeft: Float
 ){
     val showBalance = remember { mutableStateOf(true) }
     Card(modifier = modifier.fillMaxWidth(),
@@ -74,7 +75,7 @@ fun BalanceCardView(
 
             Text(
                 modifier = Modifier.padding(top = 16.dp),
-                text = "75% monthly budget left",
+                text = "${budgetLeft * 100}% budget left",
                 style = raleway(fontSize = 12, weight = FontWeight.Normal)
             )
             LinearProgressIndicator(
@@ -83,13 +84,12 @@ fun BalanceCardView(
                     .height(12.dp)
                     .padding(top = 6.dp)
                     .clip(RoundedCornerShape(8.dp)),
-                progress = 0.75f,
+                progress = budgetLeft,
                 color = BlueMain,
                 trackColor = Gray
             )
         }
     }
-
 }
 
 @Preview
@@ -97,7 +97,7 @@ fun BalanceCardView(
 fun PreviewBalanceCard(){
     RekapinTheme {
         Surface {
-            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0)
+            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 0.5f)
         }
     }
 }

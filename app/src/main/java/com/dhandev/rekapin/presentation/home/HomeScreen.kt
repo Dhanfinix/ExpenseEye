@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -71,9 +72,19 @@ fun HomeScreen(
         iterations = LottieConstants.IterateForever
     )
     viewModel.getIncomeExpense()
+    viewModel.getExpense()
     val balance = remember { mutableDoubleStateOf(0.0) }
+    val balanceThisMonth = remember { mutableDoubleStateOf(0.0) }
+    val budget = remember { mutableFloatStateOf(0f) }
     viewModel.balance.observe(lifecycleOwner){
         balance.doubleValue = it
+    }
+    viewModel.expense.observe(lifecycleOwner){
+        balanceThisMonth.doubleValue = viewModel.budget.doubleValue - it
+    }
+    viewModel.expense.observe(lifecycleOwner){
+        val result = 1f - it.div(viewModel.budget.doubleValue).toFloat()
+        budget.floatValue = String.format("%.2f", result).toFloat()
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -91,7 +102,7 @@ fun HomeScreen(
             userScrollEnabled = true
         ) {
             item {
-                BalanceCardView(modifier.padding(vertical = 8.dp, horizontal = 16.dp), balance.doubleValue)
+                BalanceCardView(modifier.padding(vertical = 8.dp, horizontal = 16.dp), balanceThisMonth.doubleValue, budget.floatValue)
             }
             item {
                 Text(

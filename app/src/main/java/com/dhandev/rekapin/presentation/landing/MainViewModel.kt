@@ -26,8 +26,12 @@ class MainViewModel(
     val loading = mutableStateOf(true)
     val username = mutableStateOf("")
     val reportPeriod = mutableIntStateOf(1)
+    val budget = mutableDoubleStateOf(0.0)
     private val _balance = MutableLiveData<Double>()
     val balance : LiveData<Double> = _balance
+
+    private val _expense = MutableLiveData<Double>()
+    val expense : LiveData<Double> = _expense
     fun saveProfileData(data: ProfileModel) {
         viewModelScope.launch(Dispatchers.IO) {
             preference.saveProfileData(data)
@@ -42,7 +46,10 @@ class MainViewModel(
     }
     fun getAll(fromDataInMillis: Long) = trxRepository.getAllTransaction(fromDataInMillis).asLiveData()
     fun getIncomeExpense() = viewModelScope.launch {
-        _balance.postValue(trxRepository.getTotalBalance(DateUtil.fromReportPeriodDate(reportPeriod.value)))
+        _balance.postValue(trxRepository.getTotalBalance(DateUtil.fromReportPeriodDate(reportPeriod.intValue)))
+    }
+    fun getExpense() = viewModelScope.launch {
+        _expense.postValue(trxRepository.getTotalExpense(DateUtil.fromReportPeriodDate(reportPeriod.intValue)).first())
     }
 
     init {
@@ -52,6 +59,7 @@ class MainViewModel(
                 loading.value = false
                 username.value = profile?.userName ?: ""
                 reportPeriod.intValue = profile?.reportPeriod ?: 1
+                budget.doubleValue = profile?.budget?.toDouble() ?: 0.0
             }
         }
     }
