@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.dhandev.expenseeye"
+    namespace = "com.dhandev.rekapin"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.dhandev.expenseeye"
+        applicationId = "com.dhandev.rekapin"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
