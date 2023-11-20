@@ -52,7 +52,7 @@ fun BalanceCardView(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "Your Balance",
+                    text = "This month's budget",
                     style = raleway(fontSize = 14, weight = FontWeight.Normal)
                 )
                 Image(
@@ -74,7 +74,7 @@ fun BalanceCardView(
 
             Text(
                 modifier = Modifier.padding(top = 16.dp),
-                text = "75% left since first month day",
+                text = "75% monthly budget left",
                 style = raleway(fontSize = 12, weight = FontWeight.Normal)
             )
             LinearProgressIndicator(

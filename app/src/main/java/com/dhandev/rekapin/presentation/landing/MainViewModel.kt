@@ -12,6 +12,7 @@ import com.dhandev.rekapin.data.local.DataStorePreference
 import com.dhandev.rekapin.data.model.ProfileModel
 import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.domain.TransactionRepository
+import com.dhandev.rekapin.utils.DateUtil
 import com.dhandev.rekapin.utils.TransactionCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -41,7 +42,7 @@ class MainViewModel(
     }
     fun getAll(fromDataInMillis: Long) = trxRepository.getAllTransaction(fromDataInMillis).asLiveData()
     fun getIncomeExpense() = viewModelScope.launch {
-        _balance.postValue(trxRepository.getTotalBalance())
+        _balance.postValue(trxRepository.getTotalBalance(DateUtil.fromReportPeriodDate(reportPeriod.value)))
     }
 
     init {

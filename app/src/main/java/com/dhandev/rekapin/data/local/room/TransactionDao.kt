@@ -13,9 +13,9 @@ interface TransactionDao {
     fun getAllTransaction(fromDateInMillis: Long): Flow<List<TransactionItemModel>>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: TransactionItemModel)
-    @Query("SELECT SUM(total) FROM transaction_table WHERE isExpense = 1")
-    fun getTotalExpenses(): Flow<Double>
+    @Query("SELECT SUM(total) FROM transaction_table WHERE isExpense = 1 AND dateInMillis >= :fromDateInMillis")
+    fun getTotalExpenses(fromDateInMillis: Long): Flow<Double>
 
-    @Query("SELECT SUM(total) FROM transaction_table WHERE isExpense = 0")
-    fun getTotalIncome(): Flow<Double>
+    @Query("SELECT SUM(total) FROM transaction_table WHERE isExpense = 0  AND dateInMillis >= :fromDateInMillis")
+    fun getTotalIncome(fromDateInMillis: Long): Flow<Double>
 }
