@@ -42,6 +42,7 @@ import com.dhandev.rekapin.presentation.report.ReportDestination
 import com.dhandev.rekapin.presentation.settings.SettingsDestination
 import com.dhandev.rekapin.presentation.ui.component.BottomNavigationView
 import com.dhandev.rekapin.presentation.ui.component.TitleSubtitle
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,7 +59,7 @@ fun RekapinApp(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             when (currentRoute) {
-                HomeDestination.route -> TitleSubtitle(title = "Good Morning,", subtitle = viewModel.username.value, scrollBehavior = scrollBehavior)
+                HomeDestination.route -> TitleSubtitle(title = getGreetings(), subtitle = viewModel.username.value, scrollBehavior = scrollBehavior)
                 ReportDestination.route -> TitleSubtitle(title = "Here is your money report,", subtitle = "in good visual", scrollBehavior = scrollBehavior)
                 SettingsDestination.route -> TitleSubtitle(title = "Settings", subtitle = stringResource(
                     id = R.string.app_name
@@ -81,6 +82,19 @@ fun RekapinApp(
             RekapinNavGraph(navController = navController, Modifier, paddingValues, viewModel)
         }
     )
+}
+
+private fun getGreetings() : String {
+    val currentTime = Calendar.getInstance().timeInMillis
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = currentTime
+    return when (calendar.get(Calendar.HOUR_OF_DAY)) {
+        in 6..11 -> "Good morning!"
+        in 12..13 -> "It's noon!"
+        in 14..17 -> "Good afternoon!"
+        in 18..20 -> "Good evening!"
+        else -> "Good night!"
+    }
 }
 
 /**
