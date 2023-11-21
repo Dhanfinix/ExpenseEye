@@ -10,7 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.Button
@@ -19,6 +20,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,9 +47,11 @@ fun DetailBottomSheet(
     modifier: Modifier = Modifier,
     scaffoldState: BottomSheetScaffoldState,
     data: TransactionItemModel,
+    onDelete:()->Unit
 ) {
     val context = LocalContext.current
     val (categoryImage, categoryName) = CategoryUtil.getCategory(data)
+    val openAlertDialog = remember { mutableStateOf(false) }
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -126,7 +131,7 @@ fun DetailBottomSheet(
                     Button(
                         modifier = Modifier.weight(1f),
                         onClick = {
-                            Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show()
+                            openAlertDialog.value = true
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MyRed,
@@ -151,4 +156,13 @@ fun DetailBottomSheet(
             }
         }) {}
 
+    if (openAlertDialog.value){
+        MyAlertDialog(
+            onDismissRequest = { openAlertDialog.value = false },
+            onConfirmation = { onDelete() },
+            dialogTitle = stringResource(R.string.delete_transaction),
+            dialogText = stringResource(R.string.delete_transaction_confrimation),
+            icon = Icons.Filled.Delete
+        )
+    }
 }

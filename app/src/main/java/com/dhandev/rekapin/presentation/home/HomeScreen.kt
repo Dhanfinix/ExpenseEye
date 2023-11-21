@@ -237,7 +237,14 @@ fun HomeScreen(
         if (selectedDetail != null){
             DetailBottomSheet(
                 scaffoldState = scaffoldState,
-                data = selectedDetail!!
+                data = selectedDetail!!,
+                onDelete = {
+                    scope.launch {
+                        viewModel.deleteItem(selectedDetail!!)
+                        sheetState.hide()
+                        selectedDetail = null
+                    }
+                }
             )
         }
     }

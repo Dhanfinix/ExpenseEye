@@ -77,4 +77,10 @@ class MainViewModel(
             }
         }
     }
+
+    fun deleteItem(item: TransactionItemModel){
+        viewModelScope.launch {
+            trxRepository.delete(item)
+        }
+    }
 }

@@ -55,5 +55,7 @@
 
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="delete_transaction">Delete Transaction</string>
+    <string name="delete_transaction_confrimation">Are you sure to delete this transaction data?</string>
 
 </resources>
