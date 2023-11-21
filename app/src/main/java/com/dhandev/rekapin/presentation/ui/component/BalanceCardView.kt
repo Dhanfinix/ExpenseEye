@@ -2,7 +2,9 @@ package com.dhandev.rekapin.presentation.ui.component
 
 import HiddenBalanceView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,8 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.ui.theme.BlueMain
-import com.dhandev.rekapin.ui.theme.RekapinTheme
+import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.Gray
+import com.dhandev.rekapin.ui.theme.RekapinTheme
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.StringUtil
 
@@ -36,9 +42,19 @@ import com.dhandev.rekapin.utils.StringUtil
 fun BalanceCardView(
     modifier: Modifier = Modifier,
     balance: Double,
-    budgetLeft: Float
+    budgetLeft: Float,
+    isShowBalance: Boolean,
+    isShown:(Boolean) -> Unit
 ){
-    val showBalance = remember { mutableStateOf(true) }
+    val showBalance = remember { mutableStateOf(isShowBalance) }
+    isShown.invoke(showBalance.value)
+
+    val gradient = Brush.linearGradient(
+        colors = listOf(BlueSecondary, MaterialTheme.colorScheme.background),
+        start = Offset(800f, 0f),
+        end = Offset(0f, 400f)
+    )
+
     Card(modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -48,7 +64,10 @@ fun BalanceCardView(
         )
     ){
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .background(brush = gradient)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceAround
         ) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -60,7 +79,7 @@ fun BalanceCardView(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clickable { showBalance.value = !showBalance.value },
-                    painter = painterResource(id = R.drawable.ic_eye_shown),
+                    painter = painterResource(id = if (showBalance.value) R.drawable.ic_eye_shown else R.drawable.ic_eye_hide),
                     contentDescription = "Hide balance"
                 )
             }
@@ -81,7 +100,7 @@ fun BalanceCardView(
             LinearProgressIndicator(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(12.dp)
+                    .height(16.dp)
                     .padding(top = 6.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 progress = budgetLeft,
@@ -97,7 +116,7 @@ fun BalanceCardView(
 fun PreviewBalanceCard(){
     RekapinTheme {
         Surface {
-            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 0.5f)
+            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 0.5f, true) { true }
         }
     }
 }

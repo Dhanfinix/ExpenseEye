@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.map
 
 private var THEME = booleanPreferencesKey("theme")
+private var SHOWBALANCE = booleanPreferencesKey("show_balance")
 private var USER_INFO = stringPreferencesKey("user_info")
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "profile")
 
@@ -42,5 +43,15 @@ class DataStorePreference (context: Context){
         } else {
             null
         }
+    }
+
+    suspend fun saveShowBalance(isShown:Boolean){
+        dataStore.edit {preference->
+            preference[SHOWBALANCE] = isShown
+        }
+    }
+
+    val getShowBalance =dataStore.data.map {preference->
+        preference[SHOWBALANCE] ?: false
     }
 }

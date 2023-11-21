@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,10 +20,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,11 +56,6 @@ fun HomeScreen(
     navigateToCreate: () -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val gradient = Brush.linearGradient(
-        colors = listOf(BlueSecondary, MaterialTheme.colorScheme.background),
-        start = Offset(800f, 0f),
-        end = Offset(0f, 400f)
-    )
     val filter = remember { mutableLongStateOf(DateUtil.currentDate()) }       //today
     val groupedData = remember { mutableStateOf<List<TransactionGroupModel>?>(emptyList()) }
     val selectedFilter = remember { mutableIntStateOf(0) }
@@ -76,13 +69,17 @@ fun HomeScreen(
     val balance = remember { mutableDoubleStateOf(0.0) }
     val balanceThisMonth = remember { mutableDoubleStateOf(0.0) }
     val budget = remember { mutableFloatStateOf(0f) }
-    viewModel.balance.observe(lifecycleOwner){
+
+    viewModel.getShowBalance()
+    var showBalance by remember { mutableStateOf(viewModel.showBalance) }
+
+    viewModel.balance.observe(lifecycleOwner) {
         balance.doubleValue = it
     }
-    viewModel.expense.observe(lifecycleOwner){
+    viewModel.expense.observe(lifecycleOwner) {
         balanceThisMonth.doubleValue = viewModel.budget.doubleValue - it
     }
-    viewModel.expense.observe(lifecycleOwner){
+    viewModel.expense.observe(lifecycleOwner) {
         val result = 1f - it.div(viewModel.budget.doubleValue).toFloat()
         budget.floatValue = String.format("%.2f", result).toFloat()
     }
@@ -102,7 +99,15 @@ fun HomeScreen(
             userScrollEnabled = true
         ) {
             item {
-                BalanceCardView(modifier.padding(vertical = 8.dp, horizontal = 16.dp), balanceThisMonth.doubleValue, budget.floatValue)
+                BalanceCardView(
+                    modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                    balanceThisMonth.doubleValue,
+                    budget.floatValue,
+                    showBalance.value
+                ) {
+                    showBalance.value = it
+                    viewModel.saveShowBalance(it)
+                }
             }
             item {
                 Text(

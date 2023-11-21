@@ -27,6 +27,7 @@ class MainViewModel(
     val username = mutableStateOf("")
     val reportPeriod = mutableIntStateOf(1)
     val budget = mutableDoubleStateOf(0.0)
+    val showBalance = mutableStateOf(false)
     private val _balance = MutableLiveData<Double>()
     val balance : LiveData<Double> = _balance
 
@@ -60,6 +61,19 @@ class MainViewModel(
                 username.value = profile?.userName ?: ""
                 reportPeriod.intValue = profile?.reportPeriod ?: 1
                 budget.doubleValue = profile?.budget?.toDouble() ?: 0.0
+            }
+        }
+    }
+
+    fun saveShowBalance(isShown: Boolean){
+        viewModelScope.launch {
+            preference.saveShowBalance(isShown)
+        }
+    }
+    fun getShowBalance(){
+        viewModelScope.launch {
+            preference.getShowBalance.collect{
+                showBalance.value = it
             }
         }
     }
