@@ -51,4 +51,9 @@
     <string name="category">Category</string>
     <string name="date">Date</string>
     <string name="transaction_success">Transaksi berhasil tersimpan</string>
+    <string name="total_transaction">Total transaksi</string>
+
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
 </resources>

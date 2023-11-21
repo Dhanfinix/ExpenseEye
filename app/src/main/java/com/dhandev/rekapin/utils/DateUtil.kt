@@ -25,6 +25,12 @@ object DateUtil {
         return sdf.format(Date(timeInMillis))
     }
 
+    fun millisToFullDate(millis: Long): String {
+        val sdf = SimpleDateFormat("EEEE, dd MMMM yyyy '\nPukul' HH.mm 'WIB'", Locale("id", "ID"))
+        return sdf.format(Date(millis))
+    }
+
+
     val currentDate = {
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta"))
         calendar.set(Calendar.HOUR_OF_DAY, 0)

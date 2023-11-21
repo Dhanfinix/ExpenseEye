@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2023 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.dhandev.rekapin.presentation
 
 import androidx.compose.material.icons.Icons.Filled
@@ -41,8 +25,6 @@ import com.dhandev.rekapin.presentation.landing.MainViewModel
 import com.dhandev.rekapin.presentation.report.ReportDestination
 import com.dhandev.rekapin.presentation.settings.SettingsDestination
 import com.dhandev.rekapin.presentation.ui.component.BottomNavigationView
-import com.dhandev.rekapin.presentation.ui.component.TitleSubtitle
-import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,11 +41,11 @@ fun RekapinApp(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             when (currentRoute) {
-                HomeDestination.route -> TitleSubtitle(title = getGreetings(), subtitle = viewModel.username.value, scrollBehavior = scrollBehavior)
-                ReportDestination.route -> TitleSubtitle(title = "Here is your money report,", subtitle = "in good visual", scrollBehavior = scrollBehavior)
-                SettingsDestination.route -> TitleSubtitle(title = "Settings", subtitle = stringResource(
-                    id = R.string.app_name
-                ), scrollBehavior = scrollBehavior)
+//                HomeDestination.route -> TitleSubtitle(title = getGreetings(), subtitle = viewModel.username.value, scrollBehavior = scrollBehavior)
+//                ReportDestination.route -> TitleSubtitle(title = "Here is your money report,", subtitle = "in good visual", scrollBehavior = scrollBehavior)
+//                SettingsDestination.route -> TitleSubtitle(title = "Settings", subtitle = stringResource(
+//                    id = R.string.app_name
+//                ), scrollBehavior = scrollBehavior)
                 CreateDestination.route -> RekapinTopAppBar(
                     title = "Tambah Transaksi",
                     canNavigateBack = true,
@@ -82,19 +64,6 @@ fun RekapinApp(
             RekapinNavGraph(navController = navController, Modifier, paddingValues, viewModel)
         }
     )
-}
-
-private fun getGreetings() : String {
-    val currentTime = Calendar.getInstance().timeInMillis
-    val calendar = Calendar.getInstance()
-    calendar.timeInMillis = currentTime
-    return when (calendar.get(Calendar.HOUR_OF_DAY)) {
-        in 6..11 -> "Good morning!"
-        in 12..13 -> "It's noon!"
-        in 14..17 -> "Good afternoon!"
-        in 18..20 -> "Good evening!"
-        else -> "Good night!"
-    }
 }
 
 /**

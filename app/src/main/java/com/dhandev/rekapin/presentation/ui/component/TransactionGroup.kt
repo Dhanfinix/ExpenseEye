@@ -31,7 +31,8 @@ import com.dhandev.rekapin.utils.StringUtil
 @Composable
 fun TransactionGroup(
     modifier: Modifier = Modifier,
-    data: TransactionGroupModel
+    data: TransactionGroupModel,
+    itemClicked:(TransactionItemModel)->Unit
 ) {
     val totalTransaction = data.transactionItem.sumOf { if (it.isExpense) -it.total else it.total }
 
@@ -71,7 +72,7 @@ fun TransactionGroup(
             )
             Column{
                 data.transactionItem.forEach {
-                    TransactionItemView(data = it)
+                    TransactionItemView(data = it, clicked = { itemClicked(it) })
                 }
             }
         }
@@ -89,7 +90,7 @@ fun PreviewTrxGroup() {
     }
     RekapinTheme {
         Surface {
-            TransactionGroup(modifier = Modifier.padding(8.dp), groupedData[0])
+            TransactionGroup(modifier = Modifier.padding(8.dp), groupedData[0]) {}
         }
     }
 }
