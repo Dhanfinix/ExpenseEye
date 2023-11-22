@@ -111,4 +111,7 @@ dependencies {
 
     //Number picker
     implementation ("com.chargemap.compose:numberpicker:1.0.3")
+
+    //edge to edge
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.33.2-alpha")
 }

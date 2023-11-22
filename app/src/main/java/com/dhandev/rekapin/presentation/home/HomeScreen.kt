@@ -1,13 +1,16 @@
 package com.dhandev.rekapin.presentation.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -31,6 +34,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -49,8 +54,8 @@ import com.dhandev.rekapin.presentation.landing.MainViewModel
 import com.dhandev.rekapin.presentation.ui.component.BalanceCardView
 import com.dhandev.rekapin.presentation.ui.component.ChipGroup
 import com.dhandev.rekapin.presentation.ui.component.DetailBottomSheet
-import com.dhandev.rekapin.presentation.ui.component.TitleSubtitle
 import com.dhandev.rekapin.presentation.ui.component.TransactionGroup
+import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.AnimUtil
@@ -70,6 +75,7 @@ object HomeDestination : NavigationDestination {
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel(),
+    paddingValues: PaddingValues,
     navigateToCreate: (String?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -106,10 +112,21 @@ fun HomeScreen(
         bottomSheetState = sheetState
     )
     val scope = rememberCoroutineScope()
-//    var showBottomSheet by remember { mutableStateOf(false) }
     var selectedDetail by remember { mutableStateOf<TransactionItemModel?>(null) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    val gradient = Brush.radialGradient(
+        0.0f to BlueMain,
+        1.0f to Color.White,
+        radius = 700.0f,
+        center = Offset(1000f, 0f)
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(brush = gradient)
+            .statusBarsPadding()
+    ) {
         viewModel.getAll(filter.longValue).observe(lifecycleOwner) { data ->
             groupedData.value = data
                 .groupBy {
@@ -124,7 +141,14 @@ fun HomeScreen(
             userScrollEnabled = true
         ) {
             item {
-                TitleSubtitle(title =  getGreetings(), subtitle = viewModel.username.value)
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                ) {
+                    Text(text = getGreetings(), style = raleway(20, FontWeight.Bold))
+                    Text(text = viewModel.username.value, style = raleway(16, FontWeight.Normal))
+                }
             }
             item {
                 BalanceCardView(
@@ -196,7 +220,7 @@ fun HomeScreen(
                         itemClicked = {
                             selectedDetail = it
                             scope.launch {
-                                if (sheetState.isVisible){
+                                if (sheetState.isVisible) {
                                     sheetState.hide()
                                 } else {
                                     sheetState.show()
@@ -211,6 +235,7 @@ fun HomeScreen(
         ExtendedFloatingActionButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
+                .padding(paddingValues)
                 .padding(16.dp),
             text = { Text(text = "Transaksi") },
             onClick = { navigateToCreate.invoke(null) },
@@ -224,7 +249,9 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .clickable(
-                        interactionSource = MutableInteractionSource(),
+                        interactionSource = remember {
+                            MutableInteractionSource()
+                        },
                         indication = null
                     ) {
                         scope.launch {
@@ -232,10 +259,10 @@ fun HomeScreen(
                             selectedDetail = null
                         }
                     }
-            ){}
+            ) {}
         }
 
-        if (selectedDetail != null){
+        if (selectedDetail != null) {
             DetailBottomSheet(
                 scaffoldState = scaffoldState,
                 data = selectedDetail!!,
@@ -259,7 +286,7 @@ fun HomeScreen(
     }
 }
 
-private fun getGreetings() : String {
+private fun getGreetings(): String {
     val currentTime = Calendar.getInstance().timeInMillis
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currentTime
