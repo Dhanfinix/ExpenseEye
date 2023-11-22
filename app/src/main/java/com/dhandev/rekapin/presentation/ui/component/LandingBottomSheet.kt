@@ -83,7 +83,7 @@ fun LandingBottomSheet(
             )
             Button(
                 onClick = {
-                    if (username.isNotEmpty() || balance.clearThousandFormat().isNotEmpty()){
+                    if (username.isNotEmpty() || balance.clearThousandFormat().isNotEmpty() || budget.clearThousandFormat().isNotEmpty()){
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             onProceed.invoke(
                                 ProfileModel(

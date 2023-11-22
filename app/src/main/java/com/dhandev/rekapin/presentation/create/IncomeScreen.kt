@@ -88,6 +88,7 @@ fun IncomeScreen(
                 setData = trxDate.longValue)
         }
         Button(
+            enabled = nominal.value != "" && trxName.value != "" ,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),

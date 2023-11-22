@@ -92,6 +92,7 @@ fun OutcomeScreen(
             )
         }
         Button(
+            enabled = nominal.value != "" && trxName.value != "" ,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
