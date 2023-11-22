@@ -35,9 +35,10 @@ import com.dhandev.rekapin.utils.DateUtil
 fun DatePickerView(
     modifier: Modifier = Modifier,
     title: String,
+    setData: Long = System.currentTimeMillis(),
     value: (Long) -> Unit
 ) {
-    val dateInMillis = remember { mutableLongStateOf(System.currentTimeMillis()) }
+    val dateInMillis = remember { mutableLongStateOf(setData) }
     val date = remember { mutableStateOf(DateUtil.millisToDate(dateInMillis.longValue)) }
     val showDialog = remember { mutableStateOf(false) }
     val borderColor = if (showDialog.value) BlueSecondary else Color.Gray

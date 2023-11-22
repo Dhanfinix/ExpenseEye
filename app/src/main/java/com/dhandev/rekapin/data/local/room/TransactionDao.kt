@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.dhandev.rekapin.data.model.TransactionItemModel
 import kotlinx.coroutines.flow.Flow
 
@@ -16,6 +17,8 @@ interface TransactionDao {
     suspend fun insert(item: TransactionItemModel)
     @Delete
     suspend fun delete(item: TransactionItemModel)
+    @Update
+    suspend fun updateTransaction(item: TransactionItemModel)
     @Query("SELECT SUM(total) FROM transaction_table WHERE isExpense = 1 AND dateInMillis >= :fromDateInMillis")
     fun getTotalExpenses(fromDateInMillis: Long): Flow<Double>
 

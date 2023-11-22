@@ -83,4 +83,9 @@ class MainViewModel(
             trxRepository.delete(item)
         }
     }
+    fun updateItem(item: TransactionItemModel){
+        viewModelScope.launch {
+            trxRepository.update(item)
+        }
+    }
 }

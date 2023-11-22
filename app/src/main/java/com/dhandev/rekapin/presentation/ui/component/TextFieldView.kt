@@ -28,9 +28,10 @@ import com.dhandev.rekapin.ui.theme.raleway
 fun TextFieldView(
     modifier : Modifier = Modifier,
     title: String,
+    setData: String = "",
     value: (String) -> Unit
 ) {
-    var data by remember { mutableStateOf("") }
+    var data by remember { mutableStateOf(setData) }
     value.invoke(data)
     Column(
         modifier = modifier.fillMaxWidth()

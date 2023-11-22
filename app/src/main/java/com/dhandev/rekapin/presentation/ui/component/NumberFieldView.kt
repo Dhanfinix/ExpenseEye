@@ -32,10 +32,11 @@ import com.dhandev.rekapin.utils.NumUtil.formatThousand
 fun NumberFieldView(
     modifier: Modifier = Modifier,
     title: String,
+    setData: String = "",
     value: (String) -> Unit
 ){
     var text by remember {
-        mutableStateOf(TextFieldValue(""))
+        mutableStateOf(TextFieldValue(setData))
     }
     value.invoke(text.text)
     Column(modifier = modifier.fillMaxWidth()) {

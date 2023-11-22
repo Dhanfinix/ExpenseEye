@@ -42,11 +42,12 @@ fun DropdownView(
     category: List<CategoryItem>,
     modifier: Modifier = Modifier,
     title: String,
+    setData: Int = 0,
     value: (CategoryItem)-> Unit
     ) {
     //TODO: CHANGE WITH DATA FROM DATABASE
     var mExpanded by remember { mutableStateOf(false) }
-    var mSelectedIndex by remember { mutableIntStateOf(0) }
+    var mSelectedIndex by remember { mutableIntStateOf(setData) }
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
     val borderColor = if (mExpanded) BlueSecondary else Color.Gray
     value.invoke(category[mSelectedIndex])

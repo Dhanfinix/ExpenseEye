@@ -47,7 +47,8 @@ fun DetailBottomSheet(
     modifier: Modifier = Modifier,
     scaffoldState: BottomSheetScaffoldState,
     data: TransactionItemModel,
-    onDelete:()->Unit
+    onDelete:()->Unit,
+    onUpdate:()->Unit
 ) {
     val context = LocalContext.current
     val (categoryImage, categoryName) = CategoryUtil.getCategory(data)
@@ -107,7 +108,7 @@ fun DetailBottomSheet(
                     Button(
                         modifier = Modifier.weight(1f),
                         onClick = {
-                            Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
+                            onUpdate()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = BlueSecondary,

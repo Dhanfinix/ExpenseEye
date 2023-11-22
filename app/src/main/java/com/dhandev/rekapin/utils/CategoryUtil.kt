@@ -1,6 +1,7 @@
 package com.dhandev.rekapin.utils
 
 import com.dhandev.rekapin.R
+import com.dhandev.rekapin.data.model.CategoryItem
 import com.dhandev.rekapin.data.model.TransactionItemModel
 
 object CategoryUtil {
@@ -43,5 +44,22 @@ object CategoryUtil {
             R.string.app_name
         )
         return Pair(categoryImage, categoryName)
+    }
+
+    fun findCategoryItemByName(name: String, isOutcome: Boolean): CategoryItem? {
+        if (isOutcome){
+            for (categoryItem in Constants.categoryOutcomeName) {
+                if (categoryItem.name == name) {
+                    return categoryItem
+                }
+            }
+        } else {
+            for (categoryItem in Constants.categoryIncomeName) {
+                if (categoryItem.name == name) {
+                    return categoryItem
+                }
+            }
+        }
+        return null
     }
 }

@@ -55,6 +55,7 @@ import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.AnimUtil
 import com.dhandev.rekapin.utils.DateUtil
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.Calendar
@@ -69,7 +70,7 @@ object HomeDestination : NavigationDestination {
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel(),
-    navigateToCreate: () -> Unit
+    navigateToCreate: (String?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val filter = remember { mutableLongStateOf(DateUtil.currentDate()) }       //today
@@ -212,7 +213,7 @@ fun HomeScreen(
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
             text = { Text(text = "Transaksi") },
-            onClick = { navigateToCreate.invoke() },
+            onClick = { navigateToCreate.invoke(null) },
             icon = { Icon(Icons.Filled.Add, "") },
             containerColor = BlueSecondary
         )
@@ -244,6 +245,10 @@ fun HomeScreen(
                         sheetState.hide()
                         selectedDetail = null
                     }
+                },
+                onUpdate = {
+                    val trxData = Gson().toJson(selectedDetail)
+                    navigateToCreate(trxData)
                 }
             )
         }

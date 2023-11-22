@@ -46,7 +46,7 @@ fun RekapinApp(
 //                SettingsDestination.route -> TitleSubtitle(title = "Settings", subtitle = stringResource(
 //                    id = R.string.app_name
 //                ), scrollBehavior = scrollBehavior)
-                CreateDestination.route -> RekapinTopAppBar(
+                CreateDestination.routeWithArgs -> RekapinTopAppBar(
                     title = "Tambah Transaksi",
                     canNavigateBack = true,
                     navigateUp = { navController.navigateUp() }

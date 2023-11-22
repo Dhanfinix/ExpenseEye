@@ -19,6 +19,11 @@ class CreateViewModel(private val trxRepository: TransactionRepository): ViewMod
             trxRepository.insertItem(item)
         }
     }
+    fun update(item: TransactionItemModel) {
+        viewModelScope.launch {
+            trxRepository.update(item)
+        }
+    }
 
     // Don't forget to cancel the coroutine scope when the ViewModel is destroyed
     override fun onCleared() {

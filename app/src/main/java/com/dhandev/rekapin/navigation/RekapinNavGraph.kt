@@ -11,8 +11,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.dhandev.rekapin.presentation.create.CreateDestination
 import com.dhandev.rekapin.presentation.create.CreateScreen
 import com.dhandev.rekapin.presentation.home.HomeDestination
@@ -55,7 +57,7 @@ fun RekapinNavGraph(
                 )
             }
             composable(route = HomeDestination.route) {
-                HomeScreen(navigateToCreate = {navController.navigate(CreateDestination.route)})
+                HomeScreen(navigateToCreate = {navController.navigate("${CreateDestination.route}?itemId=$it")})
             }
             composable(route = ReportDestination.route) {
                 ReportScreen()
@@ -73,9 +75,15 @@ fun RekapinNavGraph(
                     }
                 }
             }
-            composable(route = CreateDestination.route){
+            composable(
+                route = CreateDestination.routeWithArgs,
+                arguments = listOf(navArgument(CreateDestination.itemIdArg){
+                    nullable = true
+                })
+            ){
                 CreateScreen(
                     navigateBack = { navController.popBackStack() },
+                    argument = it.arguments?.getString(CreateDestination.itemIdArg)
                 )
                 BackHandler {
                     navController.navigate(HomeDestination.route) {
