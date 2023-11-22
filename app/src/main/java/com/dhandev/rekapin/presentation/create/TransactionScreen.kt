@@ -25,29 +25,30 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dhandev.rekapin.R
+import com.dhandev.rekapin.data.model.CategoryItem
 import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.presentation.ui.component.DatePickerView
 import com.dhandev.rekapin.presentation.ui.component.DropdownView
 import com.dhandev.rekapin.presentation.ui.component.NumberFieldView
 import com.dhandev.rekapin.presentation.ui.component.TextFieldView
-import com.dhandev.rekapin.ui.theme.MyGreen
+import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.CategoryUtil
-import com.dhandev.rekapin.utils.Constants
 import com.dhandev.rekapin.utils.NumUtil.clearThousandFormat
 import com.dhandev.rekapin.utils.NumUtil.formatThousand
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun IncomeScreen(
+fun TransactionScreen(
     modifier: Modifier = Modifier,
     viewModel: CreateViewModel = koinViewModel(),
     trxData: TransactionItemModel?,
-    onSuccess: () -> Unit
+    onSuccess: () -> Unit,
+    mCategory: List<CategoryItem>,
+    isExpense: Boolean
 ) {
     val firstOpened = remember { mutableStateOf(true) }
-    val mCategory = Constants.categoryIncomeName
     val nominal = remember { mutableStateOf("") }
     val trxName = remember { mutableStateOf("") }
     val selectedCategory = remember { mutableStateOf(mCategory[0]) }
@@ -60,8 +61,7 @@ fun IncomeScreen(
         trxId.intValue = trxData.id
         nominal.value = trxData.total.toLong().formatThousand()
         trxName.value = trxData.title
-        selectedCategory.value =
-            CategoryUtil.findCategoryItemByName(trxData.title, true) ?: mCategory[0]
+        selectedCategory.value = CategoryUtil.findCategoryItemByName(trxData.category, isExpense) ?: mCategory[0]
         trxDate.longValue = trxData.dateInMillis
     }
 
@@ -72,20 +72,24 @@ fun IncomeScreen(
             NumberFieldView(
                 title = stringResource(id = R.string.amount),
                 value = { nominal.value = it },
-                setData = nominal.value)
+                setData = nominal.value
+            )
             TextFieldView(
                 title = stringResource(id = R.string.trx_name),
                 value = { trxName.value = it },
-                setData = trxName.value)
+                setData = trxName.value
+            )
             DropdownView(
                 title = stringResource(id = R.string.category),
                 category = mCategory,
                 value = { selectedCategory.value = it },
-                setData = mCategory.indexOf(selectedCategory.value))
+                setData = mCategory.indexOf(selectedCategory.value)
+            )
             DatePickerView(
                 title = stringResource(id = R.string.date),
                 value = { trxDate.longValue = it },
-                setData = trxDate.longValue)
+                setData = trxDate.longValue
+            )
         }
         Button(
             enabled = nominal.value != "" && trxName.value != "" ,
@@ -100,20 +104,20 @@ fun IncomeScreen(
                         total = nominal.value.clearThousandFormat().toDouble(),
                         category = selectedCategory.value.name,
                         dateInMillis = trxDate.longValue,
-                        isExpense = false
+                        isExpense = isExpense
                     )
-                    if (trxData != null) {
+                    if (trxData != null){
                         viewModel.update(payload)
                     } else {
                         viewModel.insert(payload)
                     }
+
                 }.invokeOnCompletion {
                     onSuccess.invoke()
                 }
-
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MyGreen,
+                containerColor = BlueMain,
                 contentColor = Color.White
             )
         ) {

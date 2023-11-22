@@ -1,4 +1,4 @@
-package com.dhandev.rekapin.presentation.ui.component
+package com.dhandev.rekapin.presentation.create
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,11 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dhandev.rekapin.data.model.TransactionItemModel
-import com.dhandev.rekapin.presentation.create.CreateViewModel
-import com.dhandev.rekapin.presentation.create.IncomeScreen
-import com.dhandev.rekapin.presentation.create.OutcomeScreen
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.RekapinTheme
+import com.dhandev.rekapin.utils.Constants
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -57,8 +55,22 @@ fun TabView(
             }
         }
         when (selectedTabIndex.intValue) {
-            0 -> OutcomeScreen(Modifier.padding(16.dp), onSuccess = { onSuccess.invoke() }, trxData = trxData)
-            1 -> IncomeScreen(Modifier.padding(16.dp), onSuccess = { onSuccess.invoke() }, trxData = trxData)
+            0 -> TransactionScreen(
+                modifier = Modifier.padding(16.dp),
+                viewModel = viewModel,
+                trxData = trxData,
+                onSuccess = onSuccess,
+                mCategory = Constants.categoryOutcomeName,
+                isExpense = true,
+            )
+            1 -> TransactionScreen(
+                modifier = Modifier.padding(16.dp),
+                viewModel = viewModel,
+                trxData = trxData,
+                onSuccess = onSuccess,
+                mCategory = Constants.categoryIncomeName,
+                isExpense = false,
+            )
         }
     }
 }

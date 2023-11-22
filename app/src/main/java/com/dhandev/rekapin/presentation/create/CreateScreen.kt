@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.navigation.NavigationDestination
-import com.dhandev.rekapin.presentation.ui.component.TabView
 import com.dhandev.rekapin.ui.theme.RekapinTheme
 import com.google.gson.Gson
 
