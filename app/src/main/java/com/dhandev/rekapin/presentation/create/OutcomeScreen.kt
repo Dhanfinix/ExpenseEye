@@ -12,13 +12,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,6 +46,7 @@ fun OutcomeScreen(
     trxData: TransactionItemModel?,
     onSuccess: () -> Unit
 ) {
+    val firstOpened = remember { mutableStateOf(true) }
     val mCategory = Constants.categoryOutcomeName
     val nominal = remember { mutableStateOf("") }
     val trxName = remember { mutableStateOf("") }
@@ -56,7 +55,8 @@ fun OutcomeScreen(
     val scope = rememberCoroutineScope()
     val trxId = remember { mutableIntStateOf(0) }
 
-    if (trxData != null) {
+    if (trxData != null && firstOpened.value) {
+        firstOpened.value = false
         trxId.intValue = trxData.id
         nominal.value = trxData.total.toLong().formatThousand()
         trxName.value = trxData.title
@@ -134,13 +134,5 @@ fun OutcomeScreen(
                 color = Color.White
             )
         }
-
-//        Button(onClick = {
-//            viewModel.getAll().observe(lifeCycleOwner){
-//                println("Saved data $it")
-//            }
-//        }) {
-//            Text(text = "Cek Saved")
-//        }
     }
 }
