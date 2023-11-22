@@ -23,7 +23,7 @@ fun TitleSubtitle(
     scrollBehavior: TopAppBarScrollBehavior  = TopAppBarDefaults.pinnedScrollBehavior()// Add this line
 ){
     TopAppBar(  // Wrap your Column in a TopAppBar
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         scrollBehavior = scrollBehavior,  // Add this line
         title = {
             Column(

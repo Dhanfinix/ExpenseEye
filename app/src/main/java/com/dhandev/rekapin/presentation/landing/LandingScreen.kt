@@ -43,7 +43,6 @@ import com.dhandev.rekapin.R
 import com.dhandev.rekapin.navigation.NavigationDestination
 import com.dhandev.rekapin.presentation.ui.component.LandingBottomSheet
 import com.dhandev.rekapin.presentation.ui.component.StepProgressIndicator
-import com.dhandev.rekapin.presentation.ui.component.TitleSubtitle
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.raleway
@@ -149,11 +148,14 @@ fun LandingScreen(
                 selectedIndex = if (isDragged) pagerState.currentPage else pagerState.targetPage,
                 dotSize = 8.dp
             )
-            TitleSubtitle(
-                modifier = Modifier.padding(bottom = 28.dp),
-                title = stringResource(id = contentData[currentPage].title),
-                subtitle = stringResource(id = contentData[currentPage].subtitle)
-            )
+            Column(
+                modifier
+                    .fillMaxWidth()
+                    .padding(start = 12.dp)
+            ) {
+                Text(text = stringResource(id = contentData[currentPage].title), style = raleway(20, FontWeight.Bold))
+                Text(text = stringResource(id = contentData[currentPage].subtitle), style = raleway(16, FontWeight.Normal))
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
