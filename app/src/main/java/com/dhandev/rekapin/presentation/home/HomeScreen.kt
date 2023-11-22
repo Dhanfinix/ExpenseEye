@@ -218,7 +218,7 @@ fun HomeScreen(
             containerColor = BlueSecondary
         )
 
-        AnimUtil.AnimatedVisibility(visible = selectedDetail != null) {
+        AnimUtil.AnimatedVisibility(visible = sheetState.isVisible && selectedDetail != null) {
             Surface(
                 color = Color.Black.copy(alpha = 0.6f),
                 modifier = Modifier
@@ -249,6 +249,7 @@ fun HomeScreen(
                 onUpdate = {
                     scope.launch {
                         val trxData = Gson().toJson(selectedDetail)
+                        sheetState.hide()
                         navigateToCreate(trxData)
                         selectedDetail = null
                     }

@@ -98,7 +98,7 @@ fun OutcomeScreen(
             onClick = {
                 scope.launch {
                     val payload = TransactionItemModel(
-                        id = trxId.value,
+                        id = trxId.intValue,
                         title = trxName.value,
                         total = nominal.value.clearThousandFormat().toDouble(),
                         category = selectedCategory.value.name,

@@ -12,12 +12,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,8 +32,10 @@ import com.dhandev.rekapin.presentation.ui.component.NumberFieldView
 import com.dhandev.rekapin.presentation.ui.component.TextFieldView
 import com.dhandev.rekapin.ui.theme.MyGreen
 import com.dhandev.rekapin.ui.theme.raleway
+import com.dhandev.rekapin.utils.CategoryUtil
 import com.dhandev.rekapin.utils.Constants
 import com.dhandev.rekapin.utils.NumUtil.clearThousandFormat
+import com.dhandev.rekapin.utils.NumUtil.formatThousand
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -42,26 +43,49 @@ import org.koin.androidx.compose.koinViewModel
 fun IncomeScreen(
     modifier: Modifier = Modifier,
     viewModel: CreateViewModel = koinViewModel(),
+    trxData: TransactionItemModel?,
     onSuccess: () -> Unit
 ) {
+    val firstOpened = remember { mutableStateOf(true) }
     val mCategory = Constants.categoryIncomeName
-    var nominal by remember { mutableStateOf("") }
-    var trxName by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf(mCategory[0]) }
-    var trxDate by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    val nominal = remember { mutableStateOf("") }
+    val trxName = remember { mutableStateOf("") }
+    val selectedCategory = remember { mutableStateOf(mCategory[0]) }
+    val trxDate = remember { mutableLongStateOf(System.currentTimeMillis()) }
     val scope = rememberCoroutineScope()
+    val trxId = remember { mutableIntStateOf(0) }
+
+    if (trxData != null && firstOpened.value) {
+        firstOpened.value = false
+        trxId.intValue = trxData.id
+        nominal.value = trxData.total.toLong().formatThousand()
+        trxName.value = trxData.title
+        selectedCategory.value =
+            CategoryUtil.findCategoryItemByName(trxData.title, true) ?: mCategory[0]
+        trxDate.longValue = trxData.dateInMillis
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            NumberFieldView(title = stringResource(id = R.string.amount), value = { nominal = it })
-            TextFieldView(title = stringResource(id = R.string.trx_name), value = { trxName = it })
+            NumberFieldView(
+                title = stringResource(id = R.string.amount),
+                value = { nominal.value = it },
+                setData = nominal.value)
+            TextFieldView(
+                title = stringResource(id = R.string.trx_name),
+                value = { trxName.value = it },
+                setData = trxName.value)
             DropdownView(
                 title = stringResource(id = R.string.category),
                 category = mCategory,
-                value = { selectedCategory = it })
-            DatePickerView(title = stringResource(id = R.string.date), value = { trxDate = it })
+                value = { selectedCategory.value = it },
+                setData = mCategory.indexOf(selectedCategory.value))
+            DatePickerView(
+                title = stringResource(id = R.string.date),
+                value = { trxDate.longValue = it },
+                setData = trxDate.longValue)
         }
         Button(
             modifier = Modifier
@@ -69,15 +93,19 @@ fun IncomeScreen(
                 .align(Alignment.BottomCenter),
             onClick = {
                 scope.launch {
-                    viewModel.insert(
-                        TransactionItemModel(
-                            title = trxName,
-                            total = nominal.clearThousandFormat().toDouble(),
-                            category = selectedCategory.name,
-                            dateInMillis = trxDate,
-                            isExpense = false
-                        )
+                    val payload = TransactionItemModel(
+                        id = trxId.intValue,
+                        title = trxName.value,
+                        total = nominal.value.clearThousandFormat().toDouble(),
+                        category = selectedCategory.value.name,
+                        dateInMillis = trxDate.longValue,
+                        isExpense = false
                     )
+                    if (trxData != null) {
+                        viewModel.update(payload)
+                    } else {
+                        viewModel.insert(payload)
+                    }
                 }.invokeOnCompletion {
                     onSuccess.invoke()
                 }

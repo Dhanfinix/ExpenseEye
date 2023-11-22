@@ -58,7 +58,7 @@ fun TabView(
         }
         when (selectedTabIndex.intValue) {
             0 -> OutcomeScreen(Modifier.padding(16.dp), onSuccess = { onSuccess.invoke() }, trxData = trxData)
-            1 -> IncomeScreen(Modifier.padding(16.dp), onSuccess = { onSuccess.invoke() })
+            1 -> IncomeScreen(Modifier.padding(16.dp), onSuccess = { onSuccess.invoke() }, trxData = trxData)
         }
     }
 }
