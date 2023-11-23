@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -18,12 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.data.model.ProfileModel
+import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.NumUtil.clearThousandFormat
 import kotlinx.coroutines.CoroutineScope
@@ -99,7 +102,11 @@ fun LandingBottomSheet(
                     }
                 },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = BlueMain,
+                    contentColor = Color.White
+                )
             ) {
                 Text(text = stringResource(id = R.string.landing_start_btn))
             }
