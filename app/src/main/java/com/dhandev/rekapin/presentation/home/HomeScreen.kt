@@ -1,9 +1,12 @@
 package com.dhandev.rekapin.presentation.home
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +34,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -49,8 +54,8 @@ import com.dhandev.rekapin.presentation.landing.MainViewModel
 import com.dhandev.rekapin.presentation.ui.component.BalanceCardView
 import com.dhandev.rekapin.presentation.ui.component.ChipGroup
 import com.dhandev.rekapin.presentation.ui.component.DetailBottomSheet
-import com.dhandev.rekapin.presentation.ui.component.TitleSubtitle
 import com.dhandev.rekapin.presentation.ui.component.TransactionGroup
+import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.AnimUtil
@@ -70,6 +75,7 @@ object HomeDestination : NavigationDestination {
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel(),
+    paddingValues: PaddingValues,
     navigateToCreate: (String?) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -109,7 +115,19 @@ fun HomeScreen(
 //    var showBottomSheet by remember { mutableStateOf(false) }
     var selectedDetail by remember { mutableStateOf<TransactionItemModel?>(null) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    val gradient = Brush.radialGradient(
+        0.0f to BlueMain,
+        1.0f to Color.White,
+        radius = 700.0f,
+        center = Offset(1000f, 0f)
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(brush = gradient)
+            .padding(paddingValues)
+    ) {
         viewModel.getAll(filter.longValue).observe(lifecycleOwner) { data ->
             groupedData.value = data
                 .groupBy {
@@ -124,7 +142,14 @@ fun HomeScreen(
             userScrollEnabled = true
         ) {
             item {
-                TitleSubtitle(title =  getGreetings(), subtitle = viewModel.username.value)
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                ) {
+                    Text(text = getGreetings(), style = raleway(20, FontWeight.Bold))
+                    Text(text = viewModel.username.value, style = raleway(16, FontWeight.Normal))
+                }
             }
             item {
                 BalanceCardView(
@@ -196,11 +221,7 @@ fun HomeScreen(
                         itemClicked = {
                             selectedDetail = it
                             scope.launch {
-                                if (sheetState.isVisible){
-                                    sheetState.hide()
-                                } else {
-                                    sheetState.show()
-                                }
+                                sheetState.show()
                             }
                         }
                     )
@@ -213,18 +234,23 @@ fun HomeScreen(
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
             text = { Text(text = "Transaksi") },
-            onClick = { navigateToCreate.invoke(null) },
+            onClick = {
+                selectedDetail = null
+                navigateToCreate.invoke(null)
+            },
             icon = { Icon(Icons.Filled.Add, "") },
             containerColor = BlueSecondary
         )
 
-        AnimUtil.AnimatedVisibility(visible = sheetState.isVisible && selectedDetail != null) {
+        AnimUtil.AnimatedVisibility(visible = scaffoldState.bottomSheetState.isVisible) {
             Surface(
                 color = Color.Black.copy(alpha = 0.6f),
                 modifier = Modifier
                     .fillMaxSize()
                     .clickable(
-                        interactionSource = MutableInteractionSource(),
+                        interactionSource = remember {
+                            MutableInteractionSource()
+                        },
                         indication = null
                     ) {
                         scope.launch {
@@ -255,6 +281,13 @@ fun HomeScreen(
                     }
                 }
             )
+        }
+
+        BackHandler(enabled = scaffoldState.bottomSheetState.isVisible) {
+            scope.launch {
+                sheetState.hide()
+                selectedDetail = null
+            }
         }
     }
 }

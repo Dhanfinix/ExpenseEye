@@ -16,8 +16,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,7 +45,6 @@ import com.dhandev.rekapin.navigation.NavigationDestination
 import com.dhandev.rekapin.presentation.ui.component.LandingBottomSheet
 import com.dhandev.rekapin.presentation.ui.component.StepProgressIndicator
 import com.dhandev.rekapin.ui.theme.BlueMain
-import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.Constants
 import kotlinx.coroutines.delay
@@ -66,10 +66,11 @@ fun LandingScreen(
 ) {
     val contentData = Constants.LandingPageItems
     val itemsCount = contentData.size
-    val gradient = Brush.linearGradient(
-        colors = listOf(BlueSecondary, MaterialTheme.colorScheme.background),
-        start = Offset(100f, 0f),
-        end = Offset(0f, 200f)
+    val gradient = Brush.radialGradient(
+        0.0f to BlueMain,
+        1.0f to Color.White,
+        radius = 700.0f,
+        center = Offset(1000f, 0f)
     )
     val coroutineScope = rememberCoroutineScope()
 
@@ -182,7 +183,11 @@ fun LandingScreen(
                             }
                     },
                     modifier = Modifier
-                        .padding(12.dp)
+                        .padding(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = BlueMain,
+                        contentColor = Color.White
+                    )
                 ) {
                     Text(text = stringResource(id = if (currentPage == itemsCount - 1) R.string.landing_start_btn else R.string.landing_next))
                 }
