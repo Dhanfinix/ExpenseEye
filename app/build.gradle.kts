@@ -84,6 +84,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
+    implementation("androidx.room:room-paging:$roomVersion")
 
     //datastore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -111,4 +112,8 @@ dependencies {
 
     //Number picker
     implementation ("com.chargemap.compose:numberpicker:1.0.3")
+
+    //paging
+    implementation ("androidx.paging:paging-runtime-ktx:3.3.0-alpha02")
+    implementation ("androidx.paging:paging-compose:3.3.0-alpha02")
 }

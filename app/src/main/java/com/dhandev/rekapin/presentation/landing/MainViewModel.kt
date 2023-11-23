@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagedList
+import androidx.paging.cachedIn
 import com.dhandev.rekapin.data.local.DataStorePreference
 import com.dhandev.rekapin.data.model.ProfileModel
 import com.dhandev.rekapin.data.model.TransactionItemModel
@@ -45,7 +47,8 @@ class MainViewModel(
             ))
         }
     }
-    fun getAll(fromDataInMillis: Long) = trxRepository.getAllTransaction(fromDataInMillis).asLiveData()
+    fun getAll(fromDataInMillis: Long) = trxRepository.getAllTransaction(fromDataInMillis).cachedIn(viewModelScope)
+
     fun getIncomeExpense() = viewModelScope.launch {
         _balance.postValue(trxRepository.getTotalBalance(DateUtil.fromReportPeriodDate(reportPeriod.intValue)))
     }

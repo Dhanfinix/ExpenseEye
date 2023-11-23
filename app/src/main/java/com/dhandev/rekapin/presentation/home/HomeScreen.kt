@@ -41,6 +41,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -121,6 +123,7 @@ fun HomeScreen(
         radius = 700.0f,
         center = Offset(1000f, 0f)
     )
+    val items = viewModel.getAll(filter.longValue).collectAsLazyPagingItems()
 
     Box(
         modifier = Modifier
@@ -128,19 +131,31 @@ fun HomeScreen(
             .background(brush = gradient)
             .padding(paddingValues)
     ) {
-        viewModel.getAll(filter.longValue).observe(lifecycleOwner) { data ->
-            groupedData.value = data
-                .groupBy {
-                    DateUtil.millisToDateForGroup(it.dateInMillis)
-                }.map {
-                    TransactionGroupModel(it.key, it.value)
-                }
-        }
+//        viewModel.getAll(filter.longValue).observe(lifecycleOwner) { data ->
+//            groupedData.value = data
+//                .groupBy {
+//                    DateUtil.millisToDateForGroup(it.dateInMillis)
+//                }.map {
+//                    TransactionGroupModel(it.key, it.value)
+//                }
+        groupedData.value = items.itemSnapshotList.items
+            .groupBy {
+                DateUtil.millisToDateForGroup(it.dateInMillis)
+            }.map {
+                TransactionGroupModel(it.key, it.value)
+            }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
             userScrollEnabled = true
         ) {
+            if (items.loadState.prepend == LoadState.Loading) {
+                item(key = "prepend_loading") { LoadState.Loading }
+            }
+            if (items.loadState.prepend is LoadState.Error) {
+                item(key = "prepend_error") { Error() }
+            }
             item {
                 Column(
                     modifier = modifier
@@ -230,8 +245,7 @@ fun HomeScreen(
         }
 
         ExtendedFloatingActionButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
+            modifier = Modifier.align(Alignment.BottomEnd)
                 .padding(16.dp),
             text = { Text(text = "Transaksi") },
             onClick = {
@@ -258,10 +272,10 @@ fun HomeScreen(
                             selectedDetail = null
                         }
                     }
-            ){}
+            ) {}
         }
 
-        if (selectedDetail != null){
+        if (selectedDetail != null) {
             DetailBottomSheet(
                 scaffoldState = scaffoldState,
                 data = selectedDetail!!,
@@ -291,6 +305,7 @@ fun HomeScreen(
         }
     }
 }
+
 
 private fun getGreetings() : String {
     val currentTime = Calendar.getInstance().timeInMillis

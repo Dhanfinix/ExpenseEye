@@ -16,11 +16,14 @@
 
 package com.dhandev.rekapin.domain
 
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
+import androidx.paging.PagingData
 import com.dhandev.rekapin.data.model.TransactionItemModel
 import kotlinx.coroutines.flow.Flow
 
 interface ITransactionRepository {
-    fun getAllTransaction(fromDataInMillis: Long): Flow<List<TransactionItemModel>>
+    fun getAllTransaction(fromDataInMillis: Long): Flow<PagingData<TransactionItemModel>>
     suspend fun insertItem(item: TransactionItemModel)
     suspend fun getTotalExpense(fromDateInMillis: Long): Flow<Double>
     suspend fun getTotalIncome(fromDateInMillis: Long): Flow<Double>
