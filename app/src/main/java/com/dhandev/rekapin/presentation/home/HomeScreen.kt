@@ -138,12 +138,12 @@ fun HomeScreen(
 //                }.map {
 //                    TransactionGroupModel(it.key, it.value)
 //                }
-        groupedData.value = items.itemSnapshotList.items
-            .groupBy {
-                DateUtil.millisToDateForGroup(it.dateInMillis)
-            }.map {
-                TransactionGroupModel(it.key, it.value)
-            }
+//        groupedData.value = items.itemSnapshotList.items
+//            .groupBy {
+//                DateUtil.millisToDateForGroup(it.dateInMillis)
+//            }.map {
+//                TransactionGroupModel(it.key, it.value)
+//            }
 
         LazyColumn(
             modifier = Modifier
@@ -203,43 +203,52 @@ fun HomeScreen(
                 }
             }
 
-            if (groupedData.value.isNullOrEmpty()) {
-                item {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        LottieAnimation(
-                            composition = composition.value,
-                            progress = { progress },
-                            modifier = Modifier
-                                .height(200.dp)
-                                .fillMaxWidth()
-                        )
-                        Text(
-                            text = "Belum ada transaksi",
-                            style = raleway(
-                                fontSize = 16,
-                                weight = FontWeight.Normal
-                            )
-                        )
-                    }
-                }
+            if (items.loadState.refresh is LoadState.Loading) {
+                // Show a loading spinner
+            } else if (items.loadState.refresh is LoadState.Error) {
+                // Show an error message
             } else {
-                items(groupedData.value!!.size) { index ->
-                    TransactionGroup(
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            bottom = if (index == groupedData.value!!.size - 1) 50.dp else 0.dp
-                        ),
-                        data = groupedData.value!![index],
-                        itemClicked = {
-                            selectedDetail = it
-                            scope.launch {
-                                sheetState.show()
-                            }
+                // Data is loaded, you can access items[0]
+                if (items.itemCount == 0) {
+                    item {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            LottieAnimation(
+                                composition = composition.value,
+                                progress = { progress },
+                                modifier = Modifier
+                                    .height(200.dp)
+                                    .fillMaxWidth()
+                            )
+                            Text(
+                                text = "Belum ada transaksi",
+                                style = raleway(
+                                    fontSize = 16,
+                                    weight = FontWeight.Normal
+                                )
+                            )
                         }
-                    )
+                    }
+                } else {
+                    items(items.itemCount) { index ->
+                        items[index]?.let {
+                            TransactionGroup(
+                                modifier = Modifier.padding(
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                    bottom = if (index == items.itemCount - 1) 50.dp else 0.dp
+                                ),
+                                data = it,
+                                itemClicked = {trx->
+                                    selectedDetail = trx
+                                    scope.launch {
+                                        sheetState.show()
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
