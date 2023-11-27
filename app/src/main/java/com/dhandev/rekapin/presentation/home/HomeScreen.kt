@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
@@ -41,11 +40,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.data.model.TransactionGroupModel
 import com.dhandev.rekapin.data.model.TransactionItemModel
@@ -54,6 +48,7 @@ import com.dhandev.rekapin.presentation.landing.MainViewModel
 import com.dhandev.rekapin.presentation.ui.component.BalanceCardView
 import com.dhandev.rekapin.presentation.ui.component.ChipGroup
 import com.dhandev.rekapin.presentation.ui.component.DetailBottomSheet
+import com.dhandev.rekapin.presentation.ui.component.EmptyTransaction
 import com.dhandev.rekapin.presentation.ui.component.TransactionGroup
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
@@ -82,11 +77,7 @@ fun HomeScreen(
     val filter = remember { mutableLongStateOf(DateUtil.currentDate()) }       //today
     val groupedData = remember { mutableStateOf<List<TransactionGroupModel>?>(emptyList()) }
     val selectedFilter = remember { mutableIntStateOf(0) }
-    val composition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.anim_empty))
-    val progress by animateLottieCompositionAsState(
-        composition = composition.value,
-        iterations = LottieConstants.IterateForever
-    )
+
     viewModel.getIncomeExpense()
     viewModel.getExpense()
     val balance = remember { mutableDoubleStateOf(0.0) }
@@ -190,25 +181,7 @@ fun HomeScreen(
 
             if (groupedData.value.isNullOrEmpty()) {
                 item {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        LottieAnimation(
-                            composition = composition.value,
-                            progress = { progress },
-                            modifier = Modifier
-                                .padding(top = 20.dp)
-                                .height(200.dp)
-                                .fillMaxWidth()
-                        )
-                        Text(
-                            text = "Belum ada transaksi",
-                            style = raleway(
-                                fontSize = 16,
-                                weight = FontWeight.Normal
-                            )
-                        )
-                    }
+                    EmptyTransaction(Modifier.padding(top = 20.dp))
                 }
             } else {
                 items(groupedData.value!!.size) { index ->

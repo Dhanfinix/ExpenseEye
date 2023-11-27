@@ -6,20 +6,15 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -28,11 +23,16 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.ui.theme.BlueMain
-import com.dhandev.rekapin.ui.theme.BlueSecondary
+import com.dhandev.rekapin.ui.theme.MyBlue
 import com.dhandev.rekapin.ui.theme.MyGreen
+import com.dhandev.rekapin.ui.theme.MyOrange
+import com.dhandev.rekapin.ui.theme.MyPink
 import com.dhandev.rekapin.ui.theme.MyRed
+import com.dhandev.rekapin.ui.theme.MyYellow
 import com.dhandev.rekapin.ui.theme.RekapinTheme
+import com.dhandev.rekapin.utils.TransactionCategory
 import kotlin.math.atan2
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -40,12 +40,30 @@ import kotlin.math.roundToInt
 @Composable
 fun Chart(
     modifier: Modifier = Modifier,
-    colors: List<Color>,
-    inputValues: List<Float>,
+    data: List<TransactionItemModel>,
     animated: Boolean = true,
-    enableClickInfo: Boolean = true,
-    category: List<String>
+    enableClickInfo: Boolean = true
 ){
+    val inputValues = data.map {
+        it.total.toFloat()
+    }
+    val category = data.map {
+        it.category
+    }
+    val colors = data.map {
+        when(it.category){
+            TransactionCategory.Food.toString() -> MyRed
+            TransactionCategory.Income.toString() -> MyGreen
+            TransactionCategory.Gift.toString() -> Color.Yellow
+            TransactionCategory.Transportation.toString() -> MyGreen
+            TransactionCategory.Donation.toString() -> MyOrange
+            TransactionCategory.Bills.toString() -> MyYellow
+            TransactionCategory.Health.toString() -> MyPink
+            TransactionCategory.Exercise.toString() -> MyBlue
+            else -> BlueMain
+        }
+    }
+
     val chartDegrees = 360f // circle shape
 
     // start drawing clockwise (top to right)
@@ -64,6 +82,9 @@ fun Chart(
     val clickedItemIndex = remember {
         mutableIntStateOf(0)
     }
+    if (clickedItemIndex.intValue > category.count()-1){
+        clickedItemIndex.intValue = 0
+    }
 
     // calculate each slice end point in degrees, for handling click position
     val progressSize = mutableListOf<Float>()
@@ -76,7 +97,7 @@ fun Chart(
     }
     // text style
     val density = LocalDensity.current
-    val textFontSize = with(density) { 30.dp.toPx() }
+    val textFontSize = with(density) { 14.dp.toPx() }
     val textPaint = remember {
         Paint().apply {
             color = colors[clickedItemIndex.intValue].toArgb()
@@ -92,7 +113,7 @@ fun Chart(
 
     BoxWithConstraints(modifier = modifier.padding(30.dp), contentAlignment = Alignment.Center) {
 
-        val canvasSize = min(constraints.maxWidth, constraints.maxHeight)
+        val canvasSize = min(constraints.maxWidth/2, constraints.maxHeight/2)
         val size = Size(canvasSize.toFloat(), canvasSize.toFloat())
         val canvasSizeDp = with(LocalDensity.current) { canvasSize.toDp() }
 
@@ -166,23 +187,11 @@ private fun touchPointToAngle(
 
 @Preview
 @Composable
-fun PreviewChart(){
-    val chartColors = listOf(
-        MyRed,
-        MyGreen,
-        BlueMain,
-        BlueSecondary
-    )
-    val chartValues = listOf(20_000f, 100_000f, 200_000f, 30_000f)
-    val chartCategory = listOf("Makan & Minum", "Transportasi", "Donasi", "Kesehatan")
-
-    RekapinTheme {
+fun PreviewChart(){RekapinTheme {
         Surface {
             Chart(
                 modifier = Modifier.padding(20.dp),
-                colors = chartColors,
-                inputValues = chartValues,
-                category = chartCategory
+                data = listDummyItemData
             )
         }
     }

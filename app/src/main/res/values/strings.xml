@@ -59,4 +59,6 @@
     <string name="delete_transaction">Delete Transaction</string>
     <string name="delete_transaction_confrimation">Are you sure to delete this transaction data?</string>
 
+    <string name="trx_percentage">Persentase Transaksi</string>
+
 </resources>

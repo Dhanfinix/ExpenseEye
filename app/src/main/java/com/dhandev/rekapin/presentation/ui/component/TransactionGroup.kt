@@ -27,6 +27,7 @@ import com.dhandev.rekapin.ui.theme.MyRed
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.DateUtil
 import com.dhandev.rekapin.utils.StringUtil
+import com.dhandev.rekapin.utils.TransactionCategory
 
 @Composable
 fun TransactionGroup(
@@ -100,7 +101,7 @@ val dummyItemData = TransactionItemModel(
     title = "Groceries",
     dateInMillis = 1698685200000,
     total = 10000.0,
-    category = "Food",
+    category = TransactionCategory.Food.toString(),
     isExpense = false
 )
 
@@ -109,7 +110,7 @@ val dummyItemData2 = TransactionItemModel(
     title = "Salary",
     dateInMillis = 1698685200000,
     total = 1000.0,
-    category = "Income",
+    category = TransactionCategory.Income.toString(),
     isExpense = false
 )
 //val dummyData = TransactionGroupModel(
@@ -126,7 +127,7 @@ val dummyItemData3 = TransactionItemModel(
     title = "Rent",
     dateInMillis = 1698685200000,
     total = 5000.0,
-    category = "Income",
+    category = TransactionCategory.Income.toString(),
     isExpense = true
 )
 val dummyItemData4 = TransactionItemModel(
@@ -134,7 +135,7 @@ val dummyItemData4 = TransactionItemModel(
     title = "Freelance",
     dateInMillis = 1698685200000,
     total = 2000.0,
-    category = "Income",
+    category = TransactionCategory.Income.toString(),
     isExpense = false
 )
 
@@ -152,7 +153,7 @@ val dummyItemData5 = TransactionItemModel(
     title = "Utilities",
     dateInMillis = System.currentTimeMillis(),
     total = 1500.0,
-    category = "Bills",
+    category = TransactionCategory.Bills.toString(),
     isExpense = true
 )
 
@@ -161,7 +162,7 @@ val dummyItemData6 =TransactionItemModel(
     title = "Dividends",
     dateInMillis = System.currentTimeMillis(),
     total = 500.0,
-    category = "Income",
+    category = TransactionCategory.Income.toString(),
     isExpense = false
 )
 
@@ -179,7 +180,7 @@ val dummyItemData7 = TransactionItemModel(
     title = "Utilities",
     dateInMillis = System.currentTimeMillis(),
     total = 1500.0,
-    category = "Bills",
+    category = TransactionCategory.Bills.toString(),
     isExpense = true
 )
 val dummyItemData8 = TransactionItemModel(
@@ -187,7 +188,7 @@ val dummyItemData8 = TransactionItemModel(
     title = "Dividends",
     dateInMillis = System.currentTimeMillis(),
     total = 500.0,
-    category = "Income",
+    category = TransactionCategory.Income.toString(),
     isExpense = false
 )
 

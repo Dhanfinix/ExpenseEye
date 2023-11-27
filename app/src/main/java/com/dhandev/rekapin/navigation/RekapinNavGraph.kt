@@ -69,7 +69,9 @@ fun RekapinNavGraph(
                     navigateToCreate = {navController.navigate("${CreateDestination.route}?itemId=$it")})
             }
             composable(route = ReportDestination.route) {
-                ReportScreen()
+                ReportScreen(
+                    paddingValues = paddingValues
+                )
                 BackHandler {
                     navController.navigate(HomeDestination.route) {
                         popUpTo(HomeDestination.route) { inclusive = true }
