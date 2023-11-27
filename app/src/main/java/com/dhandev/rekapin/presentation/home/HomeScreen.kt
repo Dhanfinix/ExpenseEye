@@ -197,6 +197,7 @@ fun HomeScreen(
                             composition = composition.value,
                             progress = { progress },
                             modifier = Modifier
+                                .padding(top = 20.dp)
                                 .height(200.dp)
                                 .fillMaxWidth()
                         )
