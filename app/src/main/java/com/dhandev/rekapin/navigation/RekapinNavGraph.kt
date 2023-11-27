@@ -18,6 +18,8 @@ import com.dhandev.rekapin.presentation.create.CreateDestination
 import com.dhandev.rekapin.presentation.create.CreateScreen
 import com.dhandev.rekapin.presentation.home.HomeDestination
 import com.dhandev.rekapin.presentation.home.HomeScreen
+import com.dhandev.rekapin.presentation.landing.AfterSplash
+import com.dhandev.rekapin.presentation.landing.AfterSplashDestination
 import com.dhandev.rekapin.presentation.landing.LandingDestination
 import com.dhandev.rekapin.presentation.landing.LandingScreen
 import com.dhandev.rekapin.presentation.landing.MainViewModel
@@ -42,7 +44,7 @@ fun RekapinNavGraph(
     } else {
         NavHost(
             navController = navController,
-            startDestination =  if (logged) HomeDestination.route else LandingDestination.route,
+            startDestination =  if (logged) AfterSplashDestination.route else LandingDestination.route,
             modifier = modifier
                 .fillMaxSize()
         ) {
@@ -51,6 +53,13 @@ fun RekapinNavGraph(
                     autoSlideDuration = 5000,
                     navigateToHome = {navController.navigate(HomeDestination.route){
                         popUpTo(LandingDestination.route) { inclusive = true }
+                    } }
+                )
+            }
+            composable(route = AfterSplashDestination.route){
+                AfterSplash(
+                    goToHome = {navController.navigate(HomeDestination.route){
+                        popUpTo(AfterSplashDestination.route) { inclusive = true }
                     } }
                 )
             }
