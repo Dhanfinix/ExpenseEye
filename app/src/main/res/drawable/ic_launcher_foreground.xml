@@ -1,25 +1,74 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
-    android:viewportWidth="436"
-    android:viewportHeight="436">
-  <group android:scaleX="0.62"
-      android:scaleY="0.62"
-      android:translateX="82.84"
-      android:translateY="82.84">
-    <path
-        android:pathData="M0,0h436v436h-436z"
-        android:fillColor="#ffffff"/>
-    <path
-        android:pathData="M168.22,314H44L50.75,281.28H138.25L147.97,235.04L72.63,235.04L79.11,204.75L154.45,204.75L164.98,154.72L75.33,154.72L82.35,122L209,122L172.5,159.5L147.97,214L158.5,257.5L168.22,314Z"
-        android:fillColor="#BEEBFF"/>
-    <path
-        android:pathData="M267.78,122H392L385.25,154.72H297.75L288.03,200.96H363.38L356.89,231.25H281.55L271.02,281.28H360.67L353.65,314H227L263.5,276.5L288.03,222L277.5,178.5L267.78,122Z"
-        android:fillColor="#BEEBFF"/>
-    <path
-        android:pathData="M217,179.5C206.79,179.5 197,183.56 189.78,190.78C182.56,198 178.5,207.79 178.5,218C178.5,228.21 182.56,238 189.78,245.22C197,252.44 206.79,256.5 217,256.5C227.21,256.5 237,252.44 244.22,245.22C251.44,238 255.5,228.21 255.5,218C255.5,207.79 251.44,198 244.22,190.78C237,183.56 227.21,179.5 217,179.5ZM217,282.17C199.98,282.17 183.66,275.41 171.63,263.37C159.59,251.34 152.83,235.02 152.83,218C152.83,200.98 159.59,184.66 171.63,172.63C183.66,160.59 199.98,153.83 217,153.83C234.02,153.83 250.34,160.59 262.37,172.63C274.41,184.66 281.17,200.98 281.17,218C281.17,235.02 274.41,251.34 262.37,263.37C250.34,275.41 234.02,282.17 217,282.17ZM217,121.75C173.75,121.75 143.65,183.68 114,240C99.66,267.24 74.74,295.89 67.5,314.25C67.5,314.25 152.83,314.25 217,314.25C264.12,314.25 285.68,252.1 313.5,190.78C323.56,168.59 352.27,136.72 358.17,121.75C358.17,121.75 281.17,121.75 217,121.75Z"
-        android:fillColor="#00B2FF"
-        tools:ignore="VectorPath" />
+    android:viewportWidth="170"
+    android:viewportHeight="256">
+  <group android:scaleX="0.3530599"
+      android:scaleY="0.5316667"
+      android:translateX="54.98991"
+      android:translateY="59.946667">
+    <group>
+      <clip-path
+          android:pathData="M0,0h170v256h-170z"/>
+      <path
+          android:pathData="M146.52,32.82H27.35V57.27H146.52V32.82Z"
+          android:fillColor="#ffffff"/>
+      <path
+          android:pathData="M147.22,71.1H57.32V219.14H147.22V71.1Z"
+          android:fillColor="#ffffff"/>
+      <path
+          android:pathData="M126.07,15.74H36.17V163.78H126.07V15.74Z"
+          android:fillColor="#ffffff"/>
+      <path
+          android:pathData="M155.16,46.25H9.73V211.44H155.16V46.25Z"
+          android:fillColor="#ffffff"/>
+      <path
+          android:pathData="M85,0H85C38.06,0 -0,38.11 -0,85.12V170.88C-0,217.89 38.06,256 85,256H85C131.94,256 170,217.89 170,170.88V85.12C170,38.11 131.94,0 85,0ZM85,161.2C77.85,161.2 70.84,160.1 64.15,158.02C75.75,177.26 96.82,190.15 120.85,190.15V215.6C70.34,215.6 29.25,174.45 29.25,123.87H54.67C54.67,123.87 54.67,123.87 54.67,123.87C62.94,131.53 73.72,135.75 85,135.75C109.66,135.75 129.72,115.66 129.72,90.97C129.72,66.28 109.66,46.19 85,46.19C60.34,46.19 40.28,66.28 40.28,90.97H14.87C14.87,52.25 46.33,20.75 85,20.75C123.67,20.75 155.13,52.25 155.13,90.97C155.13,129.7 123.67,161.2 85,161.2V161.2Z"
+          android:fillColor="#00B2FF"/>
+      <path
+          android:pathData="M116.18,59.76C117.06,63.26 117.58,66.91 117.58,70.69C117.58,95.42 97.56,115.47 72.86,115.47C60.7,115.47 49.68,110.59 41.62,102.7C46.5,122.14 64.02,136.54 84.94,136.54C109.64,136.54 129.66,116.5 129.66,91.77C129.66,79.22 124.49,67.89 116.18,59.76H116.18Z">
+        <aapt:attr name="android:fillColor">
+          <gradient 
+              android:startX="15699.6"
+              android:startY="6015.17"
+              android:endX="3894.24"
+              android:endY="3098.3"
+              android:type="linear">
+            <item android:offset="0" android:color="#FFFFFFFF"/>
+            <item android:offset="1" android:color="#FFFFFFFF"/>
+          </gradient>
+        </aapt:attr>
+      </path>
+      <path
+          android:pathData="M146.52,32.82H27.35V57.27H146.52V32.82Z"
+          android:fillColor="#ffffff"/>
+      <path
+          android:pathData="M147.22,71.1H57.32V219.14H147.22V71.1Z"
+          android:fillColor="#ffffff"/>
+      <path
+          android:pathData="M126.07,15.74H36.17V163.78H126.07V15.74Z"
+          android:fillColor="#ffffff"/>
+      <path
+          android:pathData="M155.16,46.25H9.73V211.44H155.16V46.25Z"
+          android:fillColor="#ffffff"/>
+      <path
+          android:pathData="M85,0H85C38.06,0 -0,38.11 -0,85.12V170.88C-0,217.89 38.06,256 85,256H85C131.94,256 170,217.89 170,170.88V85.12C170,38.11 131.94,0 85,0ZM85,161.2C77.85,161.2 70.84,160.1 64.15,158.02C75.75,177.26 96.82,190.15 120.85,190.15V215.6C70.34,215.6 29.25,174.45 29.25,123.87H54.67C54.67,123.87 54.67,123.87 54.67,123.87C62.94,131.53 73.72,135.75 85,135.75C109.66,135.75 129.72,115.66 129.72,90.97C129.72,66.28 109.66,46.19 85,46.19C60.34,46.19 40.28,66.28 40.28,90.97H14.87C14.87,52.25 46.33,20.75 85,20.75C123.67,20.75 155.13,52.25 155.13,90.97C155.13,129.7 123.67,161.2 85,161.2V161.2Z"
+          android:fillColor="#00B2FF"/>
+      <path
+          android:pathData="M116.73,58.9C117.61,62.41 117.58,66.91 117.58,70.69C117.58,95.42 97.56,115.47 72.86,115.47C60.7,115.47 49.68,110.59 41.62,102.7C46.5,122.14 64.02,136.54 84.94,136.54C109.64,136.54 130.33,116.48 130.33,91.75C130.33,79.2 125.04,67.03 116.73,58.9Z">
+        <aapt:attr name="android:fillColor">
+          <gradient 
+              android:startX="126"
+              android:startY="52.5"
+              android:endX="63.5"
+              android:endY="114"
+              android:type="linear">
+            <item android:offset="0" android:color="#FFBEEBFF"/>
+            <item android:offset="1" android:color="#00BEEBFF"/>
+          </gradient>
+        </aapt:attr>
+      </path>
+    </group>
   </group>
 </vector>
