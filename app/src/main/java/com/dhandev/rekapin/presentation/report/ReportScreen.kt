@@ -61,7 +61,9 @@ fun ReportScreen(
         selectedFilter.intValue = it
     }
     val groupedData = remember { mutableStateOf<List<CategoryGroupModel>?>(emptyList()) }
-
+    val clickedCategory = remember {
+        mutableIntStateOf(-1)
+    }
     viewModel.getAll(filter.longValue).observe(lifecycleOwner) { data ->
         itemsData.value = data
         groupedData.value =data
@@ -132,7 +134,8 @@ fun ReportScreen(
                     .fillMaxWidth()
             ){
                 Chart(
-                    data = groupedData.value!!
+                    data = groupedData.value!!,
+                    clickedCategory = clickedCategory
                 )
             }
 
@@ -140,7 +143,7 @@ fun ReportScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                text = stringResource(id = R.string.expense_by_category),
+                text = "Keterangan",
                 style = raleway(
                     fontSize = 16,
                     weight = FontWeight.Bold
@@ -155,8 +158,10 @@ fun ReportScreen(
                     .fillMaxWidth()
             ){
                 LazyColumn{
-                    items(groupedData.value!!.count()){
-                        CategoryItemView(data = groupedData.value!![it])
+                    items(groupedData.value!!.count()){index->
+                        CategoryItemView(
+                            data = groupedData.value!![index],
+                            clickedCategory = { clickedCategory.intValue = it })
                     }
                 }
             }

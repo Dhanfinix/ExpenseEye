@@ -204,7 +204,7 @@ fun TotalBalanceCard(
                     .padding(top = 6.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp)),
-                progress = target.toFloat(),
+                progress = 1f - target.toFloat(),
                 color = BlueMain,
                 trackColor = Gray
             )

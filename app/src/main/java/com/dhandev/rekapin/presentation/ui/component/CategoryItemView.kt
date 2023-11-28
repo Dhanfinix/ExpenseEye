@@ -1,6 +1,7 @@
 package com.dhandev.rekapin.presentation.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -25,12 +26,14 @@ import kotlin.math.roundToInt
 fun CategoryItemView(
     modifier: Modifier = Modifier,
     data: CategoryGroupModel,
+    clickedCategory:(Int)-> Unit
 ) {
     val (categoryImage, categoryName) = CategoryUtil.getCategory(data.category)
 
     Row(
         modifier = Modifier
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable { clickedCategory(categoryName) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
