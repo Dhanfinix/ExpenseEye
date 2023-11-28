@@ -31,18 +31,18 @@ object DateUtil {
     }
 
 
-    val currentDate = {
+    fun currentDate(): Long {
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jakarta"))
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        calendar.timeInMillis
+        return calendar.timeInMillis
     }
-    val oneDayInMillis : Long = 24 * 60 * 60 * 1000
+    private const val oneDayInMillis : Long = 24 * 60 * 60 * 1000
 
     // For today's transactions
-    val fromDateInMillisToday = currentDate
+    val fromDateInMillisToday = currentDate()
 
     // For last 7 days' transactions
     val fromDateInMillis7Days = currentDate() - 7 * oneDayInMillis

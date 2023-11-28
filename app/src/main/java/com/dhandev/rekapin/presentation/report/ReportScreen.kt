@@ -1,6 +1,7 @@
 package com.dhandev.rekapin.presentation.report
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.data.model.CategoryGroupModel
+import com.dhandev.rekapin.data.model.FilterModel
 import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.navigation.NavigationDestination
 import com.dhandev.rekapin.presentation.landing.MainViewModel
@@ -32,6 +34,7 @@ import com.dhandev.rekapin.presentation.ui.component.Chart
 import com.dhandev.rekapin.presentation.ui.component.ChipGroup
 import com.dhandev.rekapin.presentation.ui.component.EmptyTransaction
 import com.dhandev.rekapin.ui.theme.BlueSecondary
+import com.dhandev.rekapin.ui.theme.gradient
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.DateUtil
 import org.koin.androidx.compose.koinViewModel
@@ -46,10 +49,17 @@ fun ReportScreen(
     paddingValues: PaddingValues,
     viewModel: MainViewModel = koinViewModel()
 ) {
+    viewModel.getFilter()
     val lifecycleOwner = LocalLifecycleOwner.current
     val itemsData = remember { mutableStateOf<List<TransactionItemModel>?>(emptyList()) }
-    val filter = remember { mutableLongStateOf(DateUtil.currentDate()) }       //today
+    val filter = remember { mutableLongStateOf(DateUtil.fromDateInMillisToday) }       //today
+    viewModel.filter.observe(lifecycleOwner){
+        filter.longValue = it
+    }
     val selectedFilter = remember { mutableIntStateOf(0) }
+    viewModel.filterIndex.observe(lifecycleOwner){
+        selectedFilter.intValue = it
+    }
     val groupedData = remember { mutableStateOf<List<CategoryGroupModel>?>(emptyList()) }
 
     viewModel.getAll(filter.longValue).observe(lifecycleOwner) { data ->
@@ -65,9 +75,11 @@ fun ReportScreen(
                 it.proportion
             }
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(brush = gradient)
             .padding(paddingValues),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -86,12 +98,17 @@ fun ReportScreen(
             selectedItem = selectedFilter
         ) {
             selectedFilter.intValue = it
-            filter.longValue = when (it) {
-                0 -> DateUtil.fromDateInMillisToday()
-                1 -> DateUtil.fromDateInMillis7Days
-                2 -> DateUtil.fromDateInMillis30Days
-                else -> DateUtil.fromReportPeriodDate(viewModel.reportPeriod.intValue)
-            }
+            viewModel.saveFilter(
+                FilterModel(
+                    index = it,
+                    filterInMillis = when (it) {
+                        0 -> DateUtil.fromDateInMillisToday
+                        1 -> DateUtil.fromDateInMillis7Days
+                        2 -> DateUtil.fromDateInMillis30Days
+                        else -> DateUtil.fromReportPeriodDate(viewModel.reportPeriod.intValue)
+                    }
+                )
+            )
         }
         if (itemsData.value.isNullOrEmpty()){
             EmptyTransaction(Modifier.fillMaxSize())
@@ -113,7 +130,6 @@ fun ReportScreen(
                 modifier = modifier
                     .padding(16.dp)
                     .fillMaxWidth()
-                    .padding(vertical = 12.dp)
             ){
                 Chart(
                     data = groupedData.value!!
@@ -137,7 +153,6 @@ fun ReportScreen(
                 modifier = modifier
                     .padding(16.dp)
                     .fillMaxWidth()
-                    .padding(vertical = 12.dp)
             ){
                 LazyColumn{
                     items(groupedData.value!!.count()){

@@ -98,15 +98,10 @@ fun Chart(
     // text style
     val density = LocalDensity.current
     val textFontSize = with(density) { 14.dp.toPx() }
-    val textPaint = remember {
-        Paint().apply {
-            color = colors[clickedItemIndex.intValue].toArgb()
-            textSize = textFontSize
-            textAlign = Paint.Align.CENTER
-        }
-    }
-    LaunchedEffect(clickedItemIndex.intValue) {
-        textPaint.color = colors[clickedItemIndex.intValue].toArgb()
+    val textPaint =  Paint().apply {
+        color = colors[clickedItemIndex.intValue].toArgb()
+        textSize = textFontSize
+        textAlign = Paint.Align.CENTER
     }
     val sliceWidth = with(LocalDensity.current) { 30.dp.toPx() }
     val selectedSliceWidth = with(LocalDensity.current) { 40.dp.toPx() }
@@ -160,7 +155,7 @@ fun Chart(
                         textPaint
                     )
                     canvas.nativeCanvas.drawText(
-                        "${proportions[clickedItemIndex.intValue].roundToInt()}%",
+                        "(${proportions[clickedItemIndex.intValue].roundToInt()}%)",
                         (canvasSize / 2) + textFontSize / 4,
                         (canvasSize / 2) + textFontSize,
                         textPaint

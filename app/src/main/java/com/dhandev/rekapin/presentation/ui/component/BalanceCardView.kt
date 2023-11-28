@@ -37,7 +37,7 @@ import com.dhandev.rekapin.utils.StringUtil
 fun BalanceCardView(
     modifier: Modifier = Modifier,
     balance: Double,
-    budgetLeft: Float,
+    budgetLeft: Double,
     isShowBalance: Boolean,
     isShown:(Boolean) -> Unit
 ){
@@ -92,7 +92,7 @@ fun BalanceCardView(
                     .height(16.dp)
                     .padding(top = 6.dp)
                     .clip(RoundedCornerShape(8.dp)),
-                progress = budgetLeft,
+                progress = budgetLeft.toFloat(),
                 color = BlueMain,
                 trackColor = Gray
             )
@@ -105,7 +105,7 @@ fun BalanceCardView(
 fun PreviewBalanceCard(){
     RekapinTheme {
         Surface {
-            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 0.5f, true) { true }
+            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 0.5, true) { true }
         }
     }
 }

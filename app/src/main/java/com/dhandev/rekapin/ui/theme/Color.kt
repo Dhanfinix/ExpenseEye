@@ -1,5 +1,7 @@
 package com.dhandev.rekapin.ui.theme
 
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -20,6 +22,12 @@ val MyOrange = Color(0xFFFFBC3B)
 val MyYellow = Color(0xFFFFF73B)
 val MyPink = Color(0xFFFF3B8D)
 val MyBlue = Color(0xFF4B3BFF)
+val gradient = Brush.radialGradient(
+    0.0f to BlueMain,
+    1.0f to Color.White,
+    radius = 700.0f,
+    center = Offset(1000f, 0f)
+)
 
 val md_theme_light_primary = Color(0xFF006492)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)

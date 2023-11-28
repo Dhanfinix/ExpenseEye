@@ -23,7 +23,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,14 +31,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dhandev.rekapin.R
+import com.dhandev.rekapin.data.model.FilterModel
 import com.dhandev.rekapin.data.model.TransactionGroupModel
 import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.navigation.NavigationDestination
@@ -49,8 +47,8 @@ import com.dhandev.rekapin.presentation.ui.component.ChipGroup
 import com.dhandev.rekapin.presentation.ui.component.DetailBottomSheet
 import com.dhandev.rekapin.presentation.ui.component.EmptyTransaction
 import com.dhandev.rekapin.presentation.ui.component.TransactionGroup
-import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
+import com.dhandev.rekapin.ui.theme.gradient
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.AnimUtil
 import com.dhandev.rekapin.utils.DateUtil
@@ -72,16 +70,24 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     navigateToCreate: (String?) -> Unit,
 ) {
+    viewModel.getFilter()
     val lifecycleOwner = LocalLifecycleOwner.current
-    val filter = remember { mutableLongStateOf(DateUtil.currentDate()) }       //today
+    val filter = remember { mutableLongStateOf(DateUtil.fromDateInMillisToday) }       //today
+    viewModel.filter.observe(lifecycleOwner){
+        filter.longValue = it
+    }
+
     val groupedData = remember { mutableStateOf<List<TransactionGroupModel>?>(emptyList()) }
     val selectedFilter = remember { mutableIntStateOf(0) }
+    viewModel.filterIndex.observe(lifecycleOwner){
+        selectedFilter.intValue = it
+    }
 
     viewModel.getIncomeExpense()
     viewModel.getExpense()
     val balance = remember { mutableDoubleStateOf(0.0) }
     val balanceThisMonth = remember { mutableDoubleStateOf(0.0) }
-    val budget = remember { mutableFloatStateOf(0f) }
+    val budget = remember { mutableDoubleStateOf(0.0) }
 
     viewModel.getShowBalance()
     val showBalance by remember { mutableStateOf(viewModel.showBalance) }
@@ -93,8 +99,8 @@ fun HomeScreen(
         balanceThisMonth.doubleValue = viewModel.budget.doubleValue - it
     }
     viewModel.expense.observe(lifecycleOwner) {
-        val result = 1f - it.div(viewModel.budget.doubleValue).toFloat()
-        budget.floatValue = String.format("%.2f", result).toFloat()
+        val result = 1.0 - it.div(viewModel.budget.doubleValue)
+        budget.doubleValue = String.format("%.2f", result).toDouble()
     }
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -102,15 +108,7 @@ fun HomeScreen(
         bottomSheetState = sheetState
     )
     val scope = rememberCoroutineScope()
-//    var showBottomSheet by remember { mutableStateOf(false) }
     var selectedDetail by remember { mutableStateOf<TransactionItemModel?>(null) }
-
-    val gradient = Brush.radialGradient(
-        0.0f to BlueMain,
-        1.0f to Color.White,
-        radius = 700.0f,
-        center = Offset(1000f, 0f)
-    )
 
     Box(
         modifier = Modifier
@@ -145,7 +143,7 @@ fun HomeScreen(
                 BalanceCardView(
                     modifier.padding(vertical = 8.dp, horizontal = 16.dp),
                     balanceThisMonth.doubleValue,
-                    budget.floatValue,
+                    budget.doubleValue,
                     showBalance.value
                 ) {
                     showBalance.value = it
@@ -169,12 +167,17 @@ fun HomeScreen(
                     selectedItem = selectedFilter
                 ) {
                     selectedFilter.intValue = it
-                    filter.longValue = when (it) {
-                        0 -> DateUtil.fromDateInMillisToday()
-                        1 -> DateUtil.fromDateInMillis7Days
-                        2 -> DateUtil.fromDateInMillis30Days
-                        else -> DateUtil.fromReportPeriodDate(viewModel.reportPeriod.intValue)
-                    }
+                    viewModel.saveFilter(
+                        FilterModel(
+                            index = it,
+                            filterInMillis = when (it) {
+                                0 -> DateUtil.fromDateInMillisToday
+                                1 -> DateUtil.fromDateInMillis7Days
+                                2 -> DateUtil.fromDateInMillis30Days
+                                else -> DateUtil.fromReportPeriodDate(viewModel.reportPeriod.intValue)
+                            }
+                        )
+                    )
                 }
             }
 
