@@ -1,5 +1,7 @@
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -29,10 +31,10 @@ fun HiddenBalanceView(
         start = Offset(200f, 0f),
         end = Offset(0f, 200f)
     )
-    LazyRow(
-        modifier = modifier.padding(top = 10.dp, end = 10.dp)
+    Row(
+        modifier = modifier.fillMaxWidth().padding(top = 10.dp, end = 10.dp)
     ){
-        items(7){
+        repeat(7){
             Surface(
                 modifier = Modifier.size(32.dp).padding(4.dp).clip(CircleShape).background(brush = if (it % 2 == 0) gradient else gradient2),
                 shape = CircleShape,

@@ -3,12 +3,17 @@ package com.dhandev.rekapin.presentation.ui.component
 import HiddenBalanceView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -16,6 +21,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,13 +44,48 @@ fun BalanceCardView(
     modifier: Modifier = Modifier,
     balance: Double,
     budgetLeft: Double,
-    isShowBalance: Boolean,
+    isShowBalance: MutableState<Boolean>,
     isShown:(Boolean) -> Unit
 ){
-    val showBalance = remember { mutableStateOf(isShowBalance) }
-    isShown.invoke(showBalance.value)
+    LazyRow(
+        modifier = modifier
+    ){
+        items(2) {index->
+            BudgetCard(
+                modifier = Modifier.padding(16.dp).padding(end = if (index == 0) 0.dp else 16.dp),
+                balance = balance,
+                isShowBalance = isShowBalance.value,
+                budgetLeft = budgetLeft,
+                isShown = { isShown(it) }
+            )
+        }
+//        item {
+//            BudgetCard(
+//                balance = balance,
+//                isShowBalance = isShowBalance.value,
+//                budgetLeft = budgetLeft,
+//                isShown = { isShown(it) }
+//            )
+//        }
+    }
+//    BudgetCard(
+//        balance = balance,
+//        isShowBalance = isShowBalance,
+//        budgetLeft = budgetLeft,
+//        isShown = { isShown(it) }
+//    )
 
+}
 
+@Composable
+fun BudgetCard(
+    modifier: Modifier = Modifier,
+    balance: Double,
+    budgetLeft: Double,
+    isShowBalance: Boolean,
+    isShown: (Boolean) -> Unit
+) {
+//    Text(text = "MY CARD")
     Card(modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -55,7 +96,8 @@ fun BalanceCardView(
     ){
         Column(
             modifier = Modifier
-                .padding(16.dp),
+                .padding(16.dp)
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.SpaceAround
         ) {
 
@@ -67,12 +109,12 @@ fun BalanceCardView(
                 Image(
                     modifier = Modifier
                         .padding(start = 8.dp)
-                        .clickable { showBalance.value = !showBalance.value },
-                    painter = painterResource(id = if (showBalance.value) R.drawable.ic_eye_shown else R.drawable.ic_eye_hide),
+                        .clickable { isShown(!isShowBalance) },
+                    painter = painterResource(id = if (isShowBalance) R.drawable.ic_eye_shown else R.drawable.ic_eye_hide),
                     contentDescription = "Hide balance"
                 )
             }
-            if (showBalance.value){
+            if (isShowBalance){
                 Text(
                     text = StringUtil.formatRp(balance.toString()),
                     style = raleway(fontSize = 32, weight = FontWeight.Bold)
@@ -88,7 +130,6 @@ fun BalanceCardView(
             )
             LinearProgressIndicator(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .height(16.dp)
                     .padding(top = 6.dp)
                     .clip(RoundedCornerShape(8.dp)),
@@ -105,7 +146,11 @@ fun BalanceCardView(
 fun PreviewBalanceCard(){
     RekapinTheme {
         Surface {
-            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 0.5, true) { true }
+            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 0.5, remember {
+                mutableStateOf(
+                    false
+                )
+            }) { true }
         }
     }
 }

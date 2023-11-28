@@ -90,7 +90,10 @@ fun HomeScreen(
     val budget = remember { mutableDoubleStateOf(0.0) }
 
     viewModel.getShowBalance()
-    val showBalance by remember { mutableStateOf(viewModel.showBalance) }
+    val showBalance = remember { mutableStateOf(false) }
+    viewModel.showBalance.observe(lifecycleOwner){
+        showBalance.value = it
+    }
 
     viewModel.balance.observe(lifecycleOwner) {
         balance.doubleValue = it
@@ -141,12 +144,11 @@ fun HomeScreen(
             }
             item {
                 BalanceCardView(
-                    modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                    modifier.fillMaxWidth(),
                     balanceThisMonth.doubleValue,
                     budget.doubleValue,
-                    showBalance.value
+                    showBalance
                 ) {
-                    showBalance.value = it
                     viewModel.saveShowBalance(it)
                 }
             }

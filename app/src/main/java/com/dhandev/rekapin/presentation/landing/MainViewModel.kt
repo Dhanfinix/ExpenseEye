@@ -28,7 +28,11 @@ class MainViewModel(
     val username = mutableStateOf("")
     val reportPeriod = mutableIntStateOf(1)
     val budget = mutableDoubleStateOf(0.0)
-    val showBalance = mutableStateOf(false)
+
+//    val showBalance = mutableStateOf(false)
+    private val _showBalance = MutableLiveData(true)
+    val showBalance : LiveData<Boolean> = _showBalance
+
     private val _filter = MutableLiveData(DateUtil.fromDateInMillisToday)
     val filter : LiveData<Long> = _filter
     private val _filterIndex = MutableLiveData(0)
@@ -80,7 +84,7 @@ class MainViewModel(
     fun getShowBalance(){
         viewModelScope.launch {
             preference.getShowBalance.collect{
-                showBalance.value = it
+                _showBalance.value = it
             }
         }
     }
