@@ -88,6 +88,7 @@ fun HomeScreen(
     val balance = remember { mutableDoubleStateOf(0.0) }
     val balanceThisMonth = remember { mutableDoubleStateOf(0.0) }
     val budget = remember { mutableDoubleStateOf(0.0) }
+    val target = remember { mutableDoubleStateOf(0.0) }
 
     viewModel.getShowBalance()
     val showBalance = remember { mutableStateOf(false) }
@@ -105,6 +106,7 @@ fun HomeScreen(
         val result = 1.0 - it.div(viewModel.budget.doubleValue)
         budget.doubleValue = String.format("%.2f", result).toDouble()
     }
+    target.doubleValue = String.format("%.2f", 1.0 - balance.doubleValue.div(viewModel.target.doubleValue).let { if (it == 1.0) 0.0 else it}).toDouble()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scaffoldState = rememberBottomSheetScaffoldState(
@@ -145,8 +147,10 @@ fun HomeScreen(
             item {
                 BalanceCardView(
                     modifier.fillMaxWidth(),
+                    balance.doubleValue,
                     balanceThisMonth.doubleValue,
                     budget.doubleValue,
+                    target.doubleValue,
                     showBalance
                 ) {
                     viewModel.saveShowBalance(it)

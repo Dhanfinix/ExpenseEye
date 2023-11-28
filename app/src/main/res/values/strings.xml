@@ -26,10 +26,11 @@
     <string name="landing_next">Next</string>
 
     <string name="landing_start_title">Before start, please fill this form</string>
-    <string name="landing_start_name">Your name</string>
-    <string name="landing_start_current_balance">Current balance</string>
+    <string name="landing_start_name">Your Name</string>
+    <string name="landing_start_current_balance">Current Balance</string>
     <string name="landing_start_monthly_budget">Monthly Budget</string>
-    <string name="landing_start_period_date">Report period</string>
+    <string name="landing_start_balance_target">Balance Target</string>
+    <string name="landing_start_period_date">Report Period</string>
     <string name="landing_start_period_date_content">Day - %s every month</string>
 
     <string name="expense_list">Expense List</string>

@@ -28,6 +28,7 @@ class MainViewModel(
     val username = mutableStateOf("")
     val reportPeriod = mutableIntStateOf(1)
     val budget = mutableDoubleStateOf(0.0)
+    val target = mutableDoubleStateOf(0.0)
 
 //    val showBalance = mutableStateOf(false)
     private val _showBalance = MutableLiveData(true)
@@ -71,6 +72,7 @@ class MainViewModel(
                 username.value = profile?.userName ?: ""
                 reportPeriod.intValue = profile?.reportPeriod ?: 1
                 budget.doubleValue = profile?.budget?.toDouble() ?: 0.0
+                target.doubleValue = profile?.target?.toDouble() ?: 0.0
             }
             getFilter()
         }
