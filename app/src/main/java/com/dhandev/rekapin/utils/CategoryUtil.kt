@@ -2,10 +2,9 @@ package com.dhandev.rekapin.utils
 
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.data.model.CategoryItem
-import com.dhandev.rekapin.data.model.TransactionItemModel
 
 object CategoryUtil {
-    fun getCategory(data: TransactionItemModel):Pair<Int, Int>{
+    fun getCategory(data: String):Pair<Int, Int>{
         val categoryMap = mapOf(
             TransactionCategory.Income.toString() to Pair(
                 R.drawable.ic_payment,
@@ -39,7 +38,7 @@ object CategoryUtil {
             )
         )
 
-        val (categoryImage, categoryName) = categoryMap[data.category] ?: Pair(
+        val (categoryImage, categoryName) = categoryMap[data] ?: Pair(
             R.drawable.ic_expenseeye,
             R.string.app_name
         )

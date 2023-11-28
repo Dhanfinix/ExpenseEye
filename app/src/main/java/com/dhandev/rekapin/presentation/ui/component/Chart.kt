@@ -23,7 +23,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dhandev.rekapin.data.model.TransactionItemModel
+import com.dhandev.rekapin.data.model.CategoryGroupModel
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.MyBlue
 import com.dhandev.rekapin.ui.theme.MyGreen
@@ -40,7 +40,7 @@ import kotlin.math.roundToInt
 @Composable
 fun Chart(
     modifier: Modifier = Modifier,
-    data: List<TransactionItemModel>,
+    data: List<CategoryGroupModel>,
     animated: Boolean = true,
     enableClickInfo: Boolean = true
 ){
@@ -70,8 +70,8 @@ fun Chart(
     var startAngle = 270f
 
     // calculate each input percentage
-    val proportions = inputValues.map {
-        it * 100 / inputValues.sum()
+    val proportions = data.map {group->
+        group.proportion.let { if(it < 0) it * -1 else it }
     }
 
     // calculate each input slice degrees
@@ -189,10 +189,10 @@ private fun touchPointToAngle(
 @Composable
 fun PreviewChart(){RekapinTheme {
         Surface {
-            Chart(
-                modifier = Modifier.padding(20.dp),
-                data = listDummyItemData
-            )
+//            Chart(
+//                modifier = Modifier.padding(20.dp),
+//                data = listDummyItemData
+//            )
         }
     }
 }

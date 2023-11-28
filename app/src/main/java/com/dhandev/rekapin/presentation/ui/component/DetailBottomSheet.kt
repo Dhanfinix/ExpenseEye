@@ -1,6 +1,5 @@
 package com.dhandev.rekapin.presentation.ui.component
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,7 +50,7 @@ fun DetailBottomSheet(
     onUpdate:()->Unit
 ) {
     val context = LocalContext.current
-    val (categoryImage, categoryName) = CategoryUtil.getCategory(data)
+    val (categoryImage, categoryName) = CategoryUtil.getCategory(data.category)
     val openAlertDialog = remember { mutableStateOf(false) }
 
     BottomSheetScaffold(
