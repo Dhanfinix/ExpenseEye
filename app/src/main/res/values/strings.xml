@@ -62,4 +62,10 @@
     <string name="trx_percentage">Persentase Transaksi</string>
     <string name="expense_by_category">Pengeluaran Berdasarkan Kategori</string>
 
+    <string name="edit_profile">Edit Profile</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="change_lang">Change Language</string>
+    <string name="import_data">Import Data</string>
+    <string name="export_data">Export Data</string>
+    <string name="logout">Logout</string>
 </resources>
