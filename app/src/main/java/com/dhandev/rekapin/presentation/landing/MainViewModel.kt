@@ -33,6 +33,9 @@ class MainViewModel(
     private val _showBalance = MutableLiveData(true)
     val showBalance : LiveData<Boolean> = _showBalance
 
+    private val _isDark = MutableLiveData(true)
+    val isDark : LiveData<Boolean> = _isDark
+
     private val _filter = MutableLiveData(DateUtil.fromDateInMillisToday)
     val filter : LiveData<Long> = _filter
     private val _filterIndex = MutableLiveData(0)
@@ -85,6 +88,19 @@ class MainViewModel(
         viewModelScope.launch {
             preference.getShowBalance.collect{
                 _showBalance.value = it
+            }
+        }
+    }
+
+    fun saveTheme(isDark: Boolean){
+        viewModelScope.launch {
+            preference.saveTheme(isDark)
+        }
+    }
+    fun getTheme(){
+        viewModelScope.launch {
+            preference.getTheme.collect{
+                _isDark.value = it
             }
         }
     }
