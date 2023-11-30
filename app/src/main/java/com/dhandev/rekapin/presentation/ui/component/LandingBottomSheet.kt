@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LandingBottomSheet(
     modifier: Modifier = Modifier,
+    title: String,
     sheetState: SheetState,
     scope: CoroutineScope,
     onProceed: (ProfileModel) -> Unit,
@@ -62,37 +63,41 @@ fun LandingBottomSheet(
         ) {
             Text(
                 modifier = modifier.padding(bottom = 12.dp),
-                text = stringResource(id = R.string.landing_start_title),
+                text = title,
                 style = raleway(fontSize = 16, weight = FontWeight.Bold)
             )
             TextFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_name),
-                value = {username = it}
+                value = { username = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_current_balance),
-                value = {balance = it}
+                value = { balance = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_monthly_budget),
-                value = {budget = it}
+                value = { budget = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_balance_target),
-                value = {target = it}
+                value = { target = it }
             )
             NumberPickerView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_period_date),
-                value = {reportPeriod = it}
+                value = { reportPeriod = it }
             )
             Button(
                 onClick = {
-                    if (username.isNotEmpty() || balance.clearThousandFormat().isNotEmpty() || budget.clearThousandFormat().isNotEmpty()){
+                    if (username.isNotEmpty() &&
+                        balance.clearThousandFormat().isNotEmpty() &&
+                        budget.clearThousandFormat().isNotEmpty() &&
+                        target.clearThousandFormat().isNotEmpty()
+                    ) {
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             onProceed.invoke(
                                 ProfileModel(

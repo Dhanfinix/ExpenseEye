@@ -116,7 +116,9 @@ fun SettingsScreen(
                 )
             }
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -151,13 +153,13 @@ fun SettingsScreen(
             LandingBottomSheet(
                 sheetState = sheetState,
                 scope = scope,
+                title = stringResource(id = R.string.edit_profile),
                 onProceed = {
                     viewModel.saveProfileData(it)
                 },
                 isShown = { showBottomSheet = it })
         }
     }
-
 }
 fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

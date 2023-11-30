@@ -197,6 +197,7 @@ fun LandingScreen(
         if (showBottomSheet) {
             LandingBottomSheet(
                 sheetState = sheetState,
+                title = stringResource(id = R.string.landing_start_title),
                 scope = scope,
                 onProceed = {
                     viewModel.saveProfileData(it)
