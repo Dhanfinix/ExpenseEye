@@ -39,15 +39,24 @@ fun LandingBottomSheet(
     title: String,
     sheetState: SheetState,
     scope: CoroutineScope,
+    userData: ProfileModel? = null,
     onProceed: (ProfileModel) -> Unit,
     isShown: (Boolean) -> Unit
 ) {
     var username by remember { mutableStateOf("") }
-    var balance by remember { mutableStateOf("0") }
-    var budget by remember { mutableStateOf("0") }
-    var target by remember { mutableStateOf("0") }
-    var reportPeriod by remember { mutableIntStateOf(1) }
+    var balance by remember { mutableStateOf("") }
+    var budget by remember { mutableStateOf("") }
+    var target by remember { mutableStateOf("") }
+    var reportPeriod by remember { mutableIntStateOf(14) }
     val context = LocalContext.current
+
+    if (userData != null){
+        username = userData.userName
+        balance = userData.balance.toString()
+        budget = userData.budget.toString()
+        target = userData.target.toString()
+        reportPeriod = userData.reportPeriod
+    }
 
     ModalBottomSheet(
         modifier = modifier.fillMaxSize(),
@@ -69,26 +78,31 @@ fun LandingBottomSheet(
             TextFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_name),
+                setData = username,
                 value = { username = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_current_balance),
+                setData = balance,
                 value = { balance = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_monthly_budget),
+                setData = budget,
                 value = { budget = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_balance_target),
+                setData = target,
                 value = { target = it }
             )
             NumberPickerView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_period_date),
+                setData = reportPeriod,
                 value = { reportPeriod = it }
             )
             Button(

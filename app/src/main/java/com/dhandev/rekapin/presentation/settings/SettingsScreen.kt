@@ -154,8 +154,9 @@ fun SettingsScreen(
                 sheetState = sheetState,
                 scope = scope,
                 title = stringResource(id = R.string.edit_profile),
+                userData = viewModel.userData,
                 onProceed = {
-                    viewModel.saveProfileData(it)
+                    viewModel.saveProfileData(it, true)
                 },
                 isShown = { showBottomSheet = it })
         }

@@ -41,9 +41,10 @@ import com.dhandev.rekapin.ui.theme.raleway
 fun NumberPickerView(
     modifier: Modifier = Modifier,
     title: String,
+    setData: Int = 14,
     value: (Int) -> Unit
 ) {
-    val date = remember { mutableIntStateOf(14) }
+    val date = remember { mutableIntStateOf(setData) }
     val showDialog = remember { mutableStateOf(false) }
     val borderColor = if (showDialog.value) BlueSecondary else Color.Gray
     value.invoke(date.intValue)

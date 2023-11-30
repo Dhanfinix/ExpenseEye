@@ -36,7 +36,9 @@ fun NumberFieldView(
     value: (String) -> Unit
 ){
     var text by remember {
-        mutableStateOf(TextFieldValue(setData))
+        mutableStateOf(TextFieldValue(if (setData.isNotBlank()) {
+            setData.toLong().formatThousand()
+        } else setData))
     }
     value.invoke(text.text)
     Column(modifier = modifier.fillMaxWidth()) {
