@@ -3,17 +3,13 @@ package com.dhandev.rekapin.presentation.ui.component
 import HiddenBalanceView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,50 +39,60 @@ import com.dhandev.rekapin.utils.StringUtil
 fun BalanceCardView(
     modifier: Modifier = Modifier,
     balance: Double,
+    budgetBalance: Double,
     budgetLeft: Double,
+    target: Double,
     isShowBalance: MutableState<Boolean>,
     isShown:(Boolean) -> Unit
 ){
     LazyRow(
         modifier = modifier
     ){
-        items(2) {index->
+        item{
             BudgetCard(
-                modifier = Modifier.padding(16.dp).padding(end = if (index == 0) 0.dp else 16.dp),
-                balance = balance,
+                modifier = Modifier
+                    .fillParentMaxWidth(0.95f)
+                    .padding(
+                        end = 16.dp,
+                        top = 16.dp,
+                        start = 16.dp,
+                        bottom = 16.dp
+                    ),
+                budgetBalance = budgetBalance,
                 isShowBalance = isShowBalance.value,
                 budgetLeft = budgetLeft,
                 isShown = { isShown(it) }
             )
         }
-//        item {
-//            BudgetCard(
-//                balance = balance,
-//                isShowBalance = isShowBalance.value,
-//                budgetLeft = budgetLeft,
-//                isShown = { isShown(it) }
-//            )
-//        }
+        item {
+            TotalBalanceCard(
+                modifier = Modifier
+                    .fillParentMaxWidth(0.95f)
+                    .padding(
+                        end = 16.dp,
+                        top = 16.dp,
+                        start = 0.dp,
+                        bottom = 16.dp
+                    ),
+                balance = balance,
+                isShowBalance = isShowBalance.value,
+                target = target,
+                isShown = { isShown(it) }
+            )
+        }
     }
-//    BudgetCard(
-//        balance = balance,
-//        isShowBalance = isShowBalance,
-//        budgetLeft = budgetLeft,
-//        isShown = { isShown(it) }
-//    )
 
 }
 
 @Composable
 fun BudgetCard(
     modifier: Modifier = Modifier,
-    balance: Double,
+    budgetBalance: Double,
     budgetLeft: Double,
     isShowBalance: Boolean,
     isShown: (Boolean) -> Unit
 ) {
-//    Text(text = "MY CARD")
-    Card(modifier = modifier.fillMaxWidth(),
+    Card(modifier = modifier,
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
@@ -116,7 +122,7 @@ fun BudgetCard(
             }
             if (isShowBalance){
                 Text(
-                    text = StringUtil.formatRp(balance.toString()),
+                    text = StringUtil.formatRp(budgetBalance.toString()),
                     style = raleway(fontSize = 32, weight = FontWeight.Bold)
                 )
             } else {
@@ -132,8 +138,73 @@ fun BudgetCard(
                 modifier = Modifier
                     .height(16.dp)
                     .padding(top = 6.dp)
+                    .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp)),
                 progress = budgetLeft.toFloat(),
+                color = BlueMain,
+                trackColor = Gray
+            )
+        }
+    }
+}
+
+@Composable
+fun TotalBalanceCard(
+    modifier: Modifier = Modifier,
+    balance: Double,
+    target: Double,
+    isShowBalance: Boolean,
+    isShown: (Boolean) -> Unit
+) {
+    Card(modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        )
+    ){
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.SpaceAround
+        ) {
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Your total balance",
+                    style = raleway(fontSize = 14, weight = FontWeight.Normal)
+                )
+                Image(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .clickable { isShown(!isShowBalance) },
+                    painter = painterResource(id = if (isShowBalance) R.drawable.ic_eye_shown else R.drawable.ic_eye_hide),
+                    contentDescription = "Hide balance"
+                )
+            }
+            if (isShowBalance){
+                Text(
+                    text = StringUtil.formatRp(balance.toString()),
+                    style = raleway(fontSize = 32, weight = FontWeight.Bold)
+                )
+            } else {
+                HiddenBalanceView()
+            }
+
+            Text(
+                modifier = Modifier.padding(top = 16.dp),
+                text = "${target * 100}% to achieve target",
+                style = raleway(fontSize = 12, weight = FontWeight.Normal)
+            )
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .height(16.dp)
+                    .padding(top = 6.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp)),
+                progress = 1f - target.toFloat(),
                 color = BlueMain,
                 trackColor = Gray
             )
@@ -146,7 +217,7 @@ fun BudgetCard(
 fun PreviewBalanceCard(){
     RekapinTheme {
         Surface {
-            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 0.5, remember {
+            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 1000000.0, 0.5, 2000000.0, remember {
                 mutableStateOf(
                     false
                 )

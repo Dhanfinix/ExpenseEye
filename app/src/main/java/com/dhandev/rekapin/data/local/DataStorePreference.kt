@@ -54,7 +54,7 @@ class DataStorePreference (context: Context){
     }
 
     val getShowBalance =dataStore.data.map {preference->
-        preference[SHOWBALANCE] ?: false
+        preference[SHOWBALANCE] ?: true
     }
 
     suspend fun saveFilter(filterInMillis: FilterModel){

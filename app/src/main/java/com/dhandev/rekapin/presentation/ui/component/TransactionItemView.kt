@@ -52,7 +52,7 @@ fun TransactionItemView(
         ) {
             Text(text = data.title, style = raleway(fontSize = 12, weight = FontWeight.Medium))
             Text(
-                text = stringResource(id = categoryName),
+                text = TransactionCategory.values()[categoryName].toString(),
                 style = raleway(fontSize = 10, weight = FontWeight.Normal)
             )
         }

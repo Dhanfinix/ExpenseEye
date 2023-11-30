@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dhandev.rekapin.data.model.CategoryGroupModel
@@ -42,7 +44,8 @@ fun Chart(
     modifier: Modifier = Modifier,
     data: List<CategoryGroupModel>,
     animated: Boolean = true,
-    enableClickInfo: Boolean = true
+    enableClickInfo: Boolean = true,
+    clickedCategory: MutableIntState
 ){
     val inputValues = data.map {
         it.total.toFloat()
@@ -54,7 +57,7 @@ fun Chart(
         when(it.category){
             TransactionCategory.Food.toString() -> MyRed
             TransactionCategory.Income.toString() -> MyGreen
-            TransactionCategory.Gift.toString() -> Color.Yellow
+            TransactionCategory.Gift.toString() -> MyOrange
             TransactionCategory.Transportation.toString() -> MyGreen
             TransactionCategory.Donation.toString() -> MyOrange
             TransactionCategory.Bills.toString() -> MyYellow
@@ -79,8 +82,12 @@ fun Chart(
         chartDegrees * prop / 100
     }
     // clicked slice index
+    val clickedCategoryName = if (clickedCategory.intValue != -1) TransactionCategory.values()[clickedCategory.intValue].toString() else ""
     val clickedItemIndex = remember {
         mutableIntStateOf(0)
+    }
+    LaunchedEffect(clickedCategoryName){
+        clickedItemIndex.intValue = if (clickedCategoryName != "") category.indexOf(clickedCategoryName) else 0
     }
     if (clickedItemIndex.intValue > category.count()-1){
         clickedItemIndex.intValue = 0

@@ -39,6 +39,7 @@ import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.CategoryUtil
 import com.dhandev.rekapin.utils.DateUtil
 import com.dhandev.rekapin.utils.StringUtil
+import com.dhandev.rekapin.utils.TransactionCategory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +67,7 @@ fun DetailBottomSheet(
                 Image(
                     modifier = Modifier.size(150.dp),
                     painter = painterResource(id = categoryImage),
-                    contentDescription = stringResource(categoryName)
+                    contentDescription = TransactionCategory.values()[categoryName].toString()
                 )
                 Text(text = data.title, style = raleway(fontSize = 24, weight = FontWeight.Bold))
                 Text(

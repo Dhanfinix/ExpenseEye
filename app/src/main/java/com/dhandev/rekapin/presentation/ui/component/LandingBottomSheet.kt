@@ -44,6 +44,7 @@ fun LandingBottomSheet(
     var username by remember { mutableStateOf("") }
     var balance by remember { mutableStateOf("0") }
     var budget by remember { mutableStateOf("0") }
+    var target by remember { mutableStateOf("0") }
     var reportPeriod by remember { mutableIntStateOf(1) }
     val context = LocalContext.current
 
@@ -79,6 +80,11 @@ fun LandingBottomSheet(
                 title = stringResource(id = R.string.landing_start_monthly_budget),
                 value = {budget = it}
             )
+            NumberFieldView(
+                modifier = modifier.padding(bottom = 12.dp),
+                title = stringResource(id = R.string.landing_start_balance_target),
+                value = {target = it}
+            )
             NumberPickerView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_period_date),
@@ -93,6 +99,7 @@ fun LandingBottomSheet(
                                     username,
                                     balance.clearThousandFormat().toLong(),
                                     budget.clearThousandFormat().toLong(),
+                                    target.clearThousandFormat().toLong(),
                                     reportPeriod
                                 )
                             )

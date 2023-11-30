@@ -8,33 +8,39 @@ object CategoryUtil {
         val categoryMap = mapOf(
             TransactionCategory.Income.toString() to Pair(
                 R.drawable.ic_payment,
-                R.string.category_payment
+                TransactionCategory.Income.ordinal
             ),
-            TransactionCategory.Gift.toString() to Pair(R.drawable.ic_gift, R.string.category_gift),
+            TransactionCategory.Gift.toString() to Pair(
+                R.drawable.ic_gift,
+                TransactionCategory.Gift.ordinal
+            ),
             TransactionCategory.Food.toString() to Pair(
                 R.drawable.ic_food_drinks,
-                R.string.category_food
+                TransactionCategory.Food.ordinal
             ),
             TransactionCategory.Transportation.toString() to Pair(
                 R.drawable.ic_transportation,
-                R.string.category_transportation
+                TransactionCategory.Transportation.ordinal
             ),
             TransactionCategory.Donation.toString() to Pair(
                 R.drawable.ic_donate,
-                R.string.category_donation
+                TransactionCategory.Donation.ordinal
             ),
-            TransactionCategory.Bills.toString() to Pair(R.drawable.ic_bill, R.string.category_bill),
+            TransactionCategory.Bills.toString() to Pair(
+                R.drawable.ic_bill,
+                TransactionCategory.Bills.ordinal
+            ),
             TransactionCategory.Health.toString() to Pair(
                 R.drawable.ic_health,
-                R.string.category_health
+                TransactionCategory.Health.ordinal
             ),
             TransactionCategory.Exercise.toString() to Pair(
                 R.drawable.ic_exercise,
-                R.string.category_exercise
+                TransactionCategory.Exercise.ordinal
             ),
             TransactionCategory.Education.toString() to Pair(
                 R.drawable.ic_education,
-                R.string.category_education
+                TransactionCategory.Education.ordinal
             )
         )
 
