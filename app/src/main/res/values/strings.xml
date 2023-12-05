@@ -69,4 +69,6 @@
     <string name="import_data">Import Data</string>
     <string name="export_data">Export Data</string>
     <string name="logout">Logout</string>
+
+    <string name="version">Version %s</string>
 </resources>

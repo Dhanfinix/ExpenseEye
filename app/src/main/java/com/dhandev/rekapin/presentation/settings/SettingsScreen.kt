@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.dhandev.rekapin.BuildConfig
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.data.model.SettingsModel
 import com.dhandev.rekapin.navigation.NavigationDestination
@@ -56,13 +57,13 @@ object SettingsDestination : NavigationDestination {
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues,
-    viewModel: MainViewModel = koinViewModel()
+    viewModel: MainViewModel = koinViewModel(),
+    navigateToHome: () -> Unit
 ) {
     val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
-
     val settingsItems = listOf(
         SettingsModel(R.drawable.ic_profile, R.string.edit_profile, false) {
             showBottomSheet = true
@@ -145,7 +146,7 @@ fun SettingsScreen(
                 )
             }
             Text(
-                text = "Version 1.0",
+                text = stringResource(id = R.string.version, BuildConfig.VERSION_NAME),
                 style = raleway(16, FontWeight.Normal),
                 )
         }
@@ -157,6 +158,7 @@ fun SettingsScreen(
                 userData = viewModel.userData,
                 onProceed = {
                     viewModel.saveProfileData(it, true)
+                    navigateToHome.invoke()
                 },
                 isShown = { showBottomSheet = it })
         }

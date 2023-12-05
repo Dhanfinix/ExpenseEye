@@ -79,7 +79,11 @@ fun RekapinNavGraph(
                 }
             }
             composable(route = SettingsDestination.route) {
-                SettingsScreen(paddingValues = paddingValues)
+                SettingsScreen(
+                    paddingValues = paddingValues,
+                    navigateToHome = {navController.navigate(HomeDestination.route){
+                        popUpTo(LandingDestination.route) { inclusive = true }
+                    } })
                 BackHandler {
                     navController.navigate(HomeDestination.route) {
                         popUpTo(HomeDestination.route) { inclusive = true }
