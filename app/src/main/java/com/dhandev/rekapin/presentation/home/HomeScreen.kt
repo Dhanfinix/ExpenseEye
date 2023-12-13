@@ -85,7 +85,7 @@ fun HomeScreen(
 
     viewModel.getIncomeExpense()
     viewModel.getExpense()
-    val balance = remember { mutableDoubleStateOf(0.0) }
+    val balance = remember { mutableDoubleStateOf(viewModel.balance.doubleValue) }
     val balanceThisMonth = remember { mutableDoubleStateOf(0.0) }
     val budget = remember { mutableDoubleStateOf(0.0) }
     val target = remember { mutableDoubleStateOf(0.0) }
@@ -96,9 +96,6 @@ fun HomeScreen(
         showBalance.value = it
     }
 
-    viewModel.balance.observe(lifecycleOwner) {
-        balance.doubleValue = it
-    }
     viewModel.expense.observe(lifecycleOwner) {
         balanceThisMonth.doubleValue = viewModel.budget.doubleValue - it
     }
