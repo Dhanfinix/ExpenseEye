@@ -28,6 +28,6 @@ object NumUtil {
         return this.replace(",", "")
     }
     fun String.clearDot(): String {
-        return this.replace(".", "")
+        return this.replace(".0", "")
     }
 }

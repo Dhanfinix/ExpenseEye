@@ -91,12 +91,11 @@ fun SettingsScreen(
     val exportData by viewModel.getAll(0).observeAsState()
 
     viewModel.getTheme()
-    var isDarkMode by remember { mutableStateOf(viewModel.isDark.value) }
+    var isDarkMode by remember { mutableStateOf(false) }
     viewModel.isDark.observe(lifeCycleOwner){
         isDarkMode = it
     }
     val isEnglish = remember { mutableStateOf(false) }
-
     LaunchedEffect(isDarkMode){
         viewModel.getTheme()
     }
@@ -107,9 +106,10 @@ fun SettingsScreen(
         SettingsModel(
             R.drawable.ic_dark_mode,
             R.string.dark_theme,
-            switchState = isDarkMode!!
+            switchState = isDarkMode
         ) {
-            viewModel.saveTheme(!isDarkMode!!) //TODO: DARK MODE
+            isDarkMode = !isDarkMode
+            viewModel.saveTheme(isDarkMode)
         },
 //        SettingsModel(R.drawable.ic_language, R.string.change_lang, switchState = isEnglish.value) {
 //            showToast(

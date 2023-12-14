@@ -72,10 +72,13 @@ fun SwitchButton(
                 text = stringResource(title),
                 style = raleway(fontSize = 16, weight = FontWeight.Medium)
             )
-            if (showSwitch){
+            if (showSwitch) {
                 Switch(
                     checked = checked.value,
-                    onCheckedChange = { checked.value = it },
+                    onCheckedChange = {
+                        checked.value = it
+                        onSwitchButtonClick()
+                    },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = BlueMain,
                     )
@@ -88,7 +91,7 @@ fun SwitchButton(
 
 @Preview
 @Composable
-fun PreviewSwitch(){
+fun PreviewSwitch() {
     RekapinTheme {
         Surface {
             SwitchButton(
