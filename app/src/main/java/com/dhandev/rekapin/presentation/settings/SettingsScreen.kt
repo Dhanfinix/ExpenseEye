@@ -50,6 +50,7 @@ import com.dhandev.rekapin.R
 import com.dhandev.rekapin.data.model.SettingsModel
 import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.navigation.NavigationDestination
+import com.dhandev.rekapin.presentation.create.CreateViewModel
 import com.dhandev.rekapin.presentation.landing.MainViewModel
 import com.dhandev.rekapin.presentation.ui.component.LandingBottomSheet
 import com.dhandev.rekapin.presentation.ui.component.MyAlertDialog
@@ -60,6 +61,7 @@ import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.DateUtil
 import com.dhandev.rekapin.utils.TransactionCategory
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -85,6 +87,7 @@ fun SettingsScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     val openAlertDialog = remember { mutableStateOf("") }
     val doExport = remember { mutableStateOf(false) }
+    val doImport = remember { mutableStateOf(false) }
     val exportData by viewModel.getAll(0).observeAsState()
 
     viewModel.getTheme()
@@ -110,10 +113,7 @@ fun SettingsScreen(
 //            )
 //        },
         SettingsModel(R.drawable.ic_import, R.string.import_data, false) {
-            showToast(
-                context,
-                "Import"
-            )
+            openAlertDialog.value = "Import"
         },
         SettingsModel(R.drawable.ic_export, R.string.export_data, false) {
             openAlertDialog.value = "Export"
@@ -209,7 +209,6 @@ fun SettingsScreen(
                 dialogText = stringResource(id = R.string.logout_confrimation),
                 icon = Icons.Filled.Warning
             )
-
             "Export" -> MyAlertDialog(
                 onDismissRequest = { openAlertDialog.value = "" },
                 onConfirmation = {
@@ -220,10 +219,25 @@ fun SettingsScreen(
                 dialogText = "Are you sure to export transaction data in .json file format?\nThis file only readable by this app",
                 icon = Icons.Filled.Info
             )
+            "Import" -> MyAlertDialog(
+                onDismissRequest = { openAlertDialog.value = "" },
+                onConfirmation = {
+                    doImport.value = true
+                    openAlertDialog.value = ""
+                },
+                dialogTitle = "Import Data",
+                dialogText = "Importing Data only possible if the file format is in .json",
+                icon = Icons.Filled.Info
+            )
         }
         if (doExport.value) {
             if (exportData != null) {
                 ExportData(context, exportData!!) { doExport.value = it }
+            }
+        }
+        if (doImport.value) {
+            ImportData(doImport = {doImport.value = it}){
+                navigateToHome()
             }
         }
     }
@@ -249,6 +263,31 @@ fun ExportData(context: Context, data: List<TransactionItemModel>, doExport: (Bo
         }
     LaunchedEffect(Unit) {
         createDocument.launch("Rekapin_$currentDate.json")
+    }
+}
+@Composable
+fun ImportData(
+    viewModel: CreateViewModel = koinViewModel(),
+    doImport: (Boolean) -> Unit,
+    onFinish: ()->Unit
+) {
+    val context = LocalContext.current
+    val openDocument = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let {
+            context.contentResolver.openInputStream(it)?.use { inputStream ->
+                inputStream.bufferedReader().use { reader ->
+                    val content = reader.readText()
+                    val listType = object : TypeToken<List<TransactionItemModel>>() {}.type
+                    val data = Gson().fromJson<List<TransactionItemModel>>(content, listType)
+                    viewModel.insertAll(data)
+                    doImport(false)
+                    onFinish()
+                }
+            }
+        }
+    }
+    LaunchedEffect(Unit) {
+        openDocument.launch(arrayOf("*/*"))
     }
 }
 

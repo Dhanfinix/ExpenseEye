@@ -15,6 +15,8 @@ interface TransactionDao {
     fun getAllTransaction(fromDateInMillis: Long): Flow<List<TransactionItemModel>>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: TransactionItemModel)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(items: List<TransactionItemModel>)
     @Delete
     suspend fun delete(item: TransactionItemModel)
     @Update
