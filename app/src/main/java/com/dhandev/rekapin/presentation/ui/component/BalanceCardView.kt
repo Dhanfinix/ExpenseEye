@@ -1,8 +1,10 @@
 package com.dhandev.rekapin.presentation.ui.component
 
 import HiddenBalanceView
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +40,7 @@ import com.dhandev.rekapin.ui.theme.RekapinTheme
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.StringUtil
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BalanceCardView(
     modifier: Modifier = Modifier,
@@ -45,8 +51,12 @@ fun BalanceCardView(
     isShowBalance: MutableState<Boolean>,
     isShown:(Boolean) -> Unit
 ){
+    val lazyListState = rememberLazyListState()
+
     LazyRow(
-        modifier = modifier
+        state = lazyListState,
+        modifier = modifier,
+        flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
     ){
         item{
             BudgetCard(
@@ -81,7 +91,6 @@ fun BalanceCardView(
             )
         }
     }
-
 }
 
 @Composable
@@ -94,7 +103,7 @@ fun BudgetCard(
 ) {
     Card(modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.onPrimary
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -112,12 +121,13 @@ fun BudgetCard(
                     text = "This month's budget",
                     style = raleway(fontSize = 14, weight = FontWeight.Normal)
                 )
-                Image(
+                Icon(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clickable { isShown(!isShowBalance) },
                     painter = painterResource(id = if (isShowBalance) R.drawable.ic_eye_shown else R.drawable.ic_eye_hide),
-                    contentDescription = "Hide balance"
+                    contentDescription = "Hide balance",
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
             if (isShowBalance){
@@ -158,7 +168,7 @@ fun TotalBalanceCard(
 ) {
     Card(modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.onPrimary
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -176,12 +186,13 @@ fun TotalBalanceCard(
                     text = "Your total balance",
                     style = raleway(fontSize = 14, weight = FontWeight.Normal)
                 )
-                Image(
+                Icon(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clickable { isShown(!isShowBalance) },
                     painter = painterResource(id = if (isShowBalance) R.drawable.ic_eye_shown else R.drawable.ic_eye_hide),
-                    contentDescription = "Hide balance"
+                    contentDescription = "Hide balance",
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
             if (isShowBalance){

@@ -1,6 +1,7 @@
 package com.dhandev.rekapin.presentation.ui.component
 
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -48,7 +49,12 @@ fun BottomNavigationView(
                         contentDescription = stringResource(id = item.name)
                     )
                 },
-                label = { Text(text = stringResource(id = item.name)) },
+                label = {
+                    Text(
+                        text = stringResource(id = item.name),
+                        color = Color.Black
+                    )
+                },
                 alwaysShowLabel = true,
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = BlueMain,

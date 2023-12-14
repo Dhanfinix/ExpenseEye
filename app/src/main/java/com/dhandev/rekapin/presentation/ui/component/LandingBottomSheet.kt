@@ -36,17 +36,27 @@ import kotlinx.coroutines.launch
 @Composable
 fun LandingBottomSheet(
     modifier: Modifier = Modifier,
+    title: String,
     sheetState: SheetState,
     scope: CoroutineScope,
+    userData: ProfileModel? = null,
     onProceed: (ProfileModel) -> Unit,
     isShown: (Boolean) -> Unit
 ) {
     var username by remember { mutableStateOf("") }
-    var balance by remember { mutableStateOf("0") }
-    var budget by remember { mutableStateOf("0") }
-    var target by remember { mutableStateOf("0") }
-    var reportPeriod by remember { mutableIntStateOf(1) }
+    var balance by remember { mutableStateOf("") }
+    var budget by remember { mutableStateOf("") }
+    var target by remember { mutableStateOf("") }
+    var reportPeriod by remember { mutableIntStateOf(14) }
     val context = LocalContext.current
+
+    if (userData != null){
+        username = userData.userName
+        balance = userData.balance.toString()
+        budget = userData.budget.toString()
+        target = userData.target.toString()
+        reportPeriod = userData.reportPeriod
+    }
 
     ModalBottomSheet(
         modifier = modifier.fillMaxSize(),
@@ -62,37 +72,46 @@ fun LandingBottomSheet(
         ) {
             Text(
                 modifier = modifier.padding(bottom = 12.dp),
-                text = stringResource(id = R.string.landing_start_title),
+                text = title,
                 style = raleway(fontSize = 16, weight = FontWeight.Bold)
             )
             TextFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_name),
-                value = {username = it}
+                setData = username,
+                value = { username = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_current_balance),
-                value = {balance = it}
+                setData = balance,
+                value = { balance = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_monthly_budget),
-                value = {budget = it}
+                setData = budget,
+                value = { budget = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_balance_target),
-                value = {target = it}
+                setData = target,
+                value = { target = it }
             )
             NumberPickerView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_period_date),
-                value = {reportPeriod = it}
+                setData = reportPeriod,
+                value = { reportPeriod = it }
             )
             Button(
                 onClick = {
-                    if (username.isNotEmpty() || balance.clearThousandFormat().isNotEmpty() || budget.clearThousandFormat().isNotEmpty()){
+                    if (username.isNotEmpty() &&
+                        balance.clearThousandFormat().isNotEmpty() &&
+                        budget.clearThousandFormat().isNotEmpty() &&
+                        target.clearThousandFormat().isNotEmpty()
+                    ) {
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             onProceed.invoke(
                                 ProfileModel(

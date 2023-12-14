@@ -15,6 +15,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -93,7 +94,7 @@ fun DropdownView(
             },
             colors = OutlinedTextFieldDefaults.colors(
                 disabledBorderColor = borderColor,
-                disabledTextColor = Color.Black
+                disabledTextColor = MaterialTheme.colorScheme.onSurface
             )
         )
 
@@ -105,7 +106,7 @@ fun DropdownView(
             modifier = Modifier
                 .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             category.forEachIndexed { index, categoryItem ->
                 Column {

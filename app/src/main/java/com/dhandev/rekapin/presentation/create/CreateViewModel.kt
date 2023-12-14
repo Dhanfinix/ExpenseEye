@@ -19,6 +19,11 @@ class CreateViewModel(private val trxRepository: TransactionRepository): ViewMod
             trxRepository.insertItem(item)
         }
     }
+    fun insertAll(items: List<TransactionItemModel>) {
+        viewModelScope.launch {
+            trxRepository.insertAllItem(items)
+        }
+    }
     fun update(item: TransactionItemModel) {
         viewModelScope.launch {
             trxRepository.update(item)

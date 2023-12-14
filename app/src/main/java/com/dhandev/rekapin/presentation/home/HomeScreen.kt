@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -31,6 +32,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -47,6 +50,7 @@ import com.dhandev.rekapin.presentation.ui.component.ChipGroup
 import com.dhandev.rekapin.presentation.ui.component.DetailBottomSheet
 import com.dhandev.rekapin.presentation.ui.component.EmptyTransaction
 import com.dhandev.rekapin.presentation.ui.component.TransactionGroup
+import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.gradient
 import com.dhandev.rekapin.ui.theme.raleway
@@ -85,7 +89,7 @@ fun HomeScreen(
 
     viewModel.getIncomeExpense()
     viewModel.getExpense()
-    val balance = remember { mutableDoubleStateOf(0.0) }
+    val balance = remember { mutableDoubleStateOf(viewModel.balance.doubleValue) }
     val balanceThisMonth = remember { mutableDoubleStateOf(0.0) }
     val budget = remember { mutableDoubleStateOf(0.0) }
     val target = remember { mutableDoubleStateOf(0.0) }
@@ -96,9 +100,6 @@ fun HomeScreen(
         showBalance.value = it
     }
 
-    viewModel.balance.observe(lifecycleOwner) {
-        balance.doubleValue = it
-    }
     viewModel.expense.observe(lifecycleOwner) {
         balanceThisMonth.doubleValue = viewModel.budget.doubleValue - it
     }
@@ -114,6 +115,13 @@ fun HomeScreen(
     )
     val scope = rememberCoroutineScope()
     var selectedDetail by remember { mutableStateOf<TransactionItemModel?>(null) }
+
+    val gradient = Brush.radialGradient(
+        0.0f to BlueMain,
+        1.0f to MaterialTheme.colorScheme.surface,
+        radius = 700.0f,
+        center = Offset(1000f, 0f)
+    )
 
     Box(
         modifier = Modifier
@@ -211,6 +219,7 @@ fun HomeScreen(
             }
         }
 
+        viewModel.getTheme()
         ExtendedFloatingActionButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -221,7 +230,8 @@ fun HomeScreen(
                 navigateToCreate.invoke(null)
             },
             icon = { Icon(Icons.Filled.Add, "") },
-            containerColor = BlueSecondary
+            containerColor = BlueSecondary,
+            contentColor = if (viewModel.isDark.value!!) MaterialTheme.colorScheme.inverseOnSurface else MaterialTheme.colorScheme.onSurface
         )
 
         AnimUtil.AnimatedVisibility(visible = scaffoldState.bottomSheetState.isVisible) {

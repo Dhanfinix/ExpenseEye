@@ -21,6 +21,13 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class DataStorePreference (context: Context){
     private val dataStore = context.dataStore
 
+    suspend fun clear(){
+        dataStore.edit {
+            it.remove(SHOWBALANCE)
+            it.remove(USER_INFO)
+            it.remove(FILTER)
+        }
+    }
     suspend fun saveTheme(isDark:Boolean){
         dataStore.edit {preference->
             preference[THEME] = isDark

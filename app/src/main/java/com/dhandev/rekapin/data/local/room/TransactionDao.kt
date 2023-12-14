@@ -15,6 +15,8 @@ interface TransactionDao {
     fun getAllTransaction(fromDateInMillis: Long): Flow<List<TransactionItemModel>>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: TransactionItemModel)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(items: List<TransactionItemModel>)
     @Delete
     suspend fun delete(item: TransactionItemModel)
     @Update
@@ -24,4 +26,7 @@ interface TransactionDao {
 
     @Query("SELECT SUM(total) FROM transaction_table WHERE isExpense = 0  AND dateInMillis >= :fromDateInMillis")
     fun getTotalIncome(fromDateInMillis: Long): Flow<Double>
+
+    @Query("DELETE FROM transaction_table")
+    fun clearTable()
 }
