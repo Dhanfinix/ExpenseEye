@@ -27,4 +27,5 @@ interface ITransactionRepository {
     suspend fun getTotalIncomeOutcome(fromDateInMillis: Long): Double
     suspend fun delete(item: TransactionItemModel)
     suspend fun update(item: TransactionItemModel)
+    suspend fun clear()
 }

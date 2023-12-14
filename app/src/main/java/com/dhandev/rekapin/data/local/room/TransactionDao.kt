@@ -24,4 +24,7 @@ interface TransactionDao {
 
     @Query("SELECT SUM(total) FROM transaction_table WHERE isExpense = 0  AND dateInMillis >= :fromDateInMillis")
     fun getTotalIncome(fromDateInMillis: Long): Flow<Double>
+
+    @Query("DELETE FROM transaction_table")
+    fun clearTable()
 }

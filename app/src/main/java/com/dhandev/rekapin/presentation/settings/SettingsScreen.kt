@@ -18,6 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -41,10 +44,12 @@ import com.dhandev.rekapin.data.model.SettingsModel
 import com.dhandev.rekapin.navigation.NavigationDestination
 import com.dhandev.rekapin.presentation.landing.MainViewModel
 import com.dhandev.rekapin.presentation.ui.component.LandingBottomSheet
+import com.dhandev.rekapin.presentation.ui.component.MyAlertDialog
 import com.dhandev.rekapin.presentation.ui.component.SwitchButton
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.raleway
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 object SettingsDestination : NavigationDestination {
@@ -64,6 +69,8 @@ fun SettingsScreen(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+    val openAlertDialog = remember { mutableStateOf(false) }
+
     val settingsItems = listOf(
         SettingsModel(R.drawable.ic_profile, R.string.edit_profile, false) {
             showBottomSheet = true
@@ -89,7 +96,9 @@ fun SettingsScreen(
                 "Export"
             )
         },
-        SettingsModel(R.drawable.ic_logout, R.string.logout, false) { showToast(context, "Logout") }
+        SettingsModel(R.drawable.ic_logout, R.string.logout, false) {
+            openAlertDialog.value = true
+        }
     )
     Box(
         modifier = Modifier.fillMaxSize()
@@ -161,6 +170,15 @@ fun SettingsScreen(
                     navigateToHome.invoke()
                 },
                 isShown = { showBottomSheet = it })
+        }
+        if (openAlertDialog.value){
+            MyAlertDialog(
+                onDismissRequest = { openAlertDialog.value = false },
+                onConfirmation = { scope.launch { viewModel.logout() } },
+                dialogTitle = stringResource(id = R.string.logout),
+                dialogText = stringResource(id = R.string.logout_confrimation),
+                icon = Icons.Filled.Warning
+            )
         }
     }
 }

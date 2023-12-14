@@ -70,5 +70,7 @@
     <string name="export_data">Export Data</string>
     <string name="logout">Logout</string>
 
+    <string name="logout_confrimation">Are you sure to logout and clear all your data?</string>
+
     <string name="version">Version %s</string>
 </resources>

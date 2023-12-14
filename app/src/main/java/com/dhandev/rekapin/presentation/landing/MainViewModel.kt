@@ -140,4 +140,10 @@ class MainViewModel(
             }
         }
     }
+    fun logout(){
+        viewModelScope.launch(Dispatchers.IO) {
+            trxRepository.clear()
+            preference.clear()
+        }
+    }
 }
