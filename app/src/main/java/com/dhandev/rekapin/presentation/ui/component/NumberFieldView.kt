@@ -25,6 +25,7 @@ import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.RekapinTheme
 import com.dhandev.rekapin.ui.theme.raleway
+import com.dhandev.rekapin.utils.NumUtil.clearDot
 import com.dhandev.rekapin.utils.NumUtil.clearThousandFormat
 import com.dhandev.rekapin.utils.NumUtil.formatThousand
 
