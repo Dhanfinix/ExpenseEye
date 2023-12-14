@@ -60,7 +60,7 @@ fun TransactionScreen(
     if (trxData != null && firstOpened.value) {
         firstOpened.value = false
         trxId.intValue = trxData.id
-        nominal.value = trxData.total.toString().clearDot()
+        nominal.value = trxData.total.toBigDecimal().toPlainString().clearDot().clearThousandFormat()
         trxName.value = trxData.title
         selectedCategory.value = CategoryUtil.findCategoryItemByName(trxData.category, isExpense) ?: mCategory[0]
         trxDate.longValue = trxData.dateInMillis

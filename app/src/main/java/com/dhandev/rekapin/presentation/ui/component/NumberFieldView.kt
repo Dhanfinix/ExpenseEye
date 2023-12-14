@@ -52,7 +52,7 @@ fun NumberFieldView(
             modifier = Modifier.fillMaxWidth(),
             value = text,
             onValueChange = { newInput ->
-                val clearText = newInput.text.clearThousandFormat()
+                val clearText = newInput.text.clearDot().clearThousandFormat()
                 if (clearText.length <= 18 && clearText.matches(Regex("[0-9]*"))) {
                     val newValue = if (clearText.isNotBlank()) {
                         clearText.toLong().formatThousand()
