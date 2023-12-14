@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,8 +37,8 @@ fun ChipGroup(
                 onClick = {
                     onItemSelected(index)
                 },
-                backgroundColor = if (selectedItem.intValue == index) BlueSecondary else Color.White,
-                contentColor = Color.Black
+                backgroundColor = if (selectedItem.intValue == index) BlueSecondary else MaterialTheme.colorScheme.surface,
+                contentColor = if (selectedItem.intValue == index) Color.Black else MaterialTheme.colorScheme.onSurface
             )
         }
     }

@@ -16,7 +16,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -101,7 +103,7 @@ fun BudgetCard(
 ) {
     Card(modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.onPrimary
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -119,12 +121,13 @@ fun BudgetCard(
                     text = "This month's budget",
                     style = raleway(fontSize = 14, weight = FontWeight.Normal)
                 )
-                Image(
+                Icon(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clickable { isShown(!isShowBalance) },
                     painter = painterResource(id = if (isShowBalance) R.drawable.ic_eye_shown else R.drawable.ic_eye_hide),
-                    contentDescription = "Hide balance"
+                    contentDescription = "Hide balance",
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
             if (isShowBalance){
@@ -165,7 +168,7 @@ fun TotalBalanceCard(
 ) {
     Card(modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.onPrimary
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -183,12 +186,13 @@ fun TotalBalanceCard(
                     text = "Your total balance",
                     style = raleway(fontSize = 14, weight = FontWeight.Normal)
                 )
-                Image(
+                Icon(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clickable { isShown(!isShowBalance) },
                     painter = painterResource(id = if (isShowBalance) R.drawable.ic_eye_shown else R.drawable.ic_eye_hide),
-                    contentDescription = "Hide balance"
+                    contentDescription = "Hide balance",
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
             if (isShowBalance){

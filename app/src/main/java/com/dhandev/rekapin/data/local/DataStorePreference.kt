@@ -23,7 +23,9 @@ class DataStorePreference (context: Context){
 
     suspend fun clear(){
         dataStore.edit {
-            it.clear()
+            it.remove(SHOWBALANCE)
+            it.remove(USER_INFO)
+            it.remove(FILTER)
         }
     }
     suspend fun saveTheme(isDark:Boolean){

@@ -36,14 +36,14 @@ fun SwitchButton(
     modifier: Modifier = Modifier,
     icon: Int,
     title: Int,
+    switchState: Boolean,
     showSwitch: Boolean = true,
     onSwitchButtonClick: () -> Unit
 ) {
-    val checked = remember { mutableStateOf(true) }
+    val checked = remember { mutableStateOf(switchState) }
     val interactionSource = remember { MutableInteractionSource() }
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = Color.White,
         border = BorderStroke(1.dp, BlueSecondary),
         modifier = modifier
             .fillMaxWidth()
@@ -94,6 +94,7 @@ fun PreviewSwitch(){
             SwitchButton(
                 icon = R.drawable.ic_payment,
                 title = R.string.category_payment,
+                switchState = false,
                 onSwitchButtonClick = {}
             )
         }

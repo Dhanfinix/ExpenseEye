@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +19,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -33,6 +36,7 @@ import com.dhandev.rekapin.presentation.ui.component.CategoryItemView
 import com.dhandev.rekapin.presentation.ui.component.Chart
 import com.dhandev.rekapin.presentation.ui.component.ChipGroup
 import com.dhandev.rekapin.presentation.ui.component.EmptyTransaction
+import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.gradient
 import com.dhandev.rekapin.ui.theme.raleway
@@ -77,6 +81,13 @@ fun ReportScreen(
                 it.proportion
             }
     }
+
+    val gradient = Brush.radialGradient(
+        0.0f to BlueMain,
+        1.0f to MaterialTheme.colorScheme.surface,
+        radius = 700.0f,
+        center = Offset(1000f, 0f)
+    )
 
     Column(
         modifier = Modifier
@@ -127,7 +138,7 @@ fun ReportScreen(
             )
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.surface,
                 border = BorderStroke(1.dp, BlueSecondary),
                 modifier = modifier
                     .padding(16.dp)
@@ -151,7 +162,7 @@ fun ReportScreen(
             )
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.surface,
                 border = BorderStroke(1.dp, BlueSecondary),
                 modifier = modifier
                     .padding(16.dp)

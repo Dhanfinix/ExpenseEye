@@ -35,7 +35,7 @@ class MainViewModel(
     private val _showBalance = MutableLiveData(true)
     val showBalance : LiveData<Boolean> = _showBalance
 
-    private val _isDark = MutableLiveData(true)
+    private val _isDark = MutableLiveData(false)
     val isDark : LiveData<Boolean> = _isDark
 
     private val _filter = MutableLiveData(DateUtil.fromDateInMillisToday)

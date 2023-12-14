@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -71,14 +70,19 @@ fun SettingsScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     val openAlertDialog = remember { mutableStateOf(false) }
 
+    viewModel.getTheme()
+    val isDarkMode = remember { mutableStateOf(viewModel.isDark.value) }
+    val isEnglish = remember { mutableStateOf(false) }
+
     val settingsItems = listOf(
         SettingsModel(R.drawable.ic_profile, R.string.edit_profile, false) {
             showBottomSheet = true
         },
-        SettingsModel(R.drawable.ic_dark_mode, R.string.dark_theme) {
+        SettingsModel(R.drawable.ic_dark_mode, R.string.dark_theme, switchState = isDarkMode.value!!) {
             viewModel.saveTheme(!viewModel.isDark.value!!) //TODO: DARK MODE
+            viewModel.getTheme()
         },
-        SettingsModel(R.drawable.ic_language, R.string.change_lang) {
+        SettingsModel(R.drawable.ic_language, R.string.change_lang, switchState = isEnglish.value) {
             showToast(
                 context,
                 "Language"
@@ -122,7 +126,8 @@ fun SettingsScreen(
                     icon = item.icon,
                     title = item.title,
                     showSwitch = item.showSwitch,
-                    onSwitchButtonClick = item.action
+                    onSwitchButtonClick = item.action,
+                    switchState = item.switchState
                 )
             }
             Row(

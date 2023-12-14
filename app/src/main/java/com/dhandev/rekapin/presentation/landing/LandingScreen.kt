@@ -18,6 +18,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -68,7 +69,7 @@ fun LandingScreen(
     val itemsCount = contentData.size
     val gradient = Brush.radialGradient(
         0.0f to BlueMain,
-        1.0f to Color.White,
+        1.0f to MaterialTheme.colorScheme.surface,
         radius = 700.0f,
         center = Offset(1000f, 0f)
     )
