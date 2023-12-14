@@ -116,4 +116,6 @@ dependencies {
 
     //Number picker
     implementation ("com.chargemap.compose:numberpicker:1.0.3")
+
+    implementation ("androidx.compose.runtime:runtime-livedata:1.5.4")
 }

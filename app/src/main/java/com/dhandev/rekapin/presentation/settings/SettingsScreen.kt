@@ -1,7 +1,11 @@
 package com.dhandev.rekapin.presentation.settings
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.text.format.DateUtils
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,12 +23,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import com.dhandev.rekapin.BuildConfig
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.data.model.SettingsModel
+import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.navigation.NavigationDestination
 import com.dhandev.rekapin.presentation.landing.MainViewModel
 import com.dhandev.rekapin.presentation.ui.component.LandingBottomSheet
@@ -48,8 +57,13 @@ import com.dhandev.rekapin.presentation.ui.component.SwitchButton
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.raleway
+import com.dhandev.rekapin.utils.DateUtil
+import com.dhandev.rekapin.utils.TransactionCategory
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import java.io.File
+import java.io.FileWriter
 
 object SettingsDestination : NavigationDestination {
     override val route: String = "settings"
@@ -65,10 +79,13 @@ fun SettingsScreen(
     navigateToHome: () -> Unit
 ) {
     val context = LocalContext.current
+    val lifeCycleOwner = LocalLifecycleOwner.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
-    val openAlertDialog = remember { mutableStateOf(false) }
+    val openAlertDialog = remember { mutableStateOf("") }
+    val doExport = remember { mutableStateOf(false) }
+    val exportData by viewModel.getAll(0).observeAsState()
 
     viewModel.getTheme()
     val isDarkMode = remember { mutableStateOf(viewModel.isDark.value) }
@@ -78,16 +95,20 @@ fun SettingsScreen(
         SettingsModel(R.drawable.ic_profile, R.string.edit_profile, false) {
             showBottomSheet = true
         },
-        SettingsModel(R.drawable.ic_dark_mode, R.string.dark_theme, switchState = isDarkMode.value!!) {
+        SettingsModel(
+            R.drawable.ic_dark_mode,
+            R.string.dark_theme,
+            switchState = isDarkMode.value!!
+        ) {
             viewModel.saveTheme(!viewModel.isDark.value!!) //TODO: DARK MODE
             viewModel.getTheme()
         },
-        SettingsModel(R.drawable.ic_language, R.string.change_lang, switchState = isEnglish.value) {
-            showToast(
-                context,
-                "Language"
-            )
-        },
+//        SettingsModel(R.drawable.ic_language, R.string.change_lang, switchState = isEnglish.value) {
+//            showToast(
+//                context,
+//                "Language"
+//            )
+//        },
         SettingsModel(R.drawable.ic_import, R.string.import_data, false) {
             showToast(
                 context,
@@ -95,18 +116,15 @@ fun SettingsScreen(
             )
         },
         SettingsModel(R.drawable.ic_export, R.string.export_data, false) {
-            showToast(
-                context,
-                "Export"
-            )
+            openAlertDialog.value = "Export"
         },
         SettingsModel(R.drawable.ic_logout, R.string.logout, false) {
-            openAlertDialog.value = true
+            openAlertDialog.value = "Logout"
         }
     )
     Box(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -118,8 +136,14 @@ fun SettingsScreen(
                     .fillMaxWidth()
                     .padding(12.dp)
             ) {
-                Text(text = stringResource(id = R.string.settings), style = raleway(20, FontWeight.Bold))
-                Text(text = stringResource(id = R.string.app_name), style = raleway(16, FontWeight.Normal))
+                Text(
+                    text = stringResource(id = R.string.settings),
+                    style = raleway(20, FontWeight.Bold)
+                )
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    style = raleway(16, FontWeight.Normal)
+                )
             }
             settingsItems.forEach { item ->
                 SwitchButton(
@@ -144,12 +168,13 @@ fun SettingsScreen(
                         .size(30.dp)
                 )
 
-                Spacer(modifier = Modifier
-                    .height(40.dp)
-                    .width(5.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(color = BlueSecondary)
-                    .offset(x = (-20).dp)
+                Spacer(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(5.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(color = BlueSecondary)
+                        .offset(x = (-20).dp)
                 )
                 Text(
                     text = stringResource(id = R.string.app_name),
@@ -162,7 +187,7 @@ fun SettingsScreen(
             Text(
                 text = stringResource(id = R.string.version, BuildConfig.VERSION_NAME),
                 style = raleway(16, FontWeight.Normal),
-                )
+            )
         }
         if (showBottomSheet) {
             LandingBottomSheet(
@@ -176,17 +201,57 @@ fun SettingsScreen(
                 },
                 isShown = { showBottomSheet = it })
         }
-        if (openAlertDialog.value){
-            MyAlertDialog(
-                onDismissRequest = { openAlertDialog.value = false },
+        when (openAlertDialog.value) {
+            "Logout" -> MyAlertDialog(
+                onDismissRequest = { openAlertDialog.value = "" },
                 onConfirmation = { scope.launch { viewModel.logout() } },
                 dialogTitle = stringResource(id = R.string.logout),
                 dialogText = stringResource(id = R.string.logout_confrimation),
                 icon = Icons.Filled.Warning
             )
+
+            "Export" -> MyAlertDialog(
+                onDismissRequest = { openAlertDialog.value = "" },
+                onConfirmation = {
+                    doExport.value = true
+                    openAlertDialog.value = ""
+                },
+                dialogTitle = "Export Data",
+                dialogText = "Are you sure to export transaction data in .json file format?\nThis file only readable by this app",
+                icon = Icons.Filled.Info
+            )
+        }
+        if (doExport.value) {
+            if (exportData != null) {
+                ExportData(context, exportData!!) { doExport.value = it }
+            }
         }
     }
 }
+
+@Composable
+fun ExportData(context: Context, data: List<TransactionItemModel>, doExport: (Boolean) -> Unit) {
+    val json = Gson().toJson(data)
+    val currentDate = System.currentTimeMillis()
+    val file = File(context.filesDir, "Rekapin_$currentDate.json")
+    val writer = FileWriter(file)
+    writer.use { it.write(json) }
+    val createDocument =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument()) { uri ->
+            uri?.let {
+                context.contentResolver.openOutputStream(it)?.use { outputStream ->
+                    outputStream.bufferedWriter().use { writer ->
+                        writer.write(json)
+                        doExport(false)
+                    }
+                }
+            }
+        }
+    LaunchedEffect(Unit) {
+        createDocument.launch("Rekapin_$currentDate.json")
+    }
+}
+
 fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
