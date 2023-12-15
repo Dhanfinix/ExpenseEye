@@ -117,6 +117,12 @@ class MainViewModel(
 
     fun deleteItem(item: TransactionItemModel){
         viewModelScope.launch {
+            var currentData : ProfileModel? = null
+            preference.getProfileData.collect{
+                currentData = it
+                currentData?.balance = currentData?.balance?.plus(item.total.toLong() * -1)!!
+                preference.saveProfileData(currentData!!)
+            }
             trxRepository.delete(item)
         }
     }
