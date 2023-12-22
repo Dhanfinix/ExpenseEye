@@ -19,7 +19,7 @@ object NumUtil {
             String.format("%s M", formatDecimal(d))
         }
 
-    fun Long.formatThousand(): String {
+    fun Double.formatThousand(): String {
         val decimalFormatter = DecimalFormat("#,###")
         return decimalFormatter.format(this)
     }

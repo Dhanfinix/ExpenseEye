@@ -38,7 +38,7 @@ fun NumberFieldView(
 ){
     var text by remember {
         mutableStateOf(TextFieldValue(if (setData.isNotBlank()) {
-            setData.toLong().formatThousand()
+            setData.toDouble().formatThousand()
         } else setData))
     }
     value.invoke(text.text)
@@ -55,7 +55,7 @@ fun NumberFieldView(
                 val clearText = newInput.text.clearDot().clearThousandFormat()
                 if (clearText.length <= 18 && clearText.matches(Regex("[0-9]*"))) {
                     val newValue = if (clearText.isNotBlank()) {
-                        clearText.toLong().formatThousand()
+                        clearText.toDouble().formatThousand()
                     } else clearText
 
                     text = newInput.copy(

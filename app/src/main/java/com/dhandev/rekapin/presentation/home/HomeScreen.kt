@@ -74,7 +74,8 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     navigateToCreate: (String?) -> Unit,
 ) {
-    viewModel.getFilter()
+    getData(viewModel)
+
     val lifecycleOwner = LocalLifecycleOwner.current
     val filter = remember { mutableLongStateOf(DateUtil.fromDateInMillisToday) }       //today
     viewModel.filter.observe(lifecycleOwner){
@@ -87,19 +88,18 @@ fun HomeScreen(
         selectedFilter.intValue = it
     }
 
-    viewModel.getIncomeExpense()
-    viewModel.getExpense()
-    val balance = remember { mutableDoubleStateOf(viewModel.balance.doubleValue) }
+    val balance = remember { mutableDoubleStateOf(0.0) }
     val balanceThisMonth = remember { mutableDoubleStateOf(0.0) }
     val budget = remember { mutableDoubleStateOf(0.0) }
     val target = remember { mutableDoubleStateOf(0.0) }
 
-    viewModel.getShowBalance()
     val showBalance = remember { mutableStateOf(false) }
     viewModel.showBalance.observe(lifecycleOwner){
         showBalance.value = it
     }
-
+    viewModel.balance.observe(lifecycleOwner){
+        balance.doubleValue = it
+    }
     viewModel.expense.observe(lifecycleOwner) {
         balanceThisMonth.doubleValue = viewModel.budget.doubleValue - it
     }
@@ -282,6 +282,13 @@ fun HomeScreen(
             }
         }
     }
+}
+
+private fun getData(viewModel: MainViewModel) {
+    viewModel.getFilter()
+    viewModel.getIncomeExpense()
+    viewModel.getExpense()
+    viewModel.getShowBalance()
 }
 
 private fun getGreetings() : String {

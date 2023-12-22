@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class CreateViewModel(
@@ -22,13 +23,12 @@ class CreateViewModel(
     // Define an insert method that calls the insert method in the DAO
     fun insert(item: TransactionItemModel) {
         viewModelScope.launch {
-            //TODO: Also update balance in data store, whether it's income or outcome
             var currentData : ProfileModel? = null
-            preference.getProfileData.collect{
+            preference.getProfileData.first().let{
                 currentData = it
-                currentData?.balance = currentData?.balance?.plus(item.total.toLong() * if (item.isExpense) -1 else 1)!!
-                preference.saveProfileData(currentData!!)
             }
+            currentData?.balance = currentData?.balance?.plus(item.total * if (item.isExpense) -1 else 1)!!
+            preference.saveProfileData(currentData!!)
             trxRepository.insertItem(item)
         }
     }
@@ -40,11 +40,13 @@ class CreateViewModel(
     fun update(item: TransactionItemModel) {
         viewModelScope.launch {
             var currentData : ProfileModel? = null
-            preference.getProfileData.collect{
+            preference.getProfileData.first().let {
                 currentData = it
-                currentData?.balance = currentData?.balance?.plus(item.total.toLong() * if (item.isExpense) -1 else 1)!!
-                preference.saveProfileData(currentData!!)
             }
+            currentData?.balance = item.total
+
+            preference.saveProfileData(currentData!!)
+
             trxRepository.update(item)
         }
     }

@@ -29,7 +29,7 @@ class MainViewModel(
     val reportPeriod = mutableIntStateOf(1)
     val budget = mutableDoubleStateOf(0.0)
     val target = mutableDoubleStateOf(0.0)
-    val balance = mutableDoubleStateOf(0.0)
+//    val balance = mutableDoubleStateOf(0.0)
     var userData : ProfileModel? = null
 //    val showBalance = mutableStateOf(false)
     private val _showBalance = MutableLiveData(true)
@@ -48,13 +48,15 @@ class MainViewModel(
 
     private val _expense = MutableLiveData<Double>()
     val expense : LiveData<Double> = _expense
+    private val _balance = MutableLiveData<Double>()
+    val balance : LiveData<Double> = _balance
     fun saveProfileData(data: ProfileModel, isEdit: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             preference.saveProfileData(data)
             if (!isEdit){
                 trxRepository.insertItem(TransactionItemModel(
                     title = "Initial balance",
-                    total = data.balance.toDouble(),
+                    total = data.balance,
                     dateInMillis = System.currentTimeMillis(),
                     category = TransactionCategory.Income.toString(),
                     isExpense = false
@@ -65,9 +67,11 @@ class MainViewModel(
     }
     fun getAll(fromDataInMillis: Long) = trxRepository.getAllTransaction(fromDataInMillis).asLiveData()
     fun getIncomeExpense() = viewModelScope.launch {
-        val result = trxRepository.getTotalIncomeOutcome(DateUtil.fromReportPeriodDate(reportPeriod.intValue))
-        _incomeOutcome.postValue(result)
-        balance.doubleValue += result
+//        val result = trxRepository.getTotalIncomeOutcome(DateUtil.fromReportPeriodDate(reportPeriod.intValue))
+//        _incomeOutcome.postValue(result)
+//        preference.getProfileData.first().let{
+//            _balance.value = it?.balance?.plus(result) ?: 0.0
+//        }
     }
     fun getExpense() = viewModelScope.launch {
         _expense.postValue(trxRepository.getTotalExpense(DateUtil.fromReportPeriodDate(reportPeriod.intValue)).first())
@@ -80,9 +84,9 @@ class MainViewModel(
                 loading.value = false
                 username.value = profile?.userName ?: ""
                 reportPeriod.intValue = profile?.reportPeriod ?: 1
-                budget.doubleValue = profile?.budget?.toDouble() ?: 0.0
-                target.doubleValue = profile?.target?.toDouble() ?: 0.0
-                balance.doubleValue = profile?.balance?.toDouble() ?: 0.0
+                budget.doubleValue = profile?.budget ?: 0.0
+                target.doubleValue = profile?.target ?: 0.0
+                _balance.value = profile?.balance ?: 0.0
                 userData = profile
             }
             getFilter()
@@ -118,11 +122,11 @@ class MainViewModel(
     fun deleteItem(item: TransactionItemModel){
         viewModelScope.launch {
             var currentData : ProfileModel? = null
-            preference.getProfileData.collect{
+            preference.getProfileData.first().let{
                 currentData = it
-                currentData?.balance = currentData?.balance?.plus(item.total.toLong() * -1)!!
-                preference.saveProfileData(currentData!!)
             }
+            currentData?.balance = currentData?.balance?.plus(item.total * -1)!!
+            preference.saveProfileData(currentData!!)
             trxRepository.delete(item)
         }
     }

@@ -116,9 +116,9 @@ fun LandingBottomSheet(
                             onProceed.invoke(
                                 ProfileModel(
                                     username,
-                                    balance.clearThousandFormat().toLong(),
-                                    budget.clearThousandFormat().toLong(),
-                                    target.clearThousandFormat().toLong(),
+                                    balance.clearThousandFormat().toDouble(),
+                                    budget.clearThousandFormat().toDouble(),
+                                    target.clearThousandFormat().toDouble(),
                                     reportPeriod
                                 )
                             )

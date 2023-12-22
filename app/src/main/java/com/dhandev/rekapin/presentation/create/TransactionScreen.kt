@@ -36,7 +36,6 @@ import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.CategoryUtil
 import com.dhandev.rekapin.utils.NumUtil.clearDot
 import com.dhandev.rekapin.utils.NumUtil.clearThousandFormat
-import com.dhandev.rekapin.utils.NumUtil.formatThousand
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
