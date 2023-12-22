@@ -34,6 +34,7 @@ import com.dhandev.rekapin.presentation.ui.component.TextFieldView
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.CategoryUtil
+import com.dhandev.rekapin.utils.NumUtil.clearDot
 import com.dhandev.rekapin.utils.NumUtil.clearThousandFormat
 import com.dhandev.rekapin.utils.NumUtil.formatThousand
 import kotlinx.coroutines.launch
@@ -59,7 +60,7 @@ fun TransactionScreen(
     if (trxData != null && firstOpened.value) {
         firstOpened.value = false
         trxId.intValue = trxData.id
-        nominal.value = trxData.total.toLong().formatThousand()
+        nominal.value = trxData.total.toBigDecimal().toPlainString().clearDot().clearThousandFormat()
         trxName.value = trxData.title
         selectedCategory.value = CategoryUtil.findCategoryItemByName(trxData.category, isExpense) ?: mCategory[0]
         trxDate.longValue = trxData.dateInMillis

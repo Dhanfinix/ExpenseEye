@@ -58,7 +58,7 @@ fun BottomNavigationView(
                 alwaysShowLabel = true,
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = BlueMain,
-                    indicatorColor = Color.White,
+                    indicatorColor = MaterialTheme.colorScheme.surface,
                     unselectedIconColor = DarkGray
                 )
             )

@@ -27,4 +27,7 @@ object NumUtil {
     fun String.clearThousandFormat(): String {
         return this.replace(",", "")
     }
+    fun String.clearDot(): String {
+        return this.replace(".0", "")
+    }
 }
