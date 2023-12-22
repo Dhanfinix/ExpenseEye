@@ -207,7 +207,7 @@ fun TotalBalanceCard(
 
             Text(
                 modifier = Modifier.padding(top = 16.dp),
-                text = String.format("You've reached %s from %s", "${100 - (targetAchieved * 100)}%", StringUtil.formatRp(target.toString())), //"You've reach ${targetAchieved * 100}% to achieve target",
+                text = String.format("You've reached %s from %s", "${targetAchieved * 100}%", StringUtil.formatRp(target.toString())), //"You've reach ${targetAchieved * 100}% to achieve target",
                 style = raleway(fontSize = 12, weight = FontWeight.Normal)
             )
             LinearProgressIndicator(

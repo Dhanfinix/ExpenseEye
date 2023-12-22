@@ -67,7 +67,7 @@ fun NumberFieldView(
             placeholder = {
                 Text(text = "100.000", color = Color.LightGray)
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = BlueSecondary,
                 cursorColor = BlueMain
