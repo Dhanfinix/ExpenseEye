@@ -65,6 +65,18 @@ class MainViewModel(
 
         }
     }
+    fun updateInitialBalance(newBalance: Double){
+        viewModelScope.launch (Dispatchers.IO){
+            trxRepository.update(TransactionItemModel(
+                id = 1,
+                title = "Initial balance",
+                total = newBalance,
+                dateInMillis = System.currentTimeMillis(),
+                category = TransactionCategory.Income.toString(),
+                isExpense = false
+            ))
+        }
+    }
     fun getAll(fromDataInMillis: Long) = trxRepository.getAllTransaction(fromDataInMillis).asLiveData()
     fun getIncomeExpense() = viewModelScope.launch {
 //        val result = trxRepository.getTotalIncomeOutcome(DateUtil.fromReportPeriodDate(reportPeriod.intValue))

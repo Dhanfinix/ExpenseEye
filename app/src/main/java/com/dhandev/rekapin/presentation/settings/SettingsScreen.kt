@@ -202,6 +202,7 @@ fun SettingsScreen(
                 userData = viewModel.userData,
                 onProceed = {
                     viewModel.saveProfileData(it, true)
+                    viewModel.updateInitialBalance(it.balance)
                     navigateToHome.invoke()
                 },
                 isShown = { showBottomSheet = it })

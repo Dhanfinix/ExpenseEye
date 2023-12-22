@@ -78,22 +78,26 @@ fun HomeScreen(
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val filter = remember { mutableLongStateOf(DateUtil.fromDateInMillisToday) }       //today
-    viewModel.filter.observe(lifecycleOwner){
-        filter.longValue = it
-    }
-
     val groupedData = remember { mutableStateOf<List<TransactionGroupModel>?>(emptyList()) }
     val selectedFilter = remember { mutableIntStateOf(0) }
-    viewModel.filterIndex.observe(lifecycleOwner){
-        selectedFilter.intValue = it
-    }
-
     val balance = remember { mutableDoubleStateOf(0.0) }
     val balanceThisMonth = remember { mutableDoubleStateOf(0.0) }
     val budget = remember { mutableDoubleStateOf(0.0) }
     val target = remember { mutableDoubleStateOf(0.0) }
-
     val showBalance = remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = sheetState
+    )
+    val scope = rememberCoroutineScope()
+    var selectedDetail by remember { mutableStateOf<TransactionItemModel?>(null) }
+
+    viewModel.filter.observe(lifecycleOwner){
+        filter.longValue = it
+    }
+    viewModel.filterIndex.observe(lifecycleOwner){
+        selectedFilter.intValue = it
+    }
     viewModel.showBalance.observe(lifecycleOwner){
         showBalance.value = it
     }
@@ -107,14 +111,12 @@ fun HomeScreen(
         val result = 1.0 - it.div(viewModel.budget.doubleValue)
         budget.doubleValue = String.format("%.2f", result).toDouble()
     }
-    target.doubleValue = String.format("%.2f", 1.0 - balance.doubleValue.div(viewModel.target.doubleValue).let { if (it == 1.0) 0.0 else it}).toDouble()
-
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = sheetState
-    )
-    val scope = rememberCoroutineScope()
-    var selectedDetail by remember { mutableStateOf<TransactionItemModel?>(null) }
+    val fractionOfTarget = balance.doubleValue.div(viewModel.target.doubleValue)
+    target.doubleValue = if (fractionOfTarget <= 1.0){
+        String.format("%.2f", 1.0 - fractionOfTarget.let { if (it == 1.0) 0.0 else it}).toDouble()
+    } else {
+        1.0
+    }
 
     val gradient = Brush.radialGradient(
         0.0f to BlueMain,

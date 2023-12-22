@@ -137,7 +137,8 @@ fun DetailBottomSheet(
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MyRed,
                             contentColor = Color.White
-                        )
+                        ),
+                        enabled = !(data.id == 1 && data.title == "Initial balance")
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_delete),
