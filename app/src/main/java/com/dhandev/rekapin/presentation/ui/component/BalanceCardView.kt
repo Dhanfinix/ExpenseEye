@@ -2,7 +2,6 @@ package com.dhandev.rekapin.presentation.ui.component
 
 import HiddenBalanceView
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +45,7 @@ fun BalanceCardView(
     balance: Double,
     budgetBalance: Double,
     budgetLeft: Double,
+    targetAchieved: Double,
     target: Double,
     isShowBalance: MutableState<Boolean>,
     isShown:(Boolean) -> Unit
@@ -86,6 +85,7 @@ fun BalanceCardView(
                     ),
                 balance = balance,
                 isShowBalance = isShowBalance.value,
+                targetAchieved = targetAchieved,
                 target = target,
                 isShown = { isShown(it) }
             )
@@ -162,8 +162,9 @@ fun BudgetCard(
 fun TotalBalanceCard(
     modifier: Modifier = Modifier,
     balance: Double,
-    target: Double,
+    targetAchieved: Double,
     isShowBalance: Boolean,
+    target: Double,
     isShown: (Boolean) -> Unit
 ) {
     Card(modifier = modifier,
@@ -206,7 +207,7 @@ fun TotalBalanceCard(
 
             Text(
                 modifier = Modifier.padding(top = 16.dp),
-                text = "${target * 100}% to achieve target",
+                text = String.format("You've reached %s from %s", "${100 - (targetAchieved * 100)}%", StringUtil.formatRp(target.toString())), //"You've reach ${targetAchieved * 100}% to achieve target",
                 style = raleway(fontSize = 12, weight = FontWeight.Normal)
             )
             LinearProgressIndicator(
@@ -215,7 +216,7 @@ fun TotalBalanceCard(
                     .padding(top = 6.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp)),
-                progress = target.toFloat(),
+                progress = targetAchieved.toFloat(),
                 color = BlueMain,
                 trackColor = Gray
             )
@@ -228,7 +229,7 @@ fun TotalBalanceCard(
 fun PreviewBalanceCard(){
     RekapinTheme {
         Surface {
-            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 1000000.0, 0.5, 2000000.0, remember {
+            BalanceCardView(modifier = Modifier.padding(16.dp), 100000.0, 1000000.0, 0.5, 0.5, 1000.0, remember {
                 mutableStateOf(
                     false
                 )

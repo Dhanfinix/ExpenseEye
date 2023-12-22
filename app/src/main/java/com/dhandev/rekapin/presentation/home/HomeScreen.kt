@@ -52,7 +52,6 @@ import com.dhandev.rekapin.presentation.ui.component.EmptyTransaction
 import com.dhandev.rekapin.presentation.ui.component.TransactionGroup
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
-import com.dhandev.rekapin.ui.theme.gradient
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.AnimUtil
 import com.dhandev.rekapin.utils.DateUtil
@@ -83,7 +82,7 @@ fun HomeScreen(
     val balance = remember { mutableDoubleStateOf(0.0) }
     val balanceThisMonth = remember { mutableDoubleStateOf(0.0) }
     val budget = remember { mutableDoubleStateOf(0.0) }
-    val target = remember { mutableDoubleStateOf(0.0) }
+    val targetAchieved = remember { mutableDoubleStateOf(0.0) }
     val showBalance = remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scaffoldState = rememberBottomSheetScaffoldState(
@@ -112,7 +111,7 @@ fun HomeScreen(
         budget.doubleValue = String.format("%.2f", result).toDouble()
     }
     val fractionOfTarget = balance.doubleValue.div(viewModel.target.doubleValue)
-    target.doubleValue = if (fractionOfTarget <= 1.0){
+    targetAchieved.doubleValue = if (fractionOfTarget <= 1.0){
         String.format("%.2f", 1.0 - fractionOfTarget.let { if (it == 1.0) 0.0 else it}).toDouble()
     } else {
         1.0
@@ -160,7 +159,8 @@ fun HomeScreen(
                     balance.doubleValue,
                     balanceThisMonth.doubleValue,
                     budget.doubleValue,
-                    target.doubleValue,
+                    targetAchieved.doubleValue,
+                    viewModel.target.doubleValue,
                     showBalance
                 ) {
                     viewModel.saveShowBalance(it)
