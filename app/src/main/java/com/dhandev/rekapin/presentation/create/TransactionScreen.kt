@@ -12,8 +12,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,21 +49,23 @@ fun TransactionScreen(
     mCategory: List<CategoryItem>,
     isExpense: Boolean
 ) {
-    val firstOpened = remember { mutableStateOf(true) }
-    val nominal = remember { mutableStateOf("") }
-    val trxName = remember { mutableStateOf("") }
-    val selectedCategory = remember { mutableStateOf(mCategory[0]) }
-    val trxDate = remember { mutableLongStateOf(System.currentTimeMillis()) }
+    val trxState by remember { mutableStateOf(TransactionState()) }
+    trxState.selectedCategory = mCategory[0]
+
     val scope = rememberCoroutineScope()
     val trxId = remember { mutableIntStateOf(0) }
+    val saveEnabled = remember {mutableStateOf(false)}
 
-    if (trxData != null && firstOpened.value) {
-        firstOpened.value = false
+    if (trxData != null && trxState.firstOpened) {
         trxId.intValue = trxData.id
-        nominal.value = trxData.total.toBigDecimal().toPlainString().clearDot().clearThousandFormat()
-        trxName.value = trxData.title
-        selectedCategory.value = CategoryUtil.findCategoryItemByName(trxData.category, isExpense) ?: mCategory[0]
-        trxDate.longValue = trxData.dateInMillis
+        trxState.firstOpened = false
+        trxState.nominal = trxData.total.toBigDecimal().toPlainString().clearDot().clearThousandFormat()
+        trxState.trxName = trxData.title
+        trxState.selectedCategory = CategoryUtil.findCategoryItemByName(trxData.category, isExpense) ?: mCategory[0]
+        trxState.trxDate = trxData.dateInMillis
+    }
+    LaunchedEffect(trxState.nominal, trxState.trxName){
+        saveEnabled.value = trxState.nominal != "" && trxState.trxName != ""
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -71,28 +74,28 @@ fun TransactionScreen(
         ) {
             NumberFieldView(
                 title = stringResource(id = R.string.amount),
-                value = { nominal.value = it },
-                setData = nominal.value
+                value = { trxState.nominal = it },
+                setData = trxState.nominal
             )
             TextFieldView(
                 title = stringResource(id = R.string.trx_name),
-                value = { trxName.value = it },
-                setData = trxName.value
+                value = { trxState.trxName = it },
+                setData = trxState.trxName
             )
             DropdownView(
                 title = stringResource(id = R.string.category),
                 category = mCategory,
-                value = { selectedCategory.value = it },
-                setData = mCategory.indexOf(selectedCategory.value)
+                value = { trxState.selectedCategory = it },
+                setData = mCategory.indexOf(trxState.selectedCategory)
             )
             DatePickerView(
                 title = stringResource(id = R.string.date),
-                value = { trxDate.longValue = it },
-                setData = trxDate.longValue
+                value = { trxState.trxDate = it },
+                setData = trxState.trxDate
             )
         }
         Button(
-            enabled = nominal.value != "" && trxName.value != "" ,
+            enabled = saveEnabled.value,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
@@ -100,10 +103,10 @@ fun TransactionScreen(
                 scope.launch {
                     val payload = TransactionItemModel(
                         id = trxId.intValue,
-                        title = trxName.value,
-                        total = nominal.value.clearThousandFormat().toDouble(),
-                        category = selectedCategory.value.name,
-                        dateInMillis = trxDate.longValue,
+                        title = trxState.trxName,
+                        total = trxState.nominal.clearThousandFormat().toDouble(),
+                        category = trxState.selectedCategory?.name ?: "",
+                        dateInMillis = trxState.trxDate,
                         isExpense = isExpense
                     )
                     if (trxData != null){

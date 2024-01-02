@@ -1,4 +1,4 @@
-package com.dhandev.rekapin.presentation.ui.component
+package com.dhandev.rekapin.presentation.ui.component.profileBottomSheet
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -13,10 +13,8 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.data.model.ProfileModel
+import com.dhandev.rekapin.presentation.ui.component.NumberFieldView
+import com.dhandev.rekapin.presentation.ui.component.NumberPickerView
+import com.dhandev.rekapin.presentation.ui.component.TextFieldView
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.raleway
 import com.dhandev.rekapin.utils.NumUtil.clearThousandFormat
@@ -34,7 +35,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LandingBottomSheet(
+fun ProfileBottomSheet(
     modifier: Modifier = Modifier,
     title: String,
     sheetState: SheetState,
@@ -43,19 +44,11 @@ fun LandingBottomSheet(
     onProceed: (ProfileModel) -> Unit,
     isShown: (Boolean) -> Unit
 ) {
-    var username by remember { mutableStateOf("") }
-    var balance by remember { mutableStateOf("") }
-    var budget by remember { mutableStateOf("") }
-    var target by remember { mutableStateOf("") }
-    var reportPeriod by remember { mutableIntStateOf(14) }
+    val profileState by remember { mutableStateOf(ProfileState()) }
     val context = LocalContext.current
 
     if (userData != null){
-        username = userData.userName
-        balance = userData.balance.toString()
-        budget = userData.budget.toString()
-        target = userData.target.toString()
-        reportPeriod = userData.reportPeriod
+        profileState.mapModelToState(userData)
     }
 
     ModalBottomSheet(
@@ -78,48 +71,48 @@ fun LandingBottomSheet(
             TextFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_name),
-                setData = username,
-                value = { username = it }
+                setData = profileState.userName,
+                value = { profileState.userName = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_current_balance),
-                setData = balance,
-                value = { balance = it }
+                setData = profileState.balance,
+                value = { profileState.balance = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_monthly_budget),
-                setData = budget,
-                value = { budget = it }
+                setData = profileState.budget,
+                value = { profileState.budget = it }
             )
             NumberFieldView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_balance_target),
-                setData = target,
-                value = { target = it }
+                setData = profileState.target,
+                value = { profileState.target = it }
             )
             NumberPickerView(
                 modifier = modifier.padding(bottom = 12.dp),
                 title = stringResource(id = R.string.landing_start_period_date),
-                setData = reportPeriod,
-                value = { reportPeriod = it }
+                setData = profileState.reportPeriod,
+                value = { profileState.reportPeriod = it }
             )
             Button(
                 onClick = {
-                    if (username.isNotEmpty() &&
-                        balance.clearThousandFormat().isNotEmpty() &&
-                        budget.clearThousandFormat().isNotEmpty() &&
-                        target.clearThousandFormat().isNotEmpty()
+                    if (profileState.userName.isNotEmpty() &&
+                        profileState.balance.clearThousandFormat().isNotEmpty() &&
+                        profileState.budget.clearThousandFormat().isNotEmpty() &&
+                        profileState.target.clearThousandFormat().isNotEmpty()
                     ) {
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             onProceed.invoke(
                                 ProfileModel(
-                                    username,
-                                    balance.clearThousandFormat().toDouble(),
-                                    budget.clearThousandFormat().toDouble(),
-                                    target.clearThousandFormat().toDouble(),
-                                    reportPeriod
+                                    profileState.userName,
+                                    profileState.balance.clearThousandFormat().toDouble(),
+                                    profileState.budget.clearThousandFormat().toDouble(),
+                                    profileState.target.clearThousandFormat().toDouble(),
+                                    profileState.reportPeriod
                                 )
                             )
                         }

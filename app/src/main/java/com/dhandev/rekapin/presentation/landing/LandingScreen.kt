@@ -43,7 +43,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.dhandev.rekapin.R
 import com.dhandev.rekapin.navigation.NavigationDestination
-import com.dhandev.rekapin.presentation.ui.component.LandingBottomSheet
+import com.dhandev.rekapin.presentation.ui.component.profileBottomSheet.ProfileBottomSheet
 import com.dhandev.rekapin.presentation.ui.component.StepProgressIndicator
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.raleway
@@ -196,7 +196,7 @@ fun LandingScreen(
 
         }
         if (showBottomSheet) {
-            LandingBottomSheet(
+            ProfileBottomSheet(
                 sheetState = sheetState,
                 title = stringResource(id = R.string.landing_start_title),
                 scope = scope,

@@ -45,11 +45,12 @@ import com.dhandev.rekapin.data.model.TransactionGroupModel
 import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.navigation.NavigationDestination
 import com.dhandev.rekapin.presentation.landing.MainViewModel
-import com.dhandev.rekapin.presentation.ui.component.BalanceCardView
+import com.dhandev.rekapin.presentation.ui.component.homeCard.HomeCardView
 import com.dhandev.rekapin.presentation.ui.component.ChipGroup
 import com.dhandev.rekapin.presentation.ui.component.DetailBottomSheet
 import com.dhandev.rekapin.presentation.ui.component.EmptyTransaction
 import com.dhandev.rekapin.presentation.ui.component.TransactionGroup
+import com.dhandev.rekapin.presentation.ui.component.homeCard.HomeCardState
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.raleway
@@ -112,7 +113,7 @@ fun HomeScreen(
     }
     val fractionOfTarget = balance.doubleValue.div(viewModel.target.doubleValue)
     targetAchieved.doubleValue = if (fractionOfTarget <= 1.0){
-        String.format("%.2f", 1.0 - fractionOfTarget.let { if (it == 1.0) 0.0 else it}).toDouble()
+        String.format("%.2f", fractionOfTarget.let { if (it == 1.0) 0.0 else it}).toDouble()
     } else {
         1.0
     }
@@ -154,17 +155,19 @@ fun HomeScreen(
                 }
             }
             item {
-                BalanceCardView(
-                    modifier.fillMaxWidth(),
-                    balance.doubleValue,
-                    balanceThisMonth.doubleValue,
-                    budget.doubleValue,
-                    targetAchieved.doubleValue,
-                    viewModel.target.doubleValue,
-                    showBalance
-                ) {
-                    viewModel.saveShowBalance(it)
-                }
+                HomeCardView(
+                    modifier = modifier.fillMaxWidth(),
+                    state = HomeCardState(
+                        balance,
+                        balanceThisMonth,
+                        budget,
+                        targetAchieved,
+                        viewModel.target,
+                        showBalance
+                    ) {
+                        viewModel.saveShowBalance(it)
+                    }
+                )
             }
             item {
                 Text(

@@ -1,8 +1,6 @@
 package com.dhandev.rekapin.presentation.settings
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -52,14 +50,12 @@ import com.dhandev.rekapin.data.model.TransactionItemModel
 import com.dhandev.rekapin.navigation.NavigationDestination
 import com.dhandev.rekapin.presentation.create.CreateViewModel
 import com.dhandev.rekapin.presentation.landing.MainViewModel
-import com.dhandev.rekapin.presentation.ui.component.LandingBottomSheet
+import com.dhandev.rekapin.presentation.ui.component.profileBottomSheet.ProfileBottomSheet
 import com.dhandev.rekapin.presentation.ui.component.MyAlertDialog
 import com.dhandev.rekapin.presentation.ui.component.SwitchButton
 import com.dhandev.rekapin.ui.theme.BlueMain
 import com.dhandev.rekapin.ui.theme.BlueSecondary
 import com.dhandev.rekapin.ui.theme.raleway
-import com.dhandev.rekapin.utils.DateUtil
-import com.dhandev.rekapin.utils.TransactionCategory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
@@ -195,7 +191,7 @@ fun SettingsScreen(
             )
         }
         if (showBottomSheet) {
-            LandingBottomSheet(
+            ProfileBottomSheet(
                 sheetState = sheetState,
                 scope = scope,
                 title = stringResource(id = R.string.edit_profile),
