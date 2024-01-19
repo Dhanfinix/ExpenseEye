@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,23 +50,25 @@ fun TransactionScreen(
     mCategory: List<CategoryItem>,
     isExpense: Boolean
 ) {
-    val trxState by remember { mutableStateOf(TransactionState()) }
+    var trxState by remember { mutableStateOf(TransactionState()) }
     trxState.selectedCategory = mCategory[0]
 
     val scope = rememberCoroutineScope()
     val trxId = remember { mutableIntStateOf(0) }
-    val saveEnabled = remember {mutableStateOf(false)}
+    var saveEnabled by remember {mutableStateOf(false)}
 
     if (trxData != null && trxState.firstOpened) {
         trxId.intValue = trxData.id
-        trxState.firstOpened = false
-        trxState.nominal = trxData.total.toBigDecimal().toPlainString().clearDot().clearThousandFormat()
-        trxState.trxName = trxData.title
-        trxState.selectedCategory = CategoryUtil.findCategoryItemByName(trxData.category, isExpense) ?: mCategory[0]
-        trxState.trxDate = trxData.dateInMillis
+        trxState = trxState.copy(
+            firstOpened = false,
+            nominal = trxData.total.toBigDecimal().toPlainString().clearDot().clearThousandFormat(),
+            trxName = trxData.title,
+            selectedCategory = CategoryUtil.findCategoryItemByName(trxData.category, isExpense) ?: mCategory[0],
+            trxDate = trxData.dateInMillis
+        )
     }
     LaunchedEffect(trxState.nominal, trxState.trxName){
-        saveEnabled.value = trxState.nominal != "" && trxState.trxName != ""
+        saveEnabled = trxState.nominal != "" && trxState.trxName != ""
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -74,28 +77,28 @@ fun TransactionScreen(
         ) {
             NumberFieldView(
                 title = stringResource(id = R.string.amount),
-                value = { trxState.nominal = it },
+                value = { trxState = trxState.copy(nominal = it) },
                 setData = trxState.nominal
             )
             TextFieldView(
                 title = stringResource(id = R.string.trx_name),
-                value = { trxState.trxName = it },
+                value = { trxState = trxState.copy(trxName = it) },
                 setData = trxState.trxName
             )
             DropdownView(
                 title = stringResource(id = R.string.category),
                 category = mCategory,
-                value = { trxState.selectedCategory = it },
+                value = { trxState = trxState.copy(selectedCategory = it) },
                 setData = mCategory.indexOf(trxState.selectedCategory)
             )
             DatePickerView(
                 title = stringResource(id = R.string.date),
-                value = { trxState.trxDate = it },
+                value = { trxState = trxState.copy(trxDate = it) },
                 setData = trxState.trxDate
             )
         }
         Button(
-            enabled = saveEnabled.value,
+            enabled = saveEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),

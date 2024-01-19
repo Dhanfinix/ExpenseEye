@@ -1,5 +1,6 @@
 package com.dhandev.rekapin.presentation.ui.component
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,7 +54,7 @@ fun DetailBottomSheet(
     val context = LocalContext.current
     val (categoryImage, categoryName) = CategoryUtil.getCategory(data.category)
     val openAlertDialog = remember { mutableStateOf(false) }
-
+    val isInitialBalance = data.id == 1 && data.title == "Initial balance"
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetContent = {
@@ -137,8 +138,7 @@ fun DetailBottomSheet(
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MyRed,
                             contentColor = Color.White
-                        ),
-                        enabled = !(data.id == 1 && data.title == "Initial balance")
+                        )
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_delete),
@@ -159,12 +159,18 @@ fun DetailBottomSheet(
         }) {}
 
     if (openAlertDialog.value){
-        MyAlertDialog(
-            onDismissRequest = { openAlertDialog.value = false },
-            onConfirmation = { onDelete() },
-            dialogTitle = stringResource(R.string.delete_transaction),
-            dialogText = stringResource(R.string.delete_transaction_confrimation),
-            icon = Icons.Filled.Delete
-        )
+        if (isInitialBalance){
+            Toast.makeText(context, "Initial Balance/ Data cannot be deleted", Toast.LENGTH_SHORT).show()
+            openAlertDialog.value = false
+        } else {
+            MyAlertDialog(
+                onDismissRequest = { openAlertDialog.value = false },
+                onConfirmation = { onDelete() },
+                dialogTitle = stringResource(R.string.delete_transaction),
+                dialogText = stringResource(R.string.delete_transaction_confrimation),
+                icon = Icons.Filled.Delete
+            )
+        }
+        
     }
 }

@@ -52,15 +52,22 @@ fun NumberFieldView(
             modifier = Modifier.fillMaxWidth(),
             value = text,
             onValueChange = { newInput ->
-                val clearText = newInput.text.clearDot().clearThousandFormat()
-                if (clearText.length <= 18 && clearText.matches(Regex("[0-9]*"))) {
-                    val newValue = if (clearText.isNotBlank()) {
-                        clearText.toDouble().formatThousand()
-                    } else clearText
+                if (newInput.text != ""){
+                    val clearText = newInput.text.clearDot().clearThousandFormat()
+                    if (clearText.length <= 18 && clearText.matches(Regex("[0-9]*"))) {
+                        val newValue = if (clearText.isNotBlank()) {
+                            clearText.toDouble().formatThousand()
+                        } else clearText
 
+                        text = newInput.copy(
+                            text = newValue,
+                            selection = TextRange(newValue.length)
+                        )
+                    }
+                } else {
                     text = newInput.copy(
-                        text = newValue,
-                        selection = TextRange(newValue.length)
+                        text = "",
+                        selection = TextRange(0)
                     )
                 }
             },
